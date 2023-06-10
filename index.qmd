@@ -3,7 +3,9 @@ title: "Master of Environmental Data Science (MEDS)"
 subtitle: "Program Learning Outcome (PLO) #1 Assessment - Core Knowledge"
 author: "Sam Csik"
 date: June 9, 2023
-format: html
+format: 
+  html:
+    toc: true
 execute: 
   eval: true
   echo: false
@@ -39,6 +41,7 @@ library(googlesheets4)
 library(tidyverse)
 library(janitor)
 library(showtext)
+library(ggtext)
 
 #..........................import data...........................
 medsJune2023 <- read_sheet("https://docs.google.com/spreadsheets/d/1Sq1rOmBP-g6iOCBS7NoexCj4K-j3OpeErMJ2Hxd3AHo/edit?usp=sharing")
@@ -47,10 +50,24 @@ medsJune2023 <- read_sheet("https://docs.google.com/spreadsheets/d/1Sq1rOmBP-g6i
 medsJune2023_clean <- medsJune2023 |> 
   filter(!row_number() %in% c(1, 2)) |> 
   clean_names() |> 
-  mutate(operating_system = as_factor(operating_system)) |> 
-  mutate(point_and_click_gui = as_factor(point_and_click_gui)) |> 
-  mutate(point_and_click_gui = fct_relevel(point_and_click_gui, c("Never", "Less than once per year", "Several times per year", 
-                                           "Monthly", "Weekly", "Daily")))
+  
+  # coerce data types ----
+  # mutate(start_date = as_datetime(start_date, origin = "1981-01-01"))
+  # mutate(start_date = as_datetime(start_date))
+  mutate(operating_system = as_factor(operating_system),
+         raw_data = as.character(raw_data),
+         small_program = as.character(small_program),
+         find_help_online = as.character(find_help_online),
+         overcoming_problems = as.character(overcoming_problems),
+         confident_programmer = as.character(confident_programmer),
+         easier_analyses = as.character(easier_analyses),
+         increase_efficiency = as.character(increase_efficiency)) 
+  
+  # reorder factor levels ----
+  # mutate(point_and_click_gui = fct_relevel(as_factor(point_and_click_gui),
+  #                                          c("Never", "Less than once per year", 
+  #                                            "Several times per year", 
+  #                                            "Monthly", "Weekly", "Daily"))) 
 
 #......................import Google fonts.......................
 sysfonts::font_add_google(name = "Sanchez", family = "sanchez")
@@ -65,7 +82,10 @@ meds_theme <-   theme_minimal() +
   theme(
     axis.title.x = element_text(margin = margin(t = 15, r = 0, b = 0, l = 0), family = "sanchez", size = 13),
     axis.title.y = element_text(margin = margin(t = 0, r = 15, b = 0, l = 0), family = "sanchez", size = 13), 
-    axis.text = element_text(family = "nunito", size = 10)
+    axis.text = element_text(family = "nunito", size = 10),
+    plot.title = element_text(margin = margin(t = 5, r = 0, b = 15, l = 0), size = 15, family = "sanchez"),
+    plot.subtitle = element_text(margin = margin(t = 5, r = 0, b = 15, l = 0), size = 13, family = "sanchez"),
+    plot.title.position = "plot"
   )
 ```
 
@@ -76,9 +96,8 @@ This PLO assessment was administered to the MEDS class of 2023 **(response rate 
 This assessment of MEDS PLO #1 (Core Knowledge) was developed by the MEDS Curriculum Cohesion Committee in winter/spring 2023, and therefore *was not* administered to the MEDS Class of 2023 before beginning the program in August 2022 (i.e. no pre-program assessment was conducted). No benchmark data is available for the Class of 2023. 
 :::
 
-## **Part 1: OS and data/document storage**
+## **Part 1 -- OS and data/document storage**
 
-### 1. What operating system is on the computer you are using?
 ```{r}
 #............................wrangle.............................
 q1_os <- medsJune2023_clean |> 
@@ -108,15 +127,14 @@ q1_os <- medsJune2023_clean |>
 ggplot(q1_os, aes(x = fct_reorder(os, desc(n)), y = n, label = perc_label)) +
   geom_col(fill = "#047C91") +
   geom_text(position = position_stack(vjust = 0.5), size = 4, color = "white", family = "nunito") +
-  labs(x = "Operating System", 
-       y = "Number of MEDS students") +
+  labs(x = "Operating System", y = "Number of MEDS students",
+       title = "What operating system is on the computer you are using?",
+       caption = "Question 1") +
   meds_theme
 ```
 
-### 2. Where do you store data and/or documents (select all that apply): 
-
 ```{r}
-#| fig-cap: "*Percentages will not sum to 100% ('select all that apply')*"
+#| fig-cap: "NOTE: Percentages will not sum to 100%"
 # combine written-in "server" option ----
 server <- c("Server", "Taylor server", "external server")
 
@@ -160,15 +178,14 @@ q2_store_data <- medsJune2023_clean |>
 ggplot(q2_store_data, aes(x = fct_reorder(where_store_data, desc(n)), y = n, label = perc_label)) +
   geom_col(fill = "#047C91") +
   geom_text(position = position_stack(vjust = 0.5), size = 4, color = "white", family = "nunito") +
-  labs(x = "Data Storage Location", 
-       y = "Number of MEDS students") +
+  labs(x = "Data Storage Location", y = "Number of MEDS students",
+       title = "Where do you store data and/or documents (select all that apply)",
+       caption = "Question 2") +
   meds_theme
   
 ```
 
-## **Part 2: How often do you currently use the following?:**
-
-### 3. A specialized software with a point-and-click graphical user interface (e.g., for statistical analysis: SPSS, SAS...; for Geospatial analysis: ArcGIS, QGIS...; for Genomics analysis: Geneious, …)
+## **Part 2 -- How often do you currently use the following?:**
 
 ```{r}
 #............................wrangle.............................
@@ -185,11 +202,11 @@ q3_gui <- medsJune2023_clean |>
   # ONLY ADDING BC NO ONE SELECTED 'Daily' ----
   add_row(point_and_click_gui = "Daily", n = 0) |> 
   
-  # reorder factors (didn't work in data cleaning step `medsJune2023_clean`) ----
-  mutate(point_and_click_gui = fct_relevel(point_and_click_gui, 
-                                           c("Never", "Less than once per year", "Several times per year", 
-                                           "Monthly", "Weekly", "Daily"))) |> 
-    
+  # reorder factors ----
+  mutate(point_and_click_gui = fct_relevel(point_and_click_gui,
+                                           c("Never", "Less than once per year", "Several times per year",
+                                           "Monthly", "Weekly", "Daily"))) |>
+
   # add col for percentages ----
   mutate(percentage = round((n/(sum(n)))*100, 1),
          perc_label = paste0(percentage, "%"))
@@ -199,11 +216,11 @@ ggplot(q3_gui, aes(x = point_and_click_gui, y = n, label = perc_label)) +
   geom_col(fill = "#047C91") +
   coord_flip() +
   geom_text(position = position_stack(vjust = 0.5), size = 4, color = "white", family = "nunito") +
-  labs(y = "Number of MEDS students", x = "How often I use a point and click GUI") +
+  labs(y = "Number of MEDS students", x = "Frequency of use",
+       title = "A specialized software with a point-and-click graphical user\ninterface (e.g., for statistical analysis: SPSS, SAS...;for Geospatial\nanalysis: ArcGIS, QGIS...; for Genomics analysis: Geneious, …)",
+       caption = "Question 3") +
   meds_theme
 ```
-
-### 4. Programming languages (R, Python, etc.)
 
 ```{r}
 #............................wrangle.............................
@@ -223,7 +240,7 @@ q4_prog_lang <- medsJune2023_clean |>
   add_row(program_lang = "Less than once per year", n = 0) |> 
   add_row(program_lang = "Never", n = 0) |>
 
-  # reorder factors (didn't work in data cleaning step `medsJune2023_clean`) ----
+  # reorder factors ----
   mutate(program_lang = fct_relevel(program_lang, c("Never", "Less than once per year", "Several times per year",
                                            "Monthly", "Weekly", "Daily"))) |>
 
@@ -236,11 +253,11 @@ ggplot(q4_prog_lang, aes(x = program_lang, y = n, label = perc_label)) +
   geom_col(fill = "#047C91") +
   coord_flip() +
   geom_text(position = position_stack(vjust = 0.5), size = 4, color = "white", family = "nunito") +
-  labs(y = "Number of MEDS students", x = "How often I use a programming language") +
+  labs(y = "Number of MEDS students", x = "Frequency of use",
+       title = "Programming languages (R, Python, etc.)",
+       caption = "Question 4") +
   meds_theme
 ```
-
-### 5. Databases (SQL, Access, etc.)
 
 ```{r}
 #............................wrangle.............................
@@ -254,7 +271,7 @@ q5_databases <- medsJune2023_clean |>
   count() |>
   ungroup() |> 
 
-  # reorder factors (didn't work in data cleaning step `medsJune2023_clean`) ----
+  # reorder factors ----
   mutate(databases = fct_relevel(databases, c("Never", "Less than once per year", "Several times per year",
                                             "Monthly", "Weekly", "Daily"))) |>
 
@@ -267,11 +284,11 @@ ggplot(q5_databases, aes(x = databases, y = n, label = perc_label)) +
   geom_col(fill = "#047C91") +
   coord_flip() +
   geom_text(position = position_stack(vjust = 0.5), size = 4, color = "white", family = "nunito") +
-  labs(y = "Number of MEDS students", x = "How often I use a database") +
+  labs(y = "Number of MEDS students", x = "Frequency of use",
+       title = "Databases (SQL, Access, etc.)",
+       caption = "Question 5") +
   meds_theme
 ```
-
-### 6. Version control software (Git, Subversion (SVN), Mercurial, etc.)
 
 ```{r}
 #............................wrangle.............................
@@ -291,7 +308,7 @@ q6_version_control <- medsJune2023_clean |>
   add_row(version_control = "Less than once per year", n = 0) |> 
   add_row(version_control = "Never", n = 0) |>
 
-  # reorder factors (didn't work in data cleaning step `medsJune2023_clean`) ----
+  # reorder factors ----
   mutate(version_control = fct_relevel(version_control, c("Never", "Less than once per year", "Several times per year",
                                             "Monthly", "Weekly", "Daily"))) |>
 
@@ -304,11 +321,11 @@ ggplot(q6_version_control, aes(x = version_control, y = n, label = perc_label)) 
   geom_col(fill = "#047C91") +
   coord_flip() +
   geom_text(position = position_stack(vjust = 0.5), size = 4, color = "white", family = "nunito") +
-  labs(y = "Number of MEDS students", x = "How often I use version control") +
+  labs(y = "Number of MEDS students", x = "Frequency of use",
+       title = "Version control software (Git, Subversion (SVN), Mercurial, etc.)",
+       caption = "Question 6") +
   meds_theme
 ```
-
-### 7. A command shell (usually accessed through Terminal on macOS or PowerShell on Windows)
 
 ```{r}
 #............................wrangle.............................
@@ -326,7 +343,7 @@ q7_command_shell <- medsJune2023_clean |>
   add_row(command_shell = "Less than once per year", n = 0) |> 
   add_row(command_shell = "Never", n = 0) |>
 
-  # reorder factors (didn't work in data cleaning step `medsJune2023_clean`) ----
+  # reorder factors ----
   mutate(command_shell = fct_relevel(command_shell, c("Never", "Less than once per year", "Several times per year",
                                             "Monthly", "Weekly", "Daily"))) |>
 
@@ -339,13 +356,13 @@ ggplot(q7_command_shell, aes(x = command_shell, y = n, label = perc_label)) +
   geom_col(fill = "#047C91") +
   coord_flip() +
   geom_text(position = position_stack(vjust = 0.5), size = 4, color = "white", family = "nunito") +
-  labs(y = "Number of MEDS students", x = "How often I use a command shell") +
+  labs(y = "Number of MEDS students", x = "Frequency of use",
+       title = "A command shell (usually accessed through Terminal on macOS or\nPowerShell on Windows)",
+       caption = "Question 7") +
   meds_theme
 ```
 
-## **Part 3: Personal satisfaction**
-
-### 8. Please rate your level of satisfaction with your current data management and analysis workflow (i.e. how you collect, organize, store, and analyze your data).
+## **Part 3 -- Workflow satisfaction**
 
 ```{r}
 #............................wrangle.............................
@@ -365,7 +382,7 @@ q8_satisfaction <- medsJune2023_clean |>
   add_row(rate_satisfaction = "Never thought about this", n = 0) |>
   add_row(rate_satisfaction = "Not applicable", n = 0) |>
 
-  # reorder factors (didn't work in data cleaning step `medsJune2023_clean`) ----
+  # reorder factors ----
   mutate(rate_satisfaction = fct_relevel(rate_satisfaction, c("Not applicable", "Never thought about this", "Not sure",
                                                               "Very unsatisfied", "Unsatisfied", "Neutral",
                                                               "Satisfied", "Very Satisfied"))) |>
@@ -379,52 +396,266 @@ ggplot(q8_satisfaction, aes(x = rate_satisfaction, y = n, label = perc_label)) +
   geom_col(fill = "#047C91") +
   coord_flip() +
   geom_text(position = position_stack(vjust = 0.5), size = 3, color = "white", family = "nunito") +
-  labs(y = "Number of MEDS students", x = "Satisfaction with current data workflows") +
+  labs(y = "Number of MEDS students", x = "Satisfaction level",
+       title = "Please rate your level of satisfaction with your current data\nmanagement and analysis workflow (i.e. how you collect, organize,\nstore, and analyze your data).",
+       caption = "Question 8") +
   meds_theme
 ```
 
-## **Part 4: Rank the following from 1 (strongly disagree) to 5 (strongly agree):**
-
-9. Having access to the original, raw data is important to be able to repeat an analysis.
+## **Part 4 (Questions 9 - 15) -- Rank the following from 1 (strongly disagree) to 5 (strongly agree):**
 
 ```{r}
-q9_raw_data <- medsJune2023_clean
+#............................wrangle.............................
+q9_raw_data <- medsJune2023_clean |>
+
+  # select necessary cols ----
+  select(raw_data) |>
+  
+  # sum ----
+  group_by(raw_data) |>
+  count() |>
+  ungroup() |>
+
+  # ONLY ADDING BC NO ONE SELECTED THE FOLLOWING OPTIONS ----
+  add_row(raw_data = "3 (neutral)", n = 0) |>
+  add_row(raw_data = "2", n = 0) |>
+  add_row(raw_data = "1 (strongly disagree)", n = 0) |> 
+  
+  # reorder factors ----
+  mutate(raw_data = fct_relevel(raw_data, 
+                                c("1 (strongly disagree)", "2", 
+                                  "3 (neutral)", "4", "5 (strongly agree)"))) |>
+
+  # add col for percentages ----
+  mutate(percentage = round((n/(sum(n)))*100, 1),
+         perc_label = paste0(percentage, "%"))
+
+#..............................plot..............................
+ggplot(q9_raw_data, aes(x = raw_data, y = n, label = perc_label)) +
+  geom_col(fill = "#047C91") +
+  coord_flip() +
+  geom_text(position = position_stack(vjust = 0.5), size = 3, color = "white", family = "nunito") +
+  labs(y = "Number of MEDS students", x = "Agreement level",
+       title = "Having access to the original, raw data is important to be able to\nrepeat an analysis",
+       caption = "Question 9") +
+  meds_theme
 ```
 
-10. I can write a small program, script, or macro to address a problem in my own work.
-
 ```{r}
-q10_small_program <- medsJune2023_clean
+#............................wrangle.............................
+q10_small_program <- medsJune2023_clean |> 
+  
+  # select necessary cols ----
+  select(small_program) |>
+  
+  # sum ----
+  group_by(small_program) |>
+  count() |>
+  ungroup() |>
+
+  # ONLY ADDING BC NO ONE SELECTED THE FOLLOWING OPTIONS ----
+  add_row(small_program = "2", n = 0) |>
+  add_row(small_program = "1 (strongly disagree)", n = 0) |> 
+  
+  # reorder factors ----
+  mutate(small_program = fct_relevel(small_program, 
+                                     c("1 (strongly disagree)", "2", 
+                                       "3 (neutral)", "4", "5 (strongly agree)"))) |>
+
+  # add col for percentages ----
+  mutate(percentage = round((n/(sum(n)))*100, 1),
+         perc_label = paste0(percentage, "%"))
+
+#..............................plot..............................
+ggplot(q10_small_program, aes(x = small_program, y = n, label = perc_label)) +
+  geom_col(fill = "#047C91") +
+  coord_flip() +
+  geom_text(position = position_stack(vjust = 0.5), size = 3, color = "white", family = "nunito") +
+  labs(y = "Number of MEDS students", x = "Agreement level",
+       title = "I can write a small program, script, or macro to address a problem\nin my own work",
+       caption = "Question 10") +
+  meds_theme
 ```
 
-11. I know how to search for answers to my technical questions online.
-
 ```{r}
-q11_find_help_online <- medsJune2023_clean
+#............................wrangle.............................
+q11_find_help_online <- medsJune2023_clean |> 
+    
+  # select necessary cols ----
+  select(find_help_online) |>
+  
+  # sum ----
+  group_by(find_help_online) |>
+  count() |>
+  ungroup() |> 
+  
+  # ONLY ADDING BC NO ONE SELECTED THE FOLLOWING OPTIONS ----
+  add_row(find_help_online = "3 (neutral)", n = 0) |>
+  add_row(find_help_online = "1 (strongly disagree)", n = 0) |> 
+  
+  # reorder factors ----
+  mutate(find_help_online = fct_relevel(find_help_online, 
+                                        c("1 (strongly disagree)", "2", 
+                                        "3 (neutral)", "4", "5 (strongly agree)"))) |>
+
+  # add col for percentages ----
+  mutate(percentage = round((n/(sum(n)))*100, 1),
+         perc_label = paste0(percentage, "%"))
+
+#..............................plot..............................
+ggplot(q11_find_help_online, aes(x = find_help_online, y = n, label = perc_label)) +
+  geom_col(fill = "#047C91") +
+  coord_flip() +
+  geom_text(position = position_stack(vjust = 0.5), size = 3, color = "white", family = "nunito") +
+  labs(y = "Number of MEDS students", x = "Agreement level",
+       title = "I know how to search for answers to my technical questions online",
+       caption = "Question 11") +
+  meds_theme
 ```
 
-12. While working on a programming project, if I get stuck, I can find ways of overcoming the problem.
-
 ```{r}
-q12_overcoming_problems <- medsJune2023_clean
+#............................wrangle.............................
+q12_overcoming_problems <- medsJune2023_clean |> 
+  
+  # select necessary cols ----
+  select(overcoming_problems) |>
+  
+  # sum ----
+  group_by(overcoming_problems) |>
+  count() |>
+  ungroup() |> 
+  
+  # ONLY ADDING BC NO ONE SELECTED THE FOLLOWING OPTIONS ----
+  add_row(overcoming_problems = "3 (neutral)", n = 0) |>
+  add_row(overcoming_problems = "1 (strongly disagree)", n = 0) |> 
+  
+  # reorder factors ----
+  mutate(overcoming_problems = fct_relevel(overcoming_problems, 
+                                        c("1 (strongly disagree)", "2", 
+                                        "3 (neutral)", "4", "5 (strongly agree)"))) |>
+
+  # add col for percentages ----
+  mutate(percentage = round((n/(sum(n)))*100, 1),
+         perc_label = paste0(percentage, "%"))
+
+#..............................plot..............................
+ggplot(q12_overcoming_problems, aes(x = overcoming_problems, y = n, label = perc_label)) +
+  geom_col(fill = "#047C91") +
+  coord_flip() +
+  geom_text(position = position_stack(vjust = 0.5), size = 3, color = "white", family = "nunito") +
+  labs(y = "Number of MEDS students", x = "Agreement level",
+       title = "While working on a programming project, if I get stuck, I can find\nways of overcoming the problem",
+       caption = "Question 12") +
+  meds_theme
 ```
 
-13. I am confident in my ability to make use of programming software to work with data.
-
 ```{r}
-q13_confidence <- medsJune2023_clean
+#............................wrangle.............................
+q13_confidence <- medsJune2023_clean |> 
+  
+  # select necessary cols ----
+  select(confident_programmer) |>
+  
+  # sum ----
+  group_by(confident_programmer) |>
+  count() |>
+  ungroup() |> 
+  
+  # ONLY ADDING BC NO ONE SELECTED THE FOLLOWING OPTIONS ----
+  add_row(confident_programmer = "2", n = 0) |>
+  add_row(confident_programmer = "1 (strongly disagree)", n = 0) |> 
+  
+  # reorder factors ----
+  mutate(confident_programmer = fct_relevel(confident_programmer, 
+                                        c("1 (strongly disagree)", "2", 
+                                        "3 (neutral)", "4", "5 (strongly agree)"))) |>
+
+  # add col for percentages ----
+  mutate(percentage = round((n/(sum(n)))*100, 1),
+         perc_label = paste0(percentage, "%"))
+
+#..............................plot..............................
+ggplot(q13_confidence, aes(x = confident_programmer, y = n, label = perc_label)) +
+  geom_col(fill = "#047C91") +
+  coord_flip() +
+  geom_text(position = position_stack(vjust = 0.5), size = 3, color = "white", family = "nunito") +
+  labs(y = "Number of MEDS students", x = "Agreement level",
+       title = "I am confident in my ability to make use of programming software\nto work with data",
+       caption = "Question 13") +
+  meds_theme
 ```
 
-14. Using a programming language (like R or Python) can make my analyses easier to reproduce.
-
 ```{r}
-q14_easier_analyses <- medsJune2023_clean
+#............................wrangle.............................
+q14_easier_analyses <- medsJune2023_clean |> 
+  
+  # select necessary cols ----
+  select(easier_analyses) |>
+  
+  # sum ----
+  group_by(easier_analyses) |>
+  count() |>
+  ungroup() |> 
+  
+  # ONLY ADDING BC NO ONE SELECTED THE FOLLOWING OPTIONS ----
+  add_row(easier_analyses = "3 (neutral)", n = 0) |>
+  add_row(easier_analyses = "1 (strongly disagree)", n = 0) |> 
+  
+  # reorder factors ----
+  mutate(easier_analyses = fct_relevel(easier_analyses, 
+                                        c("1 (strongly disagree)", "2", 
+                                        "3 (neutral)", "4", "5 (strongly agree)"))) |>
+
+  # add col for percentages ----
+  mutate(percentage = round((n/(sum(n)))*100, 1),
+         perc_label = paste0(percentage, "%"))
+
+#..............................plot..............................
+ggplot(q14_easier_analyses, aes(x = easier_analyses, y = n, label = perc_label)) +
+  geom_col(fill = "#047C91") +
+  coord_flip() +
+  geom_text(position = position_stack(vjust = 0.5), size = 3, color = "white", family = "nunito") +
+  labs(y = "Number of MEDS students", x = "Agreement level",
+       title = "Using a programming language (like R or Python) can make my\nanalyses easier to reproduce",
+       caption = "Question 14") +
+  meds_theme
 ```
 
-15. Using a programming language (like R or Python) can make me more efficient at working with data.
-
 ```{r}
-q15_increase_efficiency <- medsJune2023_clean
+#............................wrangle.............................
+q15_increase_efficiency <- medsJune2023_clean |> 
+  
+  # select necessary cols ----
+  select(increase_efficiency) |>
+  
+  # sum ----
+  group_by(increase_efficiency) |>
+  count() |>
+  ungroup() |> 
+  
+  # ONLY ADDING BC NO ONE SELECTED THE FOLLOWING OPTIONS ----
+  add_row(increase_efficiency = "3 (neutral)", n = 0) |>
+  add_row(increase_efficiency = "2", n = 0) |>
+  add_row(increase_efficiency = "1 (strongly disagree)", n = 0) |> 
+  
+  # reorder factors ----
+  mutate(increase_efficiency = fct_relevel(increase_efficiency, 
+                                        c("1 (strongly disagree)", "2", 
+                                        "3 (neutral)", "4", "5 (strongly agree)"))) |>
+
+  # add col for percentages ----
+  mutate(percentage = round((n/(sum(n)))*100, 1),
+         perc_label = paste0(percentage, "%"))
+
+#..............................plot..............................
+ggplot(q15_increase_efficiency, aes(x = increase_efficiency, y = n, label = perc_label)) +
+  geom_col(fill = "#047C91") +
+  coord_flip() +
+  geom_text(position = position_stack(vjust = 0.5), size = 3, color = "white", family = "nunito") +
+  labs(y = "Number of MEDS students", x = "Agreement level",
+       title = "Using a programming language (like R or Python) can make me\nmore efficient at working with data",
+       caption = "Question 15") +
+  meds_theme
 ```
 
 ## **Part 5: Stats**
