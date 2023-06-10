@@ -1,0 +1,497 @@
+---
+title: "Master of Environmental Data Science (MEDS)"
+subtitle: "Program Learning Outcome (PLO) #1 Assessment - Core Knowledge"
+author: "Sam Csik"
+date: June 9, 2023
+format: html
+execute: 
+  eval: true
+  echo: false
+  message: false
+  warning: false
+editor_options: 
+  chunk_output_type: console
+---
+
+# **Background**
+
+## Who is this survey for?
+
+All students enrolled in the Master of Environmental Data Science (MEDS) program during the 2023 - 2025 academic years will receive this survey to complete just before beginning the program and just after completing the program.
+
+## What is a PLO and where can I find the MEDS PLO?
+
+Each degree-granting program at UCSB has its own list of educational aims: the conceptual knowledge, practical skills, experiences, perspective-awareness, and/or values that students will be familiar with by the time they complete the program. These [Program Learning Outcomes](https://www.assessment.ucsb.edu/learning-outcomes) (PLOs) are defined by department faculty and approved by the Council on Assessment and the Academic Senate's Graduate Council. Find the [approved PLO](https://www.assessment.ucsb.edu/sites/default/files/sitefiles/Environmental%20Data%20Science%20%28MEDS%29_2022updated_0.pdf) for the Master of Environmental Data Science program.
+
+## How are PLOs assessed?
+
+Departments self-assess their PLO performance on a three-year cycle. A single educational aim is assessed in a cycle.
+
+## What does that mean for the MEDS program?
+
+Bren has entered its assessment cycle, which will last from 2023 - 2025. During this 3-year span, MEDS PLO 1 (Core Knowledge) will be assessed by delivering a pre- and post-program survey to MEDS students in the form of a Qualtrics survey. This survey is not a test of individual students, but rather an assessment of the MEDS program.
+
+# **End of Year Responses**
+
+```{r}
+#..........................load packages.........................
+library(googlesheets4)
+library(tidyverse)
+library(janitor)
+library(showtext)
+
+#..........................import data...........................
+medsJune2023 <- read_sheet("https://docs.google.com/spreadsheets/d/1Sq1rOmBP-g6iOCBS7NoexCj4K-j3OpeErMJ2Hxd3AHo/edit?usp=sharing")
+
+#...........................clean data...........................
+medsJune2023_clean <- medsJune2023 |> 
+  filter(!row_number() %in% c(1, 2)) |> 
+  clean_names() |> 
+  mutate(operating_system = as_factor(operating_system)) |> 
+  mutate(point_and_click_gui = as_factor(point_and_click_gui)) |> 
+  mutate(point_and_click_gui = fct_relevel(point_and_click_gui, c("Never", "Less than once per year", "Several times per year", 
+                                           "Monthly", "Weekly", "Daily")))
+
+#......................import Google fonts.......................
+sysfonts::font_add_google(name = "Sanchez", family = "sanchez")
+sysfonts::font_add_google(name = "Nunito", family = "nunito")
+
+# automatically use showtext to render text for future devices ----
+showtext::showtext_auto()
+
+#......................create ggplot theme.......................
+
+meds_theme <-   theme_minimal() + 
+  theme(
+    axis.title.x = element_text(margin = margin(t = 15, r = 0, b = 0, l = 0), family = "sanchez", size = 13),
+    axis.title.y = element_text(margin = margin(t = 0, r = 15, b = 0, l = 0), family = "sanchez", size = 13), 
+    axis.text = element_text(family = "nunito", size = 10)
+  )
+```
+
+This PLO assessment was administered to the MEDS class of 2023 **(response rate = `r nrow(medsJune2023_clean)` / 31 students)** on June 7, 2023.
+
+::: {.callout-warning}
+## Heads-up! No pre-MEDS PLO assessment data for the Claass of 2023
+This assessment of MEDS PLO #1 (Core Knowledge) was developed by the MEDS Curriculum Cohesion Committee in winter/spring 2023, and therefore *was not* administered to the MEDS Class of 2023 before beginning the program in August 2022 (i.e. no pre-program assessment was conducted). No benchmark data is available for the Class of 2023. 
+:::
+
+## **Part 1: OS and data/document storage**
+
+### 1. What operating system is on the computer you are using?
+```{r}
+#............................wrangle.............................
+q1_os <- medsJune2023_clean |> 
+  
+  # select necessary cols ----
+  select(operating_system, operating_system_4_text) |> 
+  
+  # if "Other", replace with written-in response ----
+  mutate(os = case_when(
+    operating_system == "Other" ~ operating_system_4_text,
+    TRUE ~ operating_system
+  )) |> 
+  
+  # remove unnecessary cols ----
+  select(os) |> 
+  
+  # count ----
+  group_by(os) |> 
+  count() |> 
+  ungroup() |> 
+  
+  # add col for percentages ----
+  mutate(percentage = round((n/(sum(n)))*100, 1),
+         perc_label = paste0(percentage, "%"))
+
+#..............................plot..............................
+ggplot(q1_os, aes(x = fct_reorder(os, desc(n)), y = n, label = perc_label)) +
+  geom_col(fill = "#047C91") +
+  geom_text(position = position_stack(vjust = 0.5), size = 4, color = "white", family = "nunito") +
+  labs(x = "Operating System", 
+       y = "Number of MEDS students") +
+  meds_theme
+```
+
+### 2. Where do you store data and/or documents (select all that apply): 
+
+```{r}
+#| fig-cap: "*Percentages will not sum to 100% ('select all that apply')*"
+# combine written-in "server" option ----
+server <- c("Server", "Taylor server", "external server")
+
+#............................wrangle.............................
+q2_store_data <- medsJune2023_clean |> 
+  
+  # select necessary cols ----
+  select(where_store_data, where_store_data_6_text) |> 
+  
+  # split strings by `,` delim ----
+  separate_longer_delim(where_store_data, delim = ",") |> 
+  
+  # if "Other", replace with written-in response ----
+  mutate(store_data_new = case_when(
+    where_store_data == "Other" ~ where_store_data_6_text,
+    TRUE ~ where_store_data
+  )) |>
+  
+  # remove unnecessary cols ----
+  select(where_store_data = store_data_new) |> 
+  
+  # combine similar "other" choices ----
+  mutate(where_store_data = case_when(
+    where_store_data %in% server ~ "Server",
+    TRUE ~ where_store_data
+  )) |> 
+  
+  # change "Locally on my computer" to "Locally" ----
+  mutate(across('where_store_data', str_replace, 'Locally on my computer', 'Locally')) |> 
+  
+  # count ----
+  group_by(where_store_data) |> 
+  count() |> 
+  ungroup() |> 
+  
+  # add col for percentages ----
+  mutate(percentage = round((n/(sum(n)))*100, 1),
+         perc_label = paste0(percentage, "%"))
+
+#..............................plot..............................
+ggplot(q2_store_data, aes(x = fct_reorder(where_store_data, desc(n)), y = n, label = perc_label)) +
+  geom_col(fill = "#047C91") +
+  geom_text(position = position_stack(vjust = 0.5), size = 4, color = "white", family = "nunito") +
+  labs(x = "Data Storage Location", 
+       y = "Number of MEDS students") +
+  meds_theme
+  
+```
+
+## **Part 2: How often do you currently use the following?:**
+
+### 3. A specialized software with a point-and-click graphical user interface (e.g., for statistical analysis: SPSS, SAS...; for Geospatial analysis: ArcGIS, QGIS...; for Genomics analysis: Geneious, …)
+
+```{r}
+#............................wrangle.............................
+q3_gui <- medsJune2023_clean |> 
+  
+  # select necessary cols ----
+  select(point_and_click_gui) |> 
+  
+  # sum ----
+  group_by(point_and_click_gui) |> 
+  count() |> 
+  ungroup() |> 
+  
+  # ONLY ADDING BC NO ONE SELECTED 'Daily' ----
+  add_row(point_and_click_gui = "Daily", n = 0) |> 
+  
+  # reorder factors (didn't work in data cleaning step `medsJune2023_clean`) ----
+  mutate(point_and_click_gui = fct_relevel(point_and_click_gui, 
+                                           c("Never", "Less than once per year", "Several times per year", 
+                                           "Monthly", "Weekly", "Daily"))) |> 
+    
+  # add col for percentages ----
+  mutate(percentage = round((n/(sum(n)))*100, 1),
+         perc_label = paste0(percentage, "%"))
+
+#..............................plot..............................
+ggplot(q3_gui, aes(x = point_and_click_gui, y = n, label = perc_label)) +
+  geom_col(fill = "#047C91") +
+  coord_flip() +
+  geom_text(position = position_stack(vjust = 0.5), size = 4, color = "white", family = "nunito") +
+  labs(y = "Number of MEDS students", x = "How often I use a point and click GUI") +
+  meds_theme
+```
+
+### 4. Programming languages (R, Python, etc.)
+
+```{r}
+#............................wrangle.............................
+q4_prog_lang <- medsJune2023_clean |> 
+  
+  # select necessary cols ----
+  select(program_lang) |>
+
+  # sum ----
+  group_by(program_lang) |>
+  count() |>
+  ungroup() |> 
+
+  # ONLY ADDING BC NO ONE SELECTED THE FOLLOWING OPTIONS ----
+  add_row(program_lang = "Monthly", n = 0) |> 
+  add_row(program_lang = "Several times per year", n = 0) |> 
+  add_row(program_lang = "Less than once per year", n = 0) |> 
+  add_row(program_lang = "Never", n = 0) |>
+
+  # reorder factors (didn't work in data cleaning step `medsJune2023_clean`) ----
+  mutate(program_lang = fct_relevel(program_lang, c("Never", "Less than once per year", "Several times per year",
+                                           "Monthly", "Weekly", "Daily"))) |>
+
+  # add col for percentages ----
+  mutate(percentage = round((n/(sum(n)))*100, 1),
+         perc_label = paste0(percentage, "%"))
+
+#..............................plot..............................
+ggplot(q4_prog_lang, aes(x = program_lang, y = n, label = perc_label)) +
+  geom_col(fill = "#047C91") +
+  coord_flip() +
+  geom_text(position = position_stack(vjust = 0.5), size = 4, color = "white", family = "nunito") +
+  labs(y = "Number of MEDS students", x = "How often I use a programming language") +
+  meds_theme
+```
+
+### 5. Databases (SQL, Access, etc.)
+
+```{r}
+#............................wrangle.............................
+q5_databases <- medsJune2023_clean |> 
+  
+  # select necessary cols ----
+  select(databases) |>
+
+  # sum ----
+  group_by(databases) |>
+  count() |>
+  ungroup() |> 
+
+  # reorder factors (didn't work in data cleaning step `medsJune2023_clean`) ----
+  mutate(databases = fct_relevel(databases, c("Never", "Less than once per year", "Several times per year",
+                                            "Monthly", "Weekly", "Daily"))) |>
+
+  # add col for percentages ----
+  mutate(percentage = round((n/(sum(n)))*100, 1),
+         perc_label = paste0(percentage, "%"))
+
+#..............................plot..............................
+ggplot(q5_databases, aes(x = databases, y = n, label = perc_label)) +
+  geom_col(fill = "#047C91") +
+  coord_flip() +
+  geom_text(position = position_stack(vjust = 0.5), size = 4, color = "white", family = "nunito") +
+  labs(y = "Number of MEDS students", x = "How often I use a database") +
+  meds_theme
+```
+
+### 6. Version control software (Git, Subversion (SVN), Mercurial, etc.)
+
+```{r}
+#............................wrangle.............................
+q6_version_control <- medsJune2023_clean |> 
+  
+  # select necessary cols ----
+  select(version_control) |>
+
+  # sum ----
+  group_by(version_control) |>
+  count() |>
+  ungroup() |> 
+  
+  # ONLY ADDING BC NO ONE SELECTED THE FOLLOWING OPTIONS ----
+  add_row(version_control = "Monthly", n = 0) |> 
+  add_row(version_control = "Several times per year", n = 0) |> 
+  add_row(version_control = "Less than once per year", n = 0) |> 
+  add_row(version_control = "Never", n = 0) |>
+
+  # reorder factors (didn't work in data cleaning step `medsJune2023_clean`) ----
+  mutate(version_control = fct_relevel(version_control, c("Never", "Less than once per year", "Several times per year",
+                                            "Monthly", "Weekly", "Daily"))) |>
+
+  # add col for percentages ----
+  mutate(percentage = round((n/(sum(n)))*100, 1),
+         perc_label = paste0(percentage, "%"))
+
+#..............................plot..............................
+ggplot(q6_version_control, aes(x = version_control, y = n, label = perc_label)) +
+  geom_col(fill = "#047C91") +
+  coord_flip() +
+  geom_text(position = position_stack(vjust = 0.5), size = 4, color = "white", family = "nunito") +
+  labs(y = "Number of MEDS students", x = "How often I use version control") +
+  meds_theme
+```
+
+### 7. A command shell (usually accessed through Terminal on macOS or PowerShell on Windows)
+
+```{r}
+#............................wrangle.............................
+q7_command_shell <- medsJune2023_clean |> 
+  
+  # select necessary cols ----
+  select(command_shell) |>
+
+  # sum ----
+  group_by(command_shell) |>
+  count() |>
+  ungroup() |> 
+  
+  # ONLY ADDING BC NO ONE SELECTED THE FOLLOWING OPTIONS ----
+  add_row(command_shell = "Less than once per year", n = 0) |> 
+  add_row(command_shell = "Never", n = 0) |>
+
+  # reorder factors (didn't work in data cleaning step `medsJune2023_clean`) ----
+  mutate(command_shell = fct_relevel(command_shell, c("Never", "Less than once per year", "Several times per year",
+                                            "Monthly", "Weekly", "Daily"))) |>
+
+  # add col for percentages ----
+  mutate(percentage = round((n/(sum(n)))*100, 1),
+         perc_label = paste0(percentage, "%"))
+
+#..............................plot..............................
+ggplot(q7_command_shell, aes(x = command_shell, y = n, label = perc_label)) +
+  geom_col(fill = "#047C91") +
+  coord_flip() +
+  geom_text(position = position_stack(vjust = 0.5), size = 4, color = "white", family = "nunito") +
+  labs(y = "Number of MEDS students", x = "How often I use a command shell") +
+  meds_theme
+```
+
+## **Part 3: Personal satisfaction**
+
+### 8. Please rate your level of satisfaction with your current data management and analysis workflow (i.e. how you collect, organize, store, and analyze your data).
+
+```{r}
+#............................wrangle.............................
+q8_satisfaction <- medsJune2023_clean |> 
+  
+  # select necessary cols ----
+  select(rate_satisfaction) |>
+
+  # sum ----
+  group_by(rate_satisfaction) |>
+  count() |>
+  ungroup() |> 
+  
+  # ONLY ADDING BC NO ONE SELECTED THE FOLLOWING OPTIONS ----
+  add_row(rate_satisfaction = "Very unsatisfied", n = 0) |> 
+  add_row(rate_satisfaction = "Not sure", n = 0) |>
+  add_row(rate_satisfaction = "Never thought about this", n = 0) |>
+  add_row(rate_satisfaction = "Not applicable", n = 0) |>
+
+  # reorder factors (didn't work in data cleaning step `medsJune2023_clean`) ----
+  mutate(rate_satisfaction = fct_relevel(rate_satisfaction, c("Not applicable", "Never thought about this", "Not sure",
+                                                              "Very unsatisfied", "Unsatisfied", "Neutral",
+                                                              "Satisfied", "Very Satisfied"))) |>
+
+  # add col for percentages ----
+  mutate(percentage = round((n/(sum(n)))*100, 1),
+         perc_label = paste0(percentage, "%"))
+
+#..............................plot..............................
+ggplot(q8_satisfaction, aes(x = rate_satisfaction, y = n, label = perc_label)) +
+  geom_col(fill = "#047C91") +
+  coord_flip() +
+  geom_text(position = position_stack(vjust = 0.5), size = 3, color = "white", family = "nunito") +
+  labs(y = "Number of MEDS students", x = "Satisfaction with current data workflows") +
+  meds_theme
+```
+
+## **Part 4: Rank the following from 1 (strongly disagree) to 5 (strongly agree):**
+
+9. Having access to the original, raw data is important to be able to repeat an analysis.
+
+```{r}
+q9_raw_data <- medsJune2023_clean
+```
+
+10. I can write a small program, script, or macro to address a problem in my own work.
+
+```{r}
+q10_small_program <- medsJune2023_clean
+```
+
+11. I know how to search for answers to my technical questions online.
+
+```{r}
+q11_find_help_online <- medsJune2023_clean
+```
+
+12. While working on a programming project, if I get stuck, I can find ways of overcoming the problem.
+
+```{r}
+q12_overcoming_problems <- medsJune2023_clean
+```
+
+13. I am confident in my ability to make use of programming software to work with data.
+
+```{r}
+q13_confidence <- medsJune2023_clean
+```
+
+14. Using a programming language (like R or Python) can make my analyses easier to reproduce.
+
+```{r}
+q14_easier_analyses <- medsJune2023_clean
+```
+
+15. Using a programming language (like R or Python) can make me more efficient at working with data.
+
+```{r}
+q15_increase_efficiency <- medsJune2023_clean
+```
+
+## **Part 5: Stats**
+
+16. Consider the following sample of data: 5, 17, 0, 14, 14
+a. What is the median of this sample distribution?
+b. What is the mode of this sample distribution?
+17. How familiar are you with the term linear regression?
+a. Below is a chunk of code showing a simple linear regression relating the number of pieces of microplastics to the number of days per year with rainfall. How many pieces of microplastic do we predict will be present in a location with 45 days of rain per year (round your answer up to the nearest integer)?
+**INSERT SCREENSHOT HERE**
+18. How familiar are you with probability distributions?
+a. Which of the following terms are used to describe probability distributions (select all that apply; options: uniform, unequal, bimodal, variable, symmetric)?
+
+## **Part 6: Programming**
+19. How familiar are you with the term function as it relates to programming (1, never heard of it - 5, very familiar)?
+a. How comfortable are you creating a function in code (1, not at all comfortable - 5, very comfortable)?
+b. The following code (in R) defines a function:
+**INSERT SCREENSHOT HERE**
+This R code applies this function to data:
+**INSERT SCREENSHOT HERE**
+What is the value of power_turbine_A?
+
+## **Part 7: Environmental Modeling**
+20. Have you run a model to learn something about (or predict something about) the environment?
+a. Have you done a sensitivity analysis to assess how model results change with changes in inputs or parameters?
+If you want to explore how parameter interactions impact model results, you would do?
+
+## **Part 8: Geospatial Analysis & Remote Sensing**
+21. How comfortable are you working with spatial data?
+a. What are the two primary ways of representing spatial data (select two; options: raster, tabular, relational, vector, I'm not sure):
+b. Is the following a vector or raster?
+**INSERT SCREENSHOT HERE**
+22. How comfortable are you working with remotely sensed data?
+a. The type of remote sensing that relies on reflected radiation generated by the sun is called ___? (fill in the blank)
+23. How comfortable are you working with map projections?
+a. Converting from a geographic to projected coordinate system reprojects data from ___ (fill in the blank). 
+24. How familiar are you with the term reflectance spectra?
+a. Of the following wavelengths, which one does vegetation reflect the most?
+
+## **Part 9: Machine Learning**
+25. How familiar are you with the difference between supervised and unsupervised learning (1, never heard of either of those terms - 5, very familiar with both concepts and how they differ)?
+a. Have you ever implemented an unsupervised learning algorithm (1, definitely not - 3 (maybe, but I'm not sure - 5, yes)?
+b. K-means clustering is an example of a(n) ___ learning approach because it ___ (fill in the blanks).
+26. How familiar are you with the procedure that divides your data into separate “training”, “validation”, and “testing” sets (1, ever heard of it - 3, vague sense of what it means - 5, very familiar)?
+a. How often have you implemented a train, validation, test split (1, ever - 5, all the time)?
+b. If my model performs very well in my training set, moderately well in my validation set, and poorly in my test set, what do I learn from this (choose all that apply)?
+
+## **Part 10: Environmental Justice**
+27. How familiar are you with the term Data Justice (1, ever heard of it - 3, vague sense of what it means - 5, very familiar)?
+28. I can identify areas of bias in approaches to data analysis (1, strongly disagree - 3, neutral - 5, strongly agree).
+
+## **Part 11: Data Viz & Communication**
+29. How comfortable are you with creating a data visualization using a programming language (1, never done it before - 5, very comfortable, do it often)?
+30. Identify 4 areas for improvement in the following data visualization that shows information about Michigan counties with highest college attendance.
+25. How familiar are you with the difference between supervised and unsupervised learning?
+**INSERT SCREENSHOT HERE**
+
+## **Part 13: Programming 2**
+31. What  programming language is this code written in?
+```{r}
+#| eval: false
+#| echo: true
+# define function
+def convert_F_to_C(temp_F):
+  temp_C = (temp_F-32)*5/9
+  return temp_C
+
+# use function
+convert_F_to_C(32)
+```
