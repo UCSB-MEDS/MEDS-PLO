@@ -267,119 +267,164 @@ Heads-up! No pre-MEDS PLO assessment data for the Claass of 2023
 </section>
 <section id="part-5-stats" class="level2">
 <h2 class="anchored" data-anchor-id="part-5-stats"><strong>Part 5: Stats</strong></h2>
-<ol start="16" type="1">
-<li>Consider the following sample of data: 5, 17, 0, 14, 14</li>
-</ol>
-<ol type="a">
+<section id="consider-the-following-sample-of-data-5-17-0-14-14" class="level4">
+<h4 class="anchored" data-anchor-id="consider-the-following-sample-of-data-5-17-0-14-14">16. Consider the following sample of data: 5, 17, 0, 14, 14</h4>
+<ul>
 <li>What is the median of this sample distribution?</li>
 <li>What is the mode of this sample distribution?</li>
-</ol>
-<ol start="17" type="1">
-<li>How familiar are you with the term linear regression?</li>
-</ol>
-<ol type="a">
-<li>Below is a chunk of code showing a simple linear regression relating the number of pieces of microplastics to the number of days per year with rainfall. How many pieces of microplastic do we predict will be present in a location with 45 days of rain per year (round your answer up to the nearest integer)? <strong>INSERT SCREENSHOT HERE</strong></li>
-</ol>
-<ol start="18" type="1">
-<li>How familiar are you with probability distributions?</li>
-</ol>
-<ol type="a">
+</ul>
+</section>
+<section id="how-familiar-are-you-with-the-term-linear-regression" class="level4">
+<h4 class="anchored" data-anchor-id="how-familiar-are-you-with-the-term-linear-regression">17. How familiar are you with the term linear regression?</h4>
+<ul>
+<li>Below is a chunk of code showing a simple linear regression relating the number of pieces of microplastics to the number of days per year with rainfall. How many pieces of microplastic do we predict will be present in a location with 45 days of rain per year (round your answer up to the nearest integer)?</li>
+</ul>
+<p><strong>INSERT SCREENSHOT HERE</strong></p>
+</section>
+<section id="how-familiar-are-you-with-probability-distributions" class="level4">
+<h4 class="anchored" data-anchor-id="how-familiar-are-you-with-probability-distributions">18. How familiar are you with probability distributions?</h4>
+<ul>
 <li>Which of the following terms are used to describe probability distributions (select all that apply; options: uniform, unequal, bimodal, variable, symmetric)?</li>
-</ol>
+</ul>
+</section>
 </section>
 <section id="part-6-programming" class="level2">
 <h2 class="anchored" data-anchor-id="part-6-programming"><strong>Part 6: Programming</strong></h2>
-<ol start="19" type="1">
-<li>How familiar are you with the term function as it relates to programming (1, never heard of it - 5, very familiar)?</li>
-</ol>
-<ol type="a">
+<section id="how-familiar-are-you-with-the-term-function-as-it-relates-to-programming-1-never-heard-of-it---5-very-familiar" class="level4">
+<h4 class="anchored" data-anchor-id="how-familiar-are-you-with-the-term-function-as-it-relates-to-programming-1-never-heard-of-it---5-very-familiar">19. How familiar are you with the term function as it relates to programming (1, never heard of it - 5, very familiar)?</h4>
+<ul>
 <li>How comfortable are you creating a function in code (1, not at all comfortable - 5, very comfortable)?</li>
-<li>The following code (in R) defines a function: <strong>INSERT SCREENSHOT HERE</strong> This R code applies this function to data: <strong>INSERT SCREENSHOT HERE</strong> What is the value of power_turbine_A?</li>
-</ol>
+</ul>
+<ul>
+<li>The following code (in R) defines a function:</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>compute_turbine_power <span class="ot">&lt;-</span> <span class="cf">function</span>(height, flowrate, efficiency, maxheight){</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (height <span class="sc">&lt;</span> maxheight) {</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    power <span class="ot">=</span> height <span class="sc">*</span> flowrate <span class="sc">*</span> efficiency</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> {</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    power <span class="ot">=</span> maxheight <span class="sc">*</span> flowrate <span class="sc">*</span> efficiency</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(power)</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>This R code applies this function to data:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>flowrate <span class="ot">=</span> <span class="dv">2</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>maxheight <span class="ot">=</span> <span class="dv">20</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>power_turbine_a <span class="ot">&lt;-</span> <span class="fu">compute_turbine_power</span>(<span class="dv">10</span>, flowrate, <span class="fl">0.5</span>, maxheight)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>What is the value of power_turbine_A?</p>
+</section>
 </section>
 <section id="part-7-environmental-modeling" class="level2">
 <h2 class="anchored" data-anchor-id="part-7-environmental-modeling"><strong>Part 7: Environmental Modeling</strong></h2>
-<ol start="20" type="1">
-<li>Have you run a model to learn something about (or predict something about) the environment?</li>
-</ol>
-<ol type="a">
+<section id="have-you-run-a-model-to-learn-something-about-or-predict-something-about-the-environment" class="level4">
+<h4 class="anchored" data-anchor-id="have-you-run-a-model-to-learn-something-about-or-predict-something-about-the-environment">20. Have you run a model to learn something about (or predict something about) the environment?</h4>
+<ul>
 <li>Have you done a sensitivity analysis to assess how model results change with changes in inputs or parameters? If you want to explore how parameter interactions impact model results, you would do?</li>
-</ol>
+</ul>
+</section>
 </section>
 <section id="part-8-geospatial-analysis-remote-sensing" class="level2">
 <h2 class="anchored" data-anchor-id="part-8-geospatial-analysis-remote-sensing"><strong>Part 8: Geospatial Analysis &amp; Remote Sensing</strong></h2>
-<ol start="21" type="1">
-<li>How comfortable are you working with spatial data?</li>
-</ol>
-<ol type="a">
+<section id="how-comfortable-are-you-working-with-spatial-data" class="level4">
+<h4 class="anchored" data-anchor-id="how-comfortable-are-you-working-with-spatial-data">21. How comfortable are you working with spatial data?</h4>
+<ul>
 <li>What are the two primary ways of representing spatial data (select two; options: raster, tabular, relational, vector, I’m not sure):</li>
-<li>Is the following a vector or raster? <strong>INSERT SCREENSHOT HERE</strong></li>
-</ol>
-<ol start="22" type="1">
-<li>How comfortable are you working with remotely sensed data?</li>
-</ol>
-<ol type="a">
+<li>Is the following a vector or raster?</li>
+</ul>
+<p><strong>INSERT SCREENSHOT HERE</strong></p>
+</section>
+<section id="how-comfortable-are-you-working-with-remotely-sensed-data" class="level4">
+<h4 class="anchored" data-anchor-id="how-comfortable-are-you-working-with-remotely-sensed-data">22. How comfortable are you working with remotely sensed data?</h4>
+<ul>
 <li>The type of remote sensing that relies on reflected radiation generated by the sun is called ___? (fill in the blank)</li>
-</ol>
-<ol start="23" type="1">
-<li>How comfortable are you working with map projections?</li>
-</ol>
-<ol type="a">
+</ul>
+</section>
+<section id="how-comfortable-are-you-working-with-map-projections" class="level4">
+<h4 class="anchored" data-anchor-id="how-comfortable-are-you-working-with-map-projections">23. How comfortable are you working with map projections?</h4>
+<ul>
 <li>Converting from a geographic to projected coordinate system reprojects data from ___ (fill in the blank).</li>
-</ol>
-<ol start="24" type="1">
-<li>How familiar are you with the term reflectance spectra?</li>
-</ol>
-<ol type="a">
+</ul>
+</section>
+<section id="how-familiar-are-you-with-the-term-reflectance-spectra" class="level4">
+<h4 class="anchored" data-anchor-id="how-familiar-are-you-with-the-term-reflectance-spectra">24. How familiar are you with the term reflectance spectra?</h4>
+<ul>
 <li>Of the following wavelengths, which one does vegetation reflect the most?</li>
-</ol>
+</ul>
+</section>
 </section>
 <section id="part-9-machine-learning" class="level2">
 <h2 class="anchored" data-anchor-id="part-9-machine-learning"><strong>Part 9: Machine Learning</strong></h2>
-<ol start="25" type="1">
-<li>How familiar are you with the difference between supervised and unsupervised learning (1, never heard of either of those terms - 5, very familiar with both concepts and how they differ)?</li>
-</ol>
-<ol type="a">
+<section id="how-familiar-are-you-with-the-difference-between-supervised-and-unsupervised-learning-1-never-heard-of-either-of-those-terms---5-very-familiar-with-both-concepts-and-how-they-differ" class="level4">
+<h4 class="anchored" data-anchor-id="how-familiar-are-you-with-the-difference-between-supervised-and-unsupervised-learning-1-never-heard-of-either-of-those-terms---5-very-familiar-with-both-concepts-and-how-they-differ">25. How familiar are you with the difference between supervised and unsupervised learning (1, never heard of either of those terms - 5, very familiar with both concepts and how they differ)?</h4>
+<ul>
 <li>Have you ever implemented an unsupervised learning algorithm (1, definitely not - 3 (maybe, but I’m not sure - 5, yes)?</li>
 <li>K-means clustering is an example of a(n) ___ learning approach because it ___ (fill in the blanks).</li>
-</ol>
-<ol start="26" type="1">
-<li>How familiar are you with the procedure that divides your data into separate “training”, “validation”, and “testing” sets (1, ever heard of it - 3, vague sense of what it means - 5, very familiar)?</li>
-</ol>
-<ol type="a">
+</ul>
+</section>
+<section id="how-familiar-are-you-with-the-procedure-that-divides-your-data-into-separate-training-validation-and-testing-sets-1-ever-heard-of-it---3-vague-sense-of-what-it-means---5-very-familiar" class="level4">
+<h4 class="anchored" data-anchor-id="how-familiar-are-you-with-the-procedure-that-divides-your-data-into-separate-training-validation-and-testing-sets-1-ever-heard-of-it---3-vague-sense-of-what-it-means---5-very-familiar">26. How familiar are you with the procedure that divides your data into separate “training”, “validation”, and “testing” sets (1, ever heard of it - 3, vague sense of what it means - 5, very familiar)?</h4>
+<ul>
 <li>How often have you implemented a train, validation, test split (1, ever - 5, all the time)?</li>
 <li>If my model performs very well in my training set, moderately well in my validation set, and poorly in my test set, what do I learn from this (choose all that apply)?</li>
-</ol>
+</ul>
+</section>
 </section>
 <section id="part-10-environmental-justice" class="level2">
 <h2 class="anchored" data-anchor-id="part-10-environmental-justice"><strong>Part 10: Environmental Justice</strong></h2>
-<ol start="27" type="1">
-<li>How familiar are you with the term Data Justice (1, ever heard of it - 3, vague sense of what it means - 5, very familiar)?</li>
-<li>I can identify areas of bias in approaches to data analysis (1, strongly disagree - 3, neutral - 5, strongly agree).</li>
-</ol>
+<section id="how-familiar-are-you-with-the-term-data-justice-1-ever-heard-of-it---3-vague-sense-of-what-it-means---5-very-familiar" class="level4">
+<h4 class="anchored" data-anchor-id="how-familiar-are-you-with-the-term-data-justice-1-ever-heard-of-it---3-vague-sense-of-what-it-means---5-very-familiar">27. How familiar are you with the term Data Justice (1, ever heard of it - 3, vague sense of what it means - 5, very familiar)?</h4>
+</section>
+<section id="i-can-identify-areas-of-bias-in-approaches-to-data-analysis-1-strongly-disagree---3-neutral---5-strongly-agree." class="level4">
+<h4 class="anchored" data-anchor-id="i-can-identify-areas-of-bias-in-approaches-to-data-analysis-1-strongly-disagree---3-neutral---5-strongly-agree.">28. I can identify areas of bias in approaches to data analysis (1, strongly disagree - 3, neutral - 5, strongly agree).</h4>
+</section>
 </section>
 <section id="part-11-data-viz-communication" class="level2">
 <h2 class="anchored" data-anchor-id="part-11-data-viz-communication"><strong>Part 11: Data Viz &amp; Communication</strong></h2>
-<ol start="29" type="1">
-<li>How comfortable are you with creating a data visualization using a programming language (1, never done it before - 5, very comfortable, do it often)?</li>
-<li>Identify 4 areas for improvement in the following data visualization that shows information about Michigan counties with highest college attendance.</li>
-<li>How familiar are you with the difference between supervised and unsupervised learning? <strong>INSERT SCREENSHOT HERE</strong></li>
-</ol>
+<section id="how-comfortable-are-you-with-creating-a-data-visualization-using-a-programming-language-1-never-done-it-before---5-very-comfortable-do-it-often" class="level4">
+<h4 class="anchored" data-anchor-id="how-comfortable-are-you-with-creating-a-data-visualization-using-a-programming-language-1-never-done-it-before---5-very-comfortable-do-it-often">29. How comfortable are you with creating a data visualization using a programming language (1, never done it before - 5, very comfortable, do it often)?</h4>
+</section>
+<section id="identify-4-areas-for-improvement-in-the-following-data-visualization-that-shows-information-about-michigan-counties-with-highest-college-attendance." class="level4">
+<h4 class="anchored" data-anchor-id="identify-4-areas-for-improvement-in-the-following-data-visualization-that-shows-information-about-michigan-counties-with-highest-college-attendance.">30. Identify 4 areas for improvement in the following data visualization that shows information about Michigan counties with highest college attendance.</h4>
+</section>
+<section id="how-familiar-are-you-with-the-difference-between-supervised-and-unsupervised-learning" class="level4">
+<h4 class="anchored" data-anchor-id="how-familiar-are-you-with-the-difference-between-supervised-and-unsupervised-learning">25. How familiar are you with the difference between supervised and unsupervised learning?</h4>
+<p><strong>INSERT SCREENSHOT HERE</strong></p>
+</section>
 </section>
 <section id="part-13-programming-2" class="level2">
 <h2 class="anchored" data-anchor-id="part-13-programming-2"><strong>Part 13: Programming 2</strong></h2>
-<ol start="31" type="1">
-<li>What programming language is this code written in?</li>
-</ol>
+<section id="what-programming-language-is-this-code-written-in" class="level4">
+<h4 class="anchored" data-anchor-id="what-programming-language-is-this-code-written-in">31. What programming language is this code written in?</h4>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># define function</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>def <span class="fu">convert_F_to_C</span>(temp_F)<span class="sc">:</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  temp_C <span class="ot">=</span> (temp_F<span class="dv">-32</span>)<span class="sc">*</span><span class="dv">5</span><span class="sc">/</span><span class="dv">9</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  return temp_C</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co"># use function</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">convert_F_to_C</span>(<span class="dv">32</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># define function</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>def <span class="fu">convert_F_to_C</span>(temp_F)<span class="sc">:</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  temp_C <span class="ot">=</span> (temp_F<span class="dv">-32</span>)<span class="sc">*</span><span class="dv">5</span><span class="sc">/</span><span class="dv">9</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  return temp_C</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co"># use function</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="fu">convert_F_to_C</span>(<span class="dv">32</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<div class="cell">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-23-1.png" class="img-fluid figure-img" width="672"></p>
+<p></p><figcaption class="figure-caption">Correct answer: Python</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
 </section>
 </section>
 

@@ -52,23 +52,40 @@ medsJune2023_clean <- medsJune2023 |>
   clean_names() |> 
   
   # coerce data types ----
-  # mutate(start_date = as_datetime(start_date, origin = "1981-01-01"))
-  # mutate(start_date = as_datetime(start_date))
-  mutate(operating_system = as_factor(operating_system),
+  mutate(#start_date = as_datetime(start_date, origin = "1981-01-01"),
+         #start_date = as_datetime(start_date)
+         progress = as.numeric(progress),
+         duration_in_seconds = as.numeric(duration_in_seconds),
+         finished = as.character(finished),
+         operating_system = as_factor(operating_system),
          raw_data = as.character(raw_data),
          small_program = as.character(small_program),
          find_help_online = as.character(find_help_online),
          overcoming_problems = as.character(overcoming_problems),
          confident_programmer = as.character(confident_programmer),
          easier_analyses = as.character(easier_analyses),
-         increase_efficiency = as.character(increase_efficiency)) 
+         increase_efficiency = as.character(increase_efficiency),
+         median = as.numeric(median),
+         mode = as.numeric(mode),
+         linear_regression = as.character(linear_regression),
+         microplastics_lr = as.character(microplastics_lr),
+         prob_dist = as.character(prob_dist),
+         term_function = as.character(term_function),
+         writing_functions = as.character(writing_functions),
+         fxn_output = as.character(fxn_output),
+         spatial_data = as.character(spatial_data),
+         remote_sense_comfort = as.character(remote_sense_comfort),
+         map_proj_comfort = as.character(map_proj_comfort), 
+         reflec_spec = as.character(reflec_spec),
+         sup_vs_unsup_learn = as.character(sup_vs_unsup_learn),
+         implemented_algo = as.character(implemented_algo),
+         ml_div_data = as.character(ml_div_data),
+         train_valid_split = as.character(train_valid_split),
+         data_justice = as.character(data_justice),
+         bias = as.character(bias),
+         data_viz_programming = as.character(data_viz_programming),
+         sc0 = as.numeric(sc0)) 
   
-  # reorder factor levels ----
-  # mutate(point_and_click_gui = fct_relevel(as_factor(point_and_click_gui),
-  #                                          c("Never", "Less than once per year", 
-  #                                            "Several times per year", 
-  #                                            "Monthly", "Weekly", "Daily"))) 
-
 #......................import Google fonts.......................
 sysfonts::font_add_google(name = "Sanchez", family = "sanchez")
 sysfonts::font_add_google(name = "Nunito", family = "nunito")
@@ -78,14 +95,16 @@ showtext::showtext_auto()
 
 #......................create ggplot theme.......................
 
-meds_theme <-   theme_minimal() + 
+meds_theme <- theme_minimal() + 
   theme(
     axis.title.x = element_text(margin = margin(t = 15, r = 0, b = 0, l = 0), family = "sanchez", size = 13),
     axis.title.y = element_text(margin = margin(t = 0, r = 15, b = 0, l = 0), family = "sanchez", size = 13), 
     axis.text = element_text(family = "nunito", size = 10),
     plot.title = element_text(margin = margin(t = 5, r = 0, b = 15, l = 0), size = 15, family = "sanchez"),
     plot.subtitle = element_text(margin = margin(t = 5, r = 0, b = 15, l = 0), size = 13, family = "sanchez"),
-    plot.title.position = "plot"
+    plot.caption = element_text(family = "sanchez"),
+    plot.title.position = "plot",
+    legend.position = "none"
   )
 ```
 
@@ -660,61 +679,114 @@ ggplot(q15_increase_efficiency, aes(x = increase_efficiency, y = n, label = perc
 
 ## **Part 5: Stats**
 
-16. Consider the following sample of data: 5, 17, 0, 14, 14
-a. What is the median of this sample distribution?
-b. What is the mode of this sample distribution?
-17. How familiar are you with the term linear regression?
-a. Below is a chunk of code showing a simple linear regression relating the number of pieces of microplastics to the number of days per year with rainfall. How many pieces of microplastic do we predict will be present in a location with 45 days of rain per year (round your answer up to the nearest integer)?
+#### 16. Consider the following sample of data: 5, 17, 0, 14, 14
+-  What is the median of this sample distribution?
+-  What is the mode of this sample distribution?
+
+#### 17. How familiar are you with the term linear regression?
+-  Below is a chunk of code showing a simple linear regression relating the number of pieces of microplastics to the number of days per year with rainfall. How many pieces of microplastic do we predict will be present in a location with 45 days of rain per year (round your answer up to the nearest integer)?
+
 **INSERT SCREENSHOT HERE**
-18. How familiar are you with probability distributions?
-a. Which of the following terms are used to describe probability distributions (select all that apply; options: uniform, unequal, bimodal, variable, symmetric)?
+
+#### 18. How familiar are you with probability distributions?
+-  Which of the following terms are used to describe probability distributions (select all that apply; options: uniform, unequal, bimodal, variable, symmetric)?
 
 ## **Part 6: Programming**
-19. How familiar are you with the term function as it relates to programming (1, never heard of it - 5, very familiar)?
-a. How comfortable are you creating a function in code (1, not at all comfortable - 5, very comfortable)?
-b. The following code (in R) defines a function:
-**INSERT SCREENSHOT HERE**
+#### 19. How familiar are you with the term function as it relates to programming (1, never heard of it - 5, very familiar)?
+
+```{r}
+
+```
+
+-  How comfortable are you creating a function in code (1, not at all comfortable - 5, very comfortable)?
+
+```{r}
+q19a <- medsJune2023_clean
+```
+
+-  The following code (in R) defines a function:
+```{r}
+#| eval: false
+#| echo: true
+compute_turbine_power <- function(height, flowrate, efficiency, maxheight){
+  
+  if (height < maxheight) {
+    
+    power = height * flowrate * efficiency
+    
+  } else {
+    
+    power = maxheight * flowrate * efficiency
+    
+  }
+  
+  return(power)
+  
+}
+```
+
 This R code applies this function to data:
-**INSERT SCREENSHOT HERE**
+```{r}
+#| eval: false
+#| echo: true
+flowrate = 2
+maxheight = 20
+power_turbine_a <- compute_turbine_power(10, flowrate, 0.5, maxheight)
+```
+
 What is the value of power_turbine_A?
 
+```{r}
+
+```
+
 ## **Part 7: Environmental Modeling**
-20. Have you run a model to learn something about (or predict something about) the environment?
-a. Have you done a sensitivity analysis to assess how model results change with changes in inputs or parameters?
+#### 20. Have you run a model to learn something about (or predict something about) the environment?
+-  Have you done a sensitivity analysis to assess how model results change with changes in inputs or parameters?
 If you want to explore how parameter interactions impact model results, you would do?
 
 ## **Part 8: Geospatial Analysis & Remote Sensing**
-21. How comfortable are you working with spatial data?
-a. What are the two primary ways of representing spatial data (select two; options: raster, tabular, relational, vector, I'm not sure):
-b. Is the following a vector or raster?
+#### 21. How comfortable are you working with spatial data?
+-  What are the two primary ways of representing spatial data (select two; options: raster, tabular, relational, vector, I'm not sure):
+-  Is the following a vector or raster?
+
 **INSERT SCREENSHOT HERE**
-22. How comfortable are you working with remotely sensed data?
-a. The type of remote sensing that relies on reflected radiation generated by the sun is called ___? (fill in the blank)
-23. How comfortable are you working with map projections?
-a. Converting from a geographic to projected coordinate system reprojects data from ___ (fill in the blank). 
-24. How familiar are you with the term reflectance spectra?
-a. Of the following wavelengths, which one does vegetation reflect the most?
+
+#### 22. How comfortable are you working with remotely sensed data?
+-  The type of remote sensing that relies on reflected radiation generated by the sun is called ___? (fill in the blank)
+
+#### 23. How comfortable are you working with map projections?
+-  Converting from a geographic to projected coordinate system reprojects data from ___ (fill in the blank). 
+
+#### 24. How familiar are you with the term reflectance spectra?
+-  Of the following wavelengths, which one does vegetation reflect the most?
 
 ## **Part 9: Machine Learning**
-25. How familiar are you with the difference between supervised and unsupervised learning (1, never heard of either of those terms - 5, very familiar with both concepts and how they differ)?
-a. Have you ever implemented an unsupervised learning algorithm (1, definitely not - 3 (maybe, but I'm not sure - 5, yes)?
-b. K-means clustering is an example of a(n) ___ learning approach because it ___ (fill in the blanks).
-26. How familiar are you with the procedure that divides your data into separate “training”, “validation”, and “testing” sets (1, ever heard of it - 3, vague sense of what it means - 5, very familiar)?
-a. How often have you implemented a train, validation, test split (1, ever - 5, all the time)?
-b. If my model performs very well in my training set, moderately well in my validation set, and poorly in my test set, what do I learn from this (choose all that apply)?
+
+#### 25. How familiar are you with the difference between supervised and unsupervised learning (1, never heard of either of those terms - 5, very familiar with both concepts and how they differ)?
+-  Have you ever implemented an unsupervised learning algorithm (1, definitely not - 3 (maybe, but I'm not sure - 5, yes)?
+-  K-means clustering is an example of a(n) ___ learning approach because it ___ (fill in the blanks).
+
+#### 26. How familiar are you with the procedure that divides your data into separate “training”, “validation”, and “testing” sets (1, ever heard of it - 3, vague sense of what it means - 5, very familiar)?
+-  How often have you implemented a train, validation, test split (1, ever - 5, all the time)?
+-  If my model performs very well in my training set, moderately well in my validation set, and poorly in my test set, what do I learn from this (choose all that apply)?
 
 ## **Part 10: Environmental Justice**
-27. How familiar are you with the term Data Justice (1, ever heard of it - 3, vague sense of what it means - 5, very familiar)?
-28. I can identify areas of bias in approaches to data analysis (1, strongly disagree - 3, neutral - 5, strongly agree).
+
+#### 27. How familiar are you with the term Data Justice (1, ever heard of it - 3, vague sense of what it means - 5, very familiar)?
+#### 28. I can identify areas of bias in approaches to data analysis (1, strongly disagree - 3, neutral - 5, strongly agree).
 
 ## **Part 11: Data Viz & Communication**
-29. How comfortable are you with creating a data visualization using a programming language (1, never done it before - 5, very comfortable, do it often)?
-30. Identify 4 areas for improvement in the following data visualization that shows information about Michigan counties with highest college attendance.
-25. How familiar are you with the difference between supervised and unsupervised learning?
+
+#### 29. How comfortable are you with creating a data visualization using a programming language (1, never done it before - 5, very comfortable, do it often)?
+#### 30. Identify 4 areas for improvement in the following data visualization that shows information about Michigan counties with highest college attendance.
+#### 25. How familiar are you with the difference between supervised and unsupervised learning?
+
 **INSERT SCREENSHOT HERE**
 
 ## **Part 13: Programming 2**
-31. What  programming language is this code written in?
+
+#### 31. What  programming language is this code written in?
 ```{r}
 #| eval: false
 #| echo: true
@@ -726,3 +798,39 @@ def convert_F_to_C(temp_F):
 # use function
 convert_F_to_C(32)
 ```
+
+```{r}
+#| fig-cap: "Correct answer: Python"
+#............................wrangle.............................
+q31_what_lang <- medsJune2023_clean |> 
+  
+  # select necessary cols ----
+  select(what_lang_is_this) |> 
+  
+  # sum ----
+  group_by(what_lang_is_this) |>
+  count() |>
+  ungroup() |> 
+  
+    # ONLY ADDING BC NO ONE SELECTED THE FOLLOWING OPTIONS ----
+  add_row(what_lang_is_this = "SQL", n = 0) |>
+
+  # add col for percentages ----
+  mutate(percentage = round((n/(sum(n)))*100, 1),
+         perc_label = paste0(percentage, "%"))
+
+#..............................plot..............................
+pal <- c("Python" = "#7ECD7A", "R" = "#047C91", "SQL" = "#047C91")
+
+ggplot(q31_what_lang, aes(x = what_lang_is_this, y = n, label = perc_label, fill = what_lang_is_this)) +
+  geom_col() +
+  geom_text(position = position_stack(vjust = 0.5), size = 3, color = "white", family = "nunito") +
+  labs(y = "Number of MEDS students", x = "Language",
+       #title = "What programming language is this code written in?",
+       caption = "Question 31") +
+  scale_fill_manual(
+    values = pal, limits = names(pal) 
+  ) +
+  meds_theme
+```
+
