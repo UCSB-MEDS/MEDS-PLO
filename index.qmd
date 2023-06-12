@@ -110,6 +110,9 @@ meds_theme <- theme_minimal() +
     plot.title.position = "plot",
     legend.position = "none"
   )
+
+#........................source functions........................
+source("functions.R")
 ```
 
 This PLO assessment was administered to the MEDS class of 2023 **(response rate = `r nrow(medsJune2023_clean)` / 31 students)** on June 7, 2023.
@@ -743,11 +746,6 @@ ggplot(q16_mode, aes(x = fct_reorder(mode, desc(n)), y = n, label = perc_label))
 
 ```{r}
 #............................wrangle.............................
-q17_num_answers <- medsJune2023_clean |> 
-  select(linear_regression) |> 
-  count() |> 
-  pull()
-
 q17_familiarity_lr <- medsJune2023_clean |> 
   
   # select necessary cols ----
@@ -782,9 +780,26 @@ ggplot(q17_familiarity_lr, aes(x = linear_regression, y = n, label = perc_label)
   meds_theme
 ```
 
+```{r in-line code q17}
+# total respondents ----
+q17_num_answers <- medsJune2023_clean |> 
+  select(linear_regression) |> 
+  count() |> 
+  pull()
+
+# total not answer 1 ----
+q17_not1 <- medsJune2023_clean |> 
+  select(linear_regression) |> 
+  group_by(linear_regression) |>
+  count() |>
+  ungroup() |> 
+  summarize(n = sum(n)) |> 
+  pull()
+```
+
 ::: {.callout-note}
 ## All students answered all parts of question 17
-**`r q17_num_answers` / 29 student respondents (`r ((q17_num_answers/29)*100)`%)** chose a familiarity level of 2 or greater, and therefore were directed to answer all parts of question 17.
+**`r q17_not1` / `r q17_num_answers` student respondents (`r ((q17_not1/q17_num_answers)*100)`%)** chose a familiarity level of 2 or greater, and therefore were directed to answer all parts of question 17.
 :::
 
 Below is a chunk of code showing a simple linear regression relating the number of pieces of microplastics to the number of days per year with rainfall.
@@ -861,11 +876,6 @@ DT::datatable(q17_microplastics_dt, colnames = c("Free Response Answer to Q17b")
 
 ```{r}
 #............................wrangle.............................
-q18a_num_answers <- medsJune2023_clean |> 
-  select(prob_dist) |> 
-  count() |> 
-  pull()
-
 q18a_prob_dist <- medsJune2023_clean |> 
   
   # select necessary cols ----
@@ -900,9 +910,26 @@ ggplot(q18a_prob_dist, aes(x = prob_dist, y = n, label = perc_label)) +
   meds_theme
 ```
 
+```{r in-line code q18}
+# total respondents ----
+q18a_num_answers <- medsJune2023_clean |> 
+  select(prob_dist) |> 
+  count() |> 
+  pull()
+
+# total not answer 1 ----
+q18a_not1 <- medsJune2023_clean |> 
+  select(prob_dist) |> 
+  group_by(prob_dist) |>
+  count() |>
+  ungroup() |> 
+  summarize(n = sum(n)) |> 
+  pull()
+```
+
 ::: {.callout-note}
 ## All students answered all parts of question 18
-**`r q18a_num_answers` / 29 student respondents (`r ((q18a_num_answers/29)*100)`%)** chose a familiarity level of 2 or greater, and therefore were directed to answer all parts of question 18.
+**`r q18a_not1` / `r q18a_num_answers` student respondents (`r ((q18a_not1/q18a_num_answers)*100)`%)** chose a familiarity level of 2 or greater, and therefore were directed to answer all parts of question 18.
 :::
 
 ```{r}
@@ -910,9 +937,9 @@ ggplot(q18a_prob_dist, aes(x = prob_dist, y = n, label = perc_label)) +
 #| fig-cap: "62% of respondents correctly answered question 18b (i.e. chose exactly the following options: noraml, uniform, bimodal, symmedtric)"
 # ............................wrangle.............................
 # ---- for calculating percentages in wrangling step below ----
-q18b_num_answers <- medsJune2023_clean |> 
-  select(prob_dist_terms) |> 
-  count() |> 
+q18b_num_answers <- medsJune2023_clean |>
+  select(prob_dist_terms) |>
+  count() |>
   pull()
 
 # ---- wrangle for individual selection correctness ----
@@ -1037,9 +1064,26 @@ ggplot(q19a_term_fxn, aes(x = term_function, y = n, label = perc_label)) +
   meds_theme
 ```
 
+```{r in-line code q19a}
+# total respondents ----
+q19a_num_answers <- medsJune2023_clean |> 
+  select(term_function) |> 
+  count() |> 
+  pull()
+
+# total not answer 1 ----
+q19a_not1 <- medsJune2023_clean |> 
+  select(term_function) |> 
+  group_by(term_function) |>
+  count() |>
+  ungroup() |> 
+  summarize(n = sum(n)) |> 
+  pull()
+```
+
 ::: {.callout-note}
-## All students answered all parts of question 19
-**`r q19_num_answers` / 29 student respondents (`r ((q19_num_answers/29)*100)`%)** chose a familiarity level of 2 or greater, and therefore were directed to answer all parts of question 19.
+## All students continued on to answer question 19b
+**`r q19a_not1` / `r q19a_num_answers` student respondents (`r ((q19a_not1/q19a_num_answers)*100)`%)** chose a familiarity level of 2 or greater, and therefore were directed to answer part b of question 19.
 :::
 
 ```{r}
@@ -1076,6 +1120,29 @@ ggplot(q19b_writing_fxns, aes(x = writing_functions, y = n, label = perc_label))
        caption = "Question 19b (choosing '1 (not at all)' skips respondent to question 20)") +
   meds_theme
 ```
+
+```{r in-line code q19b}
+# total respondents ----
+q19b_num_answers <- medsJune2023_clean |> 
+  select(writing_functions) |> 
+  count() |> 
+  pull()
+
+# total not answer 1 ----
+q19b_not1 <- medsJune2023_clean |> 
+  select(writing_functions) |> 
+  group_by(writing_functions) |>
+  count() |>
+  ungroup() |> 
+  summarize(n = sum(n)) |> 
+  pull()
+```
+
+::: {.callout-note}
+## All students answered all parts of question 19
+**`r q19b_not1` / `r q19b_num_answers` student respondents (`r ((q19b_not1/q19b_num_answers)*100)`%)** chose a comfortability level of 2 or greater, and therefore were directed to part c of question 19.
+:::
+
 
 The following code (in R) defines a function:
 
@@ -1226,10 +1293,8 @@ ggplot(q20c_param_int, aes(x = fct_reorder(param_interactions, desc(n)), y = n, 
   labs(y = "Number of MEDS students", x = "Selection",
        title = "If you want to explore how parameter interactions impact model\nresults, you would do...",
        caption = "Question 20c; No Response == answered 'No' to Q20b") +
-  meds_theme +
-  theme(
-    axis.text.x = element_text(angle = 15)
-  )
+  scale_x_discrete(labels = function(x) str_wrap(x, width = 15)) +
+  meds_theme 
 ```
 
 ## **Part 8: Geospatial Analysis & Remote Sensing**
@@ -1274,9 +1339,26 @@ ggplot(q21a_spatial_comfort, aes(x = spatial_data, y = n, label = perc_label)) +
   meds_theme
 ```
 
+```{r in-line code q21a}
+# total respondents ----
+q21a_num_answers <- medsJune2023_clean |> 
+  select(spatial_data) |> 
+  count() |> 
+  pull()
+
+# total not answer 1 ----
+q21a_not1 <- medsJune2023_clean |> 
+  select(spatial_data) |> 
+  group_by(spatial_data) |>
+  count() |>
+  ungroup() |> 
+  summarize(n = sum(n)) |> 
+  pull()
+```
+
 ::: {.callout-note}
 ## All students answered all parts of question 21
-**`r q21a_num_answers` / 29 student respondents (`r ((q21a_num_answers/29)*100)`%)** chose a familiarity level of 2 or greater, and therefore were directed to answer all parts of question 21.
+**`r q21a_not1` / `r q21a_num_answers` student respondents (`r ((q21a_not1/q21a_num_answers)*100)`%)** chose a familiarity level of 2 or greater, and therefore were directed to answer all parts of question 21.
 :::
 
 ```{r}
@@ -1395,23 +1477,574 @@ ggplot(q21c_vec_ras, aes(x = fct_reorder(vec_or_ras, desc(n)), y = n, label = pe
 knitr::include_graphics("images/21c-vector.png")
 ```
 
-#### 22. How comfortable are you working with remotely sensed data?
--  The type of remote sensing that relies on reflected radiation generated by the sun is called ___? (fill in the blank)
+::: {.callout-warning}
+## **UPDATE FOR NEXT YEAR**
+**This question was missing from assessment:** How familiar are you with the term *remote sensing*? 1 (never hear of it), 2, 3 (vague sense of what it means), 4, 5 (very familiar)
+:::
 
-#### 23. How comfortable are you working with map projections?
--  Converting from a geographic to projected coordinate system reprojects data from ___ (fill in the blank). 
+```{r}
+# ............................wrangle.............................
+q22a_rs_comfort <- medsJune2023_clean |> 
+  
+  # select necessary cols ----
+  select(remote_sense_comfort) |> 
+  
+  # sum ----
+  group_by(remote_sense_comfort) |>
+  count() |>
+  ungroup() |> 
+  
+  # ONLY ADDING BC NO ONE SELECTED THE FOLLOWING OPTIONS ----
+  add_row(remote_sense_comfort = "1 (never worked with it before)", n = 0) |>
+  
+  # reorder factors ----
+  mutate(remote_sense_comfort = fct_relevel(remote_sense_comfort, 
+                                        c("1 (never worked with it before)", "2", 
+                                        "3", "4", "5 (work with it all the time)"))) |>
 
-#### 24. How familiar are you with the term reflectance spectra?
--  Of the following wavelengths, which one does vegetation reflect the most?
+  # add col for percentages ----
+  mutate(percentage = round((n/(sum(n)))*100, 1),
+         perc_label = paste0(percentage, "%"))
+
+#..............................plot..............................
+ggplot(q22a_rs_comfort, aes(x = remote_sense_comfort, y = n, label = perc_label)) +
+  geom_col(fill = "#047C91") +
+  coord_flip() +
+  geom_text(position = position_stack(vjust = 0.5), size = 3, color = "white", family = "nunito") +
+  labs(y = "Number of MEDS students", x = "Comfortability level",
+       title = "How comfortable are you working with remotely sensed data?",
+       caption = "Question 22a (choosing '1 (never worked with it before)' skips respondent to question 23)") +
+  meds_theme
+```
+
+```{r in-line code q22a}
+# total respondents ----
+q22a_num_answers <- medsJune2023_clean |> 
+  select(remote_sense_comfort) |> 
+  count() |> 
+  pull()
+
+# total not answer 1 ----
+q22a_not1 <- medsJune2023_clean |> 
+  select(remote_sense_comfort) |> 
+  group_by(remote_sense_comfort) |>
+  count() |>
+  ungroup() |> 
+  summarize(n = sum(n)) |> 
+  pull()
+```
+
+::: {.callout-note}
+## All students answered all parts of question 22
+**`r q22a_not1` / `r q22a_num_answers` student respondents (`r ((q22a_not1/q22a_num_answers)*100)`%)** chose a familiarity level of 2 or greater, and therefore were directed to answer all parts of question 22.
+:::
+
+```{r}
+# ............................wrangle.............................
+q22b_rs_sun <- medsJune2023_clean |> 
+  
+  # select necessary cols ----
+  select(remote_sensing_sun) |> 
+  
+  # sum ----
+  group_by(remote_sensing_sun) |>
+  count() |>
+  ungroup() |> 
+  
+  # ONLY ADDING BC NO ONE SELECTED THE FOLLOWING OPTIONS ----
+  add_row(remote_sensing_sun = "I'm not sure", n = 0) |>
+  
+  # coerce to factor ----
+  mutate(remote_sensing_sun = as_factor(remote_sensing_sun)) |> 
+
+  # add col for percentages ----
+  mutate(percentage = round((n/(sum(n)))*100, 1),
+         perc_label = paste0(percentage, "%"))
+
+#..............................plot..............................
+pal <- c("passive" = "#7ECD7A", "active" = "#047C91", "I'm not sure" = "#047C91")
+
+ggplot(q22b_rs_sun, aes(x = fct_reorder(remote_sensing_sun, desc(n)), y = n, label = perc_label, fill = remote_sensing_sun)) +
+  geom_col() +
+  geom_text(position = position_stack(vjust = 0.5), size = 3, color = "white", family = "nunito") +
+  labs(y = "Number of MEDS students", x = "Selection",
+       title = "The type of remote sensing that relies on reflected radiation\ngenerated by the sun is called ___? (fill in the blank)",
+       caption = "Question 22b") +
+  scale_fill_manual(values = pal, limits = names(pal)) +
+  meds_theme
+```
+
+```{r}
+# ............................wrangle.............................
+q23a_num_answers <- medsJune2023_clean |> 
+  select(map_proj_comfort) |> 
+  count() |> 
+  pull()
+
+q23a_map_proj_comfort <- medsJune2023_clean |> 
+  
+  # select necessary cols ----
+  select(map_proj_comfort) |> 
+
+  # sum ----
+  group_by(map_proj_comfort) |>
+  count() |>
+  ungroup() |> 
+  
+  # coerce to factors ----
+  mutate(map_proj_comfort = as_factor(map_proj_comfort)) |> 
+  
+  # reorder factors ----
+  mutate(map_proj_comfort = fct_relevel(map_proj_comfort,
+                                        c("1 (never worked with it before)", "2",
+                                        "3", "4", "5 (work it with all the time)"))) |>
+
+  # add col for percentages ----
+  mutate(percentage = round((n/(sum(n)))*100, 1),
+         perc_label = paste0(percentage, "%"))
+
+#..............................plot..............................
+ggplot(q23a_map_proj_comfort, aes(x = map_proj_comfort, y = n, label = perc_label)) +
+  geom_col(fill = "#047C91") +
+  coord_flip() +
+  geom_text(position = position_stack(vjust = 0.5), size = 3, color = "white", family = "nunito") +
+  labs(y = "Number of MEDS students", x = "Comfortability level",
+       title = "How comfortable are you working with map projections?",
+       caption = "Question 23a (choosing '1 (never worked with it before)' skips respondent to question 24)") +
+  meds_theme
+```
+
+```{r in-line code q23a}
+# total respondents ----
+q23a_num_answers <- medsJune2023_clean |> 
+  select(map_proj_comfort) |> 
+  count() |> 
+  pull()
+
+# total not answer 1 ----
+q23a_not1 <- medsJune2023_clean |> 
+  select(map_proj_comfort) |> 
+  group_by(map_proj_comfort) |>
+  count() |>
+  ungroup() |> 
+  filter(map_proj_comfort != "1 (never worked with it before)") |> 
+  summarize(n = sum(n)) |> 
+  pull()
+```
+
+::: {.callout-note}
+## One respondent did not answer all parts of Question 23
+**`r q23a_not1` / `r q23a_num_answers` student respondents (`r ((q23a_not1/q23a_num_answers)*100)`%)** chose a familiarity level of 2 or greater -- these respondents were directed to answer all parts of question 23. One respondent selected **1 (never worked with it before)** in response to Question 23a and was jumped directly to Question 24.
+:::
+
+```{r}
+# ............................wrangle.............................
+q23b_convert_geo_coord <- medsJune2023_clean |>
+
+  # select necessary cols ----
+  select(convert_geo_to_coord) |>
+
+  # sum ----
+  group_by(convert_geo_to_coord) |>
+  count() |>
+  ungroup() |>
+  
+  # replace NA (from respondent who selected 'No' for previous question) ----
+  replace_na(list(convert_geo_to_coord = "No response")) |> 
+
+  # coerce to factors ----
+  mutate(convert_geo_to_coord = as_factor(convert_geo_to_coord)) |>
+
+  # add col for percentages ----
+  mutate(percentage = round((n/(sum(n)))*100, 1),
+         perc_label = paste0(percentage, "%"))
+
+#..............................plot..............................
+pal <- c("3D to 2D" = "#7ECD7A", "Imprecise locations to precise locations" = "#047C91", 
+         "Meters to latitude/longitude" = "#047C91", "No response" = "#047C91")
+
+
+ggplot(q23b_convert_geo_coord, aes(x = fct_reorder(convert_geo_to_coord, desc(n)), y = n, label = perc_label, fill = convert_geo_to_coord)) +
+  geom_col() +
+ geom_text(position = position_stack(vjust = 0.5), size = 3, color = "white", family = "nunito") +
+  labs(y = "Number of MEDS students", x = "Selection",
+       title = "Converting from a geographic to projected coordinate system reprojects data from ___ (fill in the blank)",
+       caption = "Question 23b") +
+  scale_x_discrete(labels = function(x) str_wrap(x, width = 15)) +
+  scale_fill_manual(values = pal, limits = names(pal)) +
+  meds_theme 
+```
+
+::: {.callout-warning}
+## **UPDATE FOR NEXT YEAR**
+Add "I'm not sure" option
+:::
+
+```{r}
+# ............................wrangle.............................
+q24a_ref_spec <- medsJune2023_clean |>
+
+  # select necessary cols ----
+  select(reflec_spec) |>
+
+  # sum ----
+  group_by(reflec_spec) |>
+  count() |>
+  ungroup() |>
+
+  # reorder factors ----
+  mutate(reflec_spec = fct_relevel(reflec_spec,
+                                 c("1 (never heard of it)", "2",
+                                 "3 (vague sense of what it means)", "4", "5 (very familiar)"))) |>
+
+  # add col for percentages ----
+  mutate(percentage = round((n/(sum(n)))*100, 1),
+         perc_label = paste0(percentage, "%"))
+
+#..............................plot..............................
+ggplot(q24a_ref_spec, aes(x = reflec_spec, y = n, label = perc_label)) +
+  geom_col(fill = "#047C91") +
+  coord_flip() +
+  geom_text(position = position_stack(vjust = 0.5), size = 3, color = "white", family = "nunito") +
+  labs(y = "Number of MEDS students", x = "Familiarity level",
+       title = "How familiar are you with the term reflectance spectra?",
+       caption = "Question 24a (choosing '1 (never heard of it)' skips respondent to question 25)") +
+  meds_theme
+```
+
+```{r in-line code q24a}
+# total respondents ----
+q24a_num_answers <- medsJune2023_clean |>
+  select(reflec_spec) |>
+  count() |>
+  pull()
+
+# total not answer 1 ----
+q24a_not1 <- medsJune2023_clean |>
+  select(reflec_spec) |>
+  group_by(reflec_spec) |>
+  count() |>
+  ungroup() |>
+  filter(reflec_spec != "1 (never heard of it)") |> 
+  summarize(n = sum(n)) |>
+  pull()
+```
+
+::: {.callout-note}
+## Two respondents did not answer all parts of Question 23
+**`r q24a_not1` / `r q24a_num_answers` student respondents (`r ((q24a_not1/q24a_num_answers)*100)`%)** chose a familiarity level of 2 or greater -- these respondents were directed to answer Question 23b. Two respondents selected **1 (never heard of it)** in response to Question 24a and were jumped directly to Question 25.
+:::
+
+```{r}
+q24b_wavelenghts <- medsJune2023_clean |> 
+  
+  # select necessary cols ----
+  select(veg_wavelength) |> 
+  
+   # sum ----
+  group_by(veg_wavelength) |>
+  count() |>
+  ungroup() |>
+
+  # replace NA (from respondents who selected 'No' for previous question) ----
+  replace_na(list(veg_wavelength = "No response")) |> 
+
+  # add col for percentages ----
+  mutate(percentage = round((n/(sum(n)))*100, 1),
+         perc_label = paste0(percentage, "%"))
+
+#..............................plot..............................
+pal <- c("green" = "#7ECD7A", "red" = "#047C91", "blue" = "#047C91", "blue and thermal" = "#047C91",
+         "I'm not sure" = "#047C91", "No response" = "#047C91")
+
+ggplot(q24b_wavelenghts, aes(x = fct_reorder(veg_wavelength, desc(n)), y = n, label = perc_label, fill = veg_wavelength)) +
+  geom_col() +
+ geom_text(position = position_stack(vjust = 0.5), size = 3, color = "white", family = "nunito") +
+  labs(y = "Number of MEDS students", x = "Selection",
+       title = "Of the following wavelengths, which one does vegetation reflect the\nmost?",
+       caption = "Question 24b") +
+  scale_fill_manual(values = pal, limits = names(pal)) +
+  meds_theme
+```
 
 ## **Part 9: Machine Learning**
 
-#### 25. How familiar are you with the difference between supervised and unsupervised learning (1, never heard of either of those terms - 5, very familiar with both concepts and how they differ)?
--  Have you ever implemented an unsupervised learning algorithm (1, definitely not - 3 (maybe, but I'm not sure - 5, yes)?
--  K-means clustering is an example of a(n) ___ learning approach because it ___ (fill in the blanks).
+```{r}
+# ............................wrangle.............................
+q25a_ml_familiarity <- medsJune2023_clean |>
 
-#### 26. How familiar are you with the procedure that divides your data into separate “training”, “validation”, and “testing” sets (1, ever heard of it - 3, vague sense of what it means - 5, very familiar)?
--  How often have you implemented a train, validation, test split (1, ever - 5, all the time)?
+  # select necessary cols ----
+  select(sup_vs_unsup_learn) |>
+
+  # sum ----
+  group_by(sup_vs_unsup_learn) |>
+  count() |>
+  ungroup() |>
+  
+  # ONLY ADDING BC NO ONE SELECTED THE FOLLOWING OPTIONS ----
+  add_row(sup_vs_unsup_learn = "1 (never heard of either of these terms)", n = 0) |>
+
+  # reorder factors ----
+  mutate(sup_vs_unsup_learn = fct_relevel(sup_vs_unsup_learn,
+                                 c("1 (never heard of either of these terms)", "2",
+                                 "3 (vague sense of these terms, but not why they are distinct from one another)", "4", "5 (very familiar with both concepts and how they differ)"))) |>
+
+  # add col for percentages ----
+  mutate(percentage = round((n/(sum(n)))*100, 1),
+         perc_label = paste0(percentage, "%"))
+
+#..............................plot..............................
+ggplot(q25a_ml_familiarity, aes(x = sup_vs_unsup_learn, y = n, label = perc_label)) +
+  geom_col(fill = "#047C91") +
+  coord_flip() +
+  geom_text(position = position_stack(vjust = 0.5), size = 3, color = "white", family = "nunito") +
+  labs(y = "Number of MEDS students", x = "Familiarity level",
+       title = "How familiar are you with the difference between supervised and\nunsupervised learning?",
+       caption = "Question 25a (choosing '1 (never heard of it)' skips respondent to question 26)") +
+  scale_x_discrete(labels = function(x) str_wrap(x, width = 15)) +
+  meds_theme
+```
+
+```{r in-line code q25a}
+# total respondents ----
+q25a_num_answers <- medsJune2023_clean |>
+  select(sup_vs_unsup_learn) |>
+  count() |>
+  pull()
+
+# total not answer 1 ----
+q25a_not1 <- medsJune2023_clean |>
+  select(sup_vs_unsup_learn) |>
+  group_by(sup_vs_unsup_learn) |>
+  count() |>
+  ungroup() |>
+  filter(sup_vs_unsup_learn != "1 (never heard of either of these terms)") |> 
+  summarize(n = sum(n)) |>
+  pull()
+```
+
+::: {.callout-note}
+## All respondents continued on to Question 25b
+**`r q25a_not1` / `r q25a_num_answers` student respondents (`r ((q25a_not1/q25a_num_answers)*100)`%)** chose a familiarity level of 2 or greater, and therefore were directed to Question 25b.
+:::
+
+```{r}
+# ............................wrangle.............................
+q25b_unsup_alg <- medsJune2023_clean |>
+
+  # select necessary cols ----
+  select(implemented_algo) |>
+
+  # sum ----
+  group_by(implemented_algo) |>
+  count() |>
+  ungroup() |>
+  
+  # ONLY ADDING BC NO ONE SELECTED THE FOLLOWING OPTIONS ----
+  add_row(implemented_algo = "1 (definitely not)", n = 0) |>
+
+  # reorder factors ----
+  mutate(implemented_algo = fct_relevel(implemented_algo,
+                                 c("1 (definitely not)", "2",
+                                 "3 (maybe, but I'm not sure)", "4", "5 (yes)"))) |>
+  
+  # add col for percentages ----
+  mutate(percentage = round((n/(sum(n)))*100, 1),
+         perc_label = paste0(percentage, "%"))
+
+#..............................plot..............................
+ggplot(q25b_unsup_alg, aes(x = implemented_algo, y = n, label = perc_label)) +
+  geom_col(fill = "#047C91") +
+  coord_flip() +
+  geom_text(position = position_stack(vjust = 0.5), size = 3, color = "white", family = "nunito") +
+  labs(y = "Number of MEDS students", x = "Familiarity level",
+       title = "Have you ever implemented an unsupervised learning algorithm?",
+       caption = "Question 25b (choosing '1 (definitely not)' skips respondent to question 26)") +
+  scale_x_discrete(labels = function(x) str_wrap(x, width = 15)) +
+  meds_theme
+```
+
+```{r in-line code q25b}
+# total respondents ----
+q25b_num_answers <- medsJune2023_clean |>
+  select(implemented_algo) |>
+  count() |>
+  pull()
+
+# total not answer 1 ----
+q25b_not1 <- medsJune2023_clean |>
+  select(implemented_algo) |>
+  group_by(implemented_algo) |>
+  count() |>
+  ungroup() |>
+  filter(implemented_algo != "1 (definitely not)") |> 
+  summarize(n = sum(n)) |>
+  pull()
+```
+
+::: {.callout-note}
+## All respondents continued on to Question 25c
+**`r q25b_not1` / `r q25b_num_answers` student respondents (`r ((q25b_not1/q25b_num_answers)*100)`%)** chose a familiarity level of 2 or greater, and therefore were directed to Question 25c.
+:::
+
+```{r}
+# ............................wrangle.............................
+q25c_kmeans <- medsJune2023_clean |>
+
+  # select necessary cols ----
+  select(kmeans) |>
+
+  # sum ----
+  group_by(kmeans) |>
+  count() |>
+  ungroup() |>
+  
+  # coerce to factor ----
+  mutate(kmeans = as_factor(kmeans)) |> 
+
+  # add col for percentages ----
+  mutate(percentage = round((n/(sum(n)))*100, 1),
+         perc_label = paste0(percentage, "%"))
+
+#..............................plot..............................
+pal <- c("unsupervised, does not require expert labeling of data" = "#7ECD7A", 
+         "unsupervised, requires expert labeling of data" = "#047C91",
+         "supervised, does not require expert labeling of data" = "#047C91",
+         "supervised and requires expert labeling of data" = "#047C91", 
+         "I'm not sure" = "#047C91")
+
+ggplot(q25c_kmeans, aes(x = fct_reorder(kmeans, desc(n)), y = n, label = perc_label, fill = kmeans)) +
+  geom_col() +
+  geom_text(position = position_stack(vjust = 0.5), size = 3, color = "white", family = "nunito") +
+  labs(y = "Number of MEDS students", x = "Selection",
+       title = "K-means clustering is an example of a(n) ___ learning approach\nbecause it ___ (fill in the blanks).",
+       caption = "Question 25c") +
+  scale_x_discrete(labels = function(x) str_wrap(x, width = 15)) +
+  scale_fill_manual(values = pal, limits = names(pal)) +
+  meds_theme
+```
+
+```{r}
+# ............................wrangle.............................
+q26a_ml_div <- medsJune2023_clean |>
+
+  # select necessary cols ----
+  select(ml_div_data) |>
+
+  # sum ----
+  group_by(ml_div_data) |>
+  count() |>
+  ungroup() |>
+  
+  # ONLY ADDING BC NO ONE SELECTED THE FOLLOWING OPTIONS ----
+  add_row(ml_div_data = "1 (never heard of it)", n = 0) |>
+  add_row(ml_div_data = "2", n = 0) |>
+
+  # reorder factors ----
+  mutate(ml_div_data = fct_relevel(ml_div_data,
+                                 c("1 (never heard of it)", "2",
+                                 "3 (vague sense of what it means)", 
+                                 "4", "5 (very familiar)"))) |>
+
+  # add col for percentages ----
+  mutate(percentage = round((n/(sum(n)))*100, 1),
+         perc_label = paste0(percentage, "%"))
+
+#..............................plot..............................
+ggplot(q26a_ml_div, aes(x = ml_div_data, y = n, label = perc_label)) +
+  geom_col(fill = "#047C91") +
+  coord_flip() +
+  geom_text(position = position_stack(vjust = 0.5), size = 3, color = "white", family = "nunito") +
+  labs(y = "Number of MEDS students", x = "Familiarity level",
+       title = "How familiar are you with the procedure that divides your data into\nseparate “training”, “validation”, and “testing” sets?",
+       caption = "Question 26a (choosing '1 (never heard of it)' skips respondent to question 27)") +
+  scale_x_discrete(labels = function(x) str_wrap(x, width = 15)) +
+  meds_theme
+```
+
+```{r in-line code q26a}
+# total respondents ----
+q26a_num_answers <- medsJune2023_clean |>
+  select(ml_div_data) |>
+  count() |>
+  pull()
+
+# total not answer 1 ----
+q26a_not1 <- medsJune2023_clean |>
+  select(ml_div_data) |>
+  group_by(ml_div_data) |>
+  count() |>
+  ungroup() |>
+  filter(ml_div_data != "1 (never heard of it)") |>
+  summarize(n = sum(n)) |>
+  pull()
+```
+
+::: {.callout-note}
+## All respondents continued on to Question 26b
+**`r q26a_not1` / `r q26a_num_answers` student respondents (`r ((q26a_not1/q26a_num_answers)*100)`%)** chose a familiarity level of 2 or greater, and therefore were directed to Question 26b.
+:::
+
+```{r}
+# ............................wrangle.............................
+q26b_tvs <- medsJune2023_clean |>
+
+  # select necessary cols ----
+  select(train_valid_split) |>
+
+  # sum ----
+  group_by(train_valid_split) |>
+  count() |>
+  ungroup() |>
+  
+  # ONLY ADDING BC NO ONE SELECTED THE FOLLOWING OPTIONS ----
+  add_row(train_valid_split = "1 (never)", n = 0) |>
+
+  # reorder factors ----
+  mutate(train_valid_split = fct_relevel(train_valid_split,
+                                 c("1 (never)", "2", "3", "4", "5 (all the time)"))) |>
+
+  # add col for percentages ----
+  mutate(percentage = round((n/(sum(n)))*100, 1),
+         perc_label = paste0(percentage, "%"))
+
+#..............................plot..............................
+ggplot(q26b_tvs, aes(x = train_valid_split, y = n, label = perc_label)) +
+  geom_col(fill = "#047C91") +
+  coord_flip() +
+  geom_text(position = position_stack(vjust = 0.5), size = 3, color = "white", family = "nunito") +
+  labs(y = "Number of MEDS students", x = "Selection",
+       title = "How often have you implemented a train, validation, test split?",
+       caption = "Question 26b (choosing '1 (never)' skips respondent to question 27)") +
+  scale_x_discrete(labels = function(x) str_wrap(x, width = 15)) +
+  meds_theme
+```
+
+```{r in-line code q26b}
+# total respondents ----
+q26b_num_answers <- medsJune2023_clean |>
+  select(train_valid_split) |>
+  count() |>
+  pull()
+
+# total not answer 1 ----
+q26b_not1 <- medsJune2023_clean |>
+  select(train_valid_split) |>
+  group_by(train_valid_split) |>
+  count() |>
+  ungroup() |>
+  filter(train_valid_split != "1 (never)") |>
+  summarize(n = sum(n)) |>
+  pull()
+```
+
+::: {.callout-note}
+## All respondents continued on to Question 26c
+**`r q26b_not1` / `r q26b_num_answers` student respondents (`r ((q26b_not1/q26b_num_answers)*100)`%)** chose a familiarity level of 2 or greater, and therefore were directed to Question 26c.
+:::
+
+
+
 -  If my model performs very well in my training set, moderately well in my validation set, and poorly in my test set, what do I learn from this (choose all that apply)?
 
 ## **Part 10: Environmental Justice**
@@ -1426,6 +2059,35 @@ knitr::include_graphics("images/21c-vector.png")
 #### 25. How familiar are you with the difference between supervised and unsupervised learning?
 
 **INSERT SCREENSHOT HERE**
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ## **Part 13: Programming 2**
 
@@ -1443,7 +2105,6 @@ convert_F_to_C(32)
 ```
 
 ```{r}
-#| fig-cap: "Correct answer: Python"
 #............................wrangle.............................
 q31_what_lang <- medsJune2023_clean |> 
   
