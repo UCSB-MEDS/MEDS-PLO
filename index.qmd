@@ -6,6 +6,10 @@ date: June 9, 2023
 format: 
   html:
     toc: true
+    toc-location: left
+    code-tools: 
+      source: true
+      toggle: false
 execute: 
   eval: true
   echo: false
@@ -115,7 +119,7 @@ This PLO assessment was administered to the MEDS class of 2023 **(response rate 
 This assessment of MEDS PLO #1 (Core Knowledge) was developed by the MEDS Curriculum Cohesion Committee in winter/spring 2023, and therefore *was not* administered to the MEDS Class of 2023 before beginning the program in August 2022 (i.e. no pre-program assessment was conducted). No benchmark data is available for the Class of 2023. 
 :::
 
-## **Part 1 -- OS and data/document storage**
+## **Part 1: OS and data/document storage**
 
 ```{r}
 #............................wrangle.............................
@@ -204,7 +208,7 @@ ggplot(q2_store_data, aes(x = fct_reorder(where_store_data, desc(n)), y = n, lab
   
 ```
 
-## **Part 2 -- How often do you currently use the following?:**
+## **Part 2: How often do you currently use the following?**
 
 ```{r}
 #............................wrangle.............................
@@ -381,7 +385,7 @@ ggplot(q7_command_shell, aes(x = command_shell, y = n, label = perc_label)) +
   meds_theme
 ```
 
-## **Part 3 -- Workflow satisfaction**
+## **Part 3: Workflow satisfaction**
 
 ```{r}
 #............................wrangle.............................
@@ -421,7 +425,7 @@ ggplot(q8_satisfaction, aes(x = rate_satisfaction, y = n, label = perc_label)) +
   meds_theme
 ```
 
-## **Part 4 (Questions 9 - 15) -- Rank the following from 1 (strongly disagree) to 5 (strongly agree):**
+## **Part 4: Rank the following from 1 (strongly disagree) to 5 (strongly agree)**
 
 ```{r}
 #............................wrangle.............................
@@ -679,32 +683,402 @@ ggplot(q15_increase_efficiency, aes(x = increase_efficiency, y = n, label = perc
 
 ## **Part 5: Stats**
 
-#### 16. Consider the following sample of data: 5, 17, 0, 14, 14
--  What is the median of this sample distribution?
--  What is the mode of this sample distribution?
-
-#### 17. How familiar are you with the term linear regression?
--  Below is a chunk of code showing a simple linear regression relating the number of pieces of microplastics to the number of days per year with rainfall. How many pieces of microplastic do we predict will be present in a location with 45 days of rain per year (round your answer up to the nearest integer)?
-
-**INSERT SCREENSHOT HERE**
-
-#### 18. How familiar are you with probability distributions?
--  Which of the following terms are used to describe probability distributions (select all that apply; options: uniform, unequal, bimodal, variable, symmetric)?
-
-## **Part 6: Programming**
-#### 19. How familiar are you with the term function as it relates to programming (1, never heard of it - 5, very familiar)?
-
 ```{r}
-
+#............................wrangle.............................
+q16_median <- medsJune2023_clean |> 
+  
+  # select necessary cols ----
+  select(median) |> 
+  
+  # coerce to factor ----
+  mutate(median = as_factor(median)) |> 
+  
+  # sum ----
+  group_by(median) |>
+  count() |>
+  ungroup() |> 
+  
+  # add col for percentages ----
+  mutate(percentage = round((n/(sum(n)))*100, 1),
+         perc_label = paste0(percentage, "%"))
+  
+#..............................plot..............................
+ggplot(q16_median, aes(x = fct_reorder(median, desc(n)), y = n, label = perc_label)) +
+  geom_col(fill = "#047C91") +
+  geom_text(position = position_stack(vjust = 0.5), size = 3, color = "white", family = "nunito") +
+  labs(y = "Number of MEDS students", x = "Selection",
+       title = "Calculate the median of this sample distribution: 5, 17, 0, 14, 14",
+       caption = "Question 16a (free response)") +
+  meds_theme
 ```
 
--  How comfortable are you creating a function in code (1, not at all comfortable - 5, very comfortable)?
-
 ```{r}
-q19a <- medsJune2023_clean
+#............................wrangle.............................
+q16_mode <- medsJune2023_clean |> 
+  
+  # select necessary cols ----
+  select(mode) |> 
+  
+  # coerce to factor ----
+  mutate(mode = as_factor(mode)) |> 
+  
+  # sum ----
+  group_by(mode) |>
+  count() |>
+  ungroup() |> 
+  
+  # add col for percentages ----
+  mutate(percentage = round((n/(sum(n)))*100, 1),
+         perc_label = paste0(percentage, "%"))
+  
+#..............................plot..............................
+ggplot(q16_mode, aes(x = fct_reorder(mode, desc(n)), y = n, label = perc_label)) +
+  geom_col(fill = "#047C91") +
+  geom_text(position = position_stack(vjust = 0.5), size = 3, color = "white", family = "nunito") +
+  labs(y = "Number of MEDS students", x = "Selection",
+       title = "Calculate the mode of this sample distribution: 5, 17, 0, 14, 14",
+       caption = "Question 16b (free response)") +
+  meds_theme
 ```
 
--  The following code (in R) defines a function:
+```{r}
+#............................wrangle.............................
+q17_num_answers <- medsJune2023_clean |> 
+  select(linear_regression) |> 
+  count() |> 
+  pull()
+
+q17_familiarity_lr <- medsJune2023_clean |> 
+  
+  # select necessary cols ----
+  select(linear_regression) |> 
+  
+  # sum ----
+  group_by(linear_regression) |>
+  count() |>
+  ungroup() |> 
+  
+  # ONLY ADDING BC NO ONE SELECTED THE FOLLOWING OPTIONS ----
+  add_row(linear_regression = "2", n = 0) |>
+  add_row(linear_regression = "1 - never heard of it", n = 0) |>
+  
+  # reorder factors ----
+  mutate(linear_regression = fct_relevel(linear_regression, 
+                                        c("1 - never heard of it", "2", 
+                                        "3 - vague sense of what it means", "4", "5 - very familiar"))) |>
+
+  # add col for percentages ----
+  mutate(percentage = round((n/(sum(n)))*100, 1),
+         perc_label = paste0(percentage, "%"))
+
+#..............................plot..............................
+ggplot(q17_familiarity_lr, aes(x = linear_regression, y = n, label = perc_label)) +
+  geom_col(fill = "#047C91") +
+  coord_flip() +
+  geom_text(position = position_stack(vjust = 0.5), size = 3, color = "white", family = "nunito") +
+  labs(y = "Number of MEDS students", x = "Familiarity level",
+       title = "How familiar are you with the term linear regression?",
+       caption = "Question 17a (choosing '1 - never heard of it' skips respondent to question 18)") +
+  meds_theme
+```
+
+::: {.callout-note}
+## All students answered all parts of question 17
+**`r q17_num_answers` / 29 student respondents (`r ((q17_num_answers/29)*100)`%)** chose a familiarity level of 2 or greater, and therefore were directed to answer all parts of question 17.
+:::
+
+Below is a chunk of code showing a simple linear regression relating the number of pieces of microplastics to the number of days per year with rainfall.
+
+```{r}
+#| fig-align: center
+knitr::include_graphics("images/17-microplastics-lm.png")
+```
+
+```{r}
+#............................wrangle.............................
+q17_microplastics <- medsJune2023_clean |> 
+  
+  # select necessary cols ----
+  select(microplastics_lr) |> 
+  
+  # round values and remove sentences for plotting purposes ----
+  mutate_if(is.character, str_replace_all, 
+            pattern = "For 45 days of rain per year, we expect 27 pieces of microplastic, ceteris paribus.", replacement = "27") |> 
+  mutate_if(is.character, str_replace_all, pattern = "26.52", replacement = "27") |> 
+  mutate_if(is.character, str_replace_all, pattern = "46.76823", replacement = "47") |> 
+  mutate_if(is.character, str_replace_all, pattern = "46.77", replacement = "47") |> 
+  mutate_if(is.character, str_replace_all, pattern = "900.28", replacement = "900") |> 
+  mutate_if(is.character, str_replace_all, pattern = "47 mg", replacement = "47") |> 
+  mutate_if(is.character, str_replace_all, pattern = "27 pieces", replacement = "27") |> 
+  
+  # convert to factor ----
+  mutate(microplastics_lr = as_factor(microplastics_lr)) |> 
+
+  # sum ----
+  group_by(microplastics_lr) |>
+  count() |>
+  ungroup() |>
+
+# add col for percentages ----
+mutate(percentage = round((n/(sum(n)))*100, 1),
+       perc_label = paste0(percentage, "%"))
+
+#..............................plot..............................
+pal <- c("47" = "#7ECD7A", "27" = "#047C91", "900" = "#047C91", "26" = "#047C91", 
+         "956" = "#047C91","43" = "#047C91", "911" = "#047C91", "46" = "#047C91")
+
+ggplot(q17_microplastics, aes(x = fct_reorder(microplastics_lr, desc(n)), y = n, label = perc_label, fill = microplastics_lr)) +
+  geom_col() +
+  geom_text(position = position_stack(vjust = 0.5), size = 3, color = "white", family = "nunito") +
+  labs(y = "Number of MEDS students", x = "Response",
+       title = "How many pieces of microplastic do we predict will be present\nin a location with 45 days of rain per year (round your answer up to\nthe nearest integer)?",
+       caption = "Question 17b (free response)") +
+   scale_fill_manual(values = pal, limits = names(pal)) +
+  meds_theme
+```
+
+::: {.callout-note}
+## Question 17b raw responses
+Some respondents recorded their answers in sentence form, while others did not round their answers to the nearest integer. Cleaned responses are shown in the plot, above. Responses as they were recorded are included in the table, below:
+
+```{r}
+#............................wrangle.............................
+q17_microplastics_dt <- medsJune2023_clean |> 
+  
+  # select necessary cols ----
+  select(microplastics_lr)
+
+DT::datatable(q17_microplastics_dt, colnames = c("Free Response Answer to Q17b"),
+              
+               options = list(autoWidth = TRUE, 
+                              pageLength = 5,
+                              lengthMenu = c(5, 10, 20, 30),
+                              dom = 'ltp')
+              
+              )
+```
+:::
+
+```{r}
+#............................wrangle.............................
+q18a_num_answers <- medsJune2023_clean |> 
+  select(prob_dist) |> 
+  count() |> 
+  pull()
+
+q18a_prob_dist <- medsJune2023_clean |> 
+  
+  # select necessary cols ----
+  select(prob_dist) |> 
+  
+  # sum ----
+  group_by(prob_dist) |>
+  count() |>
+  ungroup() |> 
+  
+  # ONLY ADDING BC NO ONE SELECTED THE FOLLOWING OPTIONS ----
+  add_row(prob_dist = "2", n = 0) |>
+  add_row(prob_dist = "1 (never heard of it)", n = 0) |>
+  
+  # reorder factors ----
+  mutate(prob_dist = fct_relevel(prob_dist, 
+                                 c("1 (never heard of it)", "2", 
+                                 "3 (vague sense of what it means)", "4", "5 (very familiar)"))) |>
+
+  # add col for percentages ----
+  mutate(percentage = round((n/(sum(n)))*100, 1),
+         perc_label = paste0(percentage, "%"))
+
+#..............................plot..............................
+ggplot(q18a_prob_dist, aes(x = prob_dist, y = n, label = perc_label)) +
+  geom_col(fill = "#047C91") +
+  coord_flip() +
+  geom_text(position = position_stack(vjust = 0.5), size = 3, color = "white", family = "nunito") +
+  labs(y = "Number of MEDS students", x = "Familiarity level",
+       title = "How familiar are you with the term linear regression?",
+       caption = "Question 18a (choosing '1 (never heard of it)' skips respondent to question 18)") +
+  meds_theme
+```
+
+::: {.callout-note}
+## All students answered all parts of question 18
+**`r q18a_num_answers` / 29 student respondents (`r ((q18a_num_answers/29)*100)`%)** chose a familiarity level of 2 or greater, and therefore were directed to answer all parts of question 18.
+:::
+
+```{r}
+#| column: margin
+#| fig-cap: "62% of respondents correctly answered question 18b (i.e. chose exactly the following options: noraml, uniform, bimodal, symmedtric)"
+# ............................wrangle.............................
+# ---- for calculating percentages in wrangling step below ----
+q18b_num_answers <- medsJune2023_clean |> 
+  select(prob_dist_terms) |> 
+  count() |> 
+  pull()
+
+# ---- wrangle for individual selection correctness ----
+q18b_prob_dist_terms <- medsJune2023_clean |> 
+  
+  # select necessary cols ----
+  select(prob_dist_terms) |> 
+  
+  # split strings by `,` delim ----
+  separate_longer_delim(prob_dist_terms, delim = ",") |> 
+  
+  # sum ----
+  group_by(prob_dist_terms) |>
+  count() |>
+  ungroup() |> 
+  
+  # add col for percentages ----
+  mutate(percentage = round((n/q18b_num_answers)*100, 1),
+         perc_label = paste0(percentage, "%"))
+
+# ---- wrangle for answer correctness ----
+q18b_full_correct <- medsJune2023_clean |> 
+  
+  # select necessary cols ----
+  select(prob_dist_terms) |> 
+  
+  # sum ----
+  group_by(prob_dist_terms) |>
+  count() |>
+  ungroup() |> 
+  
+  # add correct or incorrect label ----
+  mutate(correctness = case_when(
+    prob_dist_terms == "normal" ~ "no",
+    prob_dist_terms == "normal,bimodal,symmetric" ~ "no",
+    prob_dist_terms == "normal,uniform" ~ "no",
+    prob_dist_terms == "normal,uniform,bimodal" ~ "no",
+    prob_dist_terms == "normal,uniform,bimodal,symmetric" ~ "yes",
+    prob_dist_terms == "normal,uniform,bimodal,variable,symmetric" ~ "no"
+  )) |> 
+  
+  # coerce data types ----
+  mutate(correctness = as_factor(correctness)) |> 
+  
+  # sum ----
+  group_by(correctness) |> 
+  summarize(total = sum(n)) |> 
+  ungroup() |> 
+  
+  # add col for percentages ----
+  mutate(percentage = round((total/(sum(total)))*100, 1),
+         perc_label = paste0(percentage, "%"))
+
+#..............................plot..............................
+# number of students who correctly chose all four selections
+pal <- c("yes" = "#7ECD7A", "no" = "#047C91")
+
+ggplot(q18b_full_correct, aes(x = fct_reorder(correctness, desc(total)), y = total, label = perc_label, fill = correctness)) +
+  geom_col() +
+  geom_text(position = position_stack(vjust = 0.5), size = 3, color = "white", family = "nunito") +
+  labs(y = "Number of MEDS students", x = "Did they get the question fully correct?",
+       caption = "Question 18b") +
+  scale_fill_manual(values = pal, limits = names(pal)) +
+  meds_theme
+```
+
+```{r}
+#..............................plot..............................
+# number of students who chose each option
+pal <- c("normal" = "#7ECD7A", "uniform" = "#7ECD7A", "bimodal" = "#7ECD7A", "symmetric" = "#7ECD7A", "variable" = "#047C91")
+
+ggplot(q18b_prob_dist_terms, aes(x = fct_reorder(prob_dist_terms, desc(n)), y = n, label = perc_label, fill = prob_dist_terms)) +
+  geom_col() +
+  geom_text(position = position_stack(vjust = 0.5), size = 3, color = "white", family = "nunito") +
+  labs(y = "Number of MEDS students", x = "Selection",
+       title = "Which of the following terms are used to describe probability\ndistributions (select all that apply)?",
+       caption = "Question 18b") +
+   scale_fill_manual(values = pal, limits = names(pal)) +
+  meds_theme
+```
+
+## **Part 6: Programming 1**
+
+```{r}
+# ............................wrangle.............................
+q19_num_answers <- medsJune2023_clean |> 
+  select(term_function) |> 
+  count() |> 
+  pull()
+
+q19a_term_fxn <- medsJune2023_clean |> 
+  
+  # select necessary cols ----
+  select(term_function) |> 
+  
+  # sum ----
+  group_by(term_function) |>
+  count() |>
+  ungroup() |> 
+  
+  # ONLY ADDING BC NO ONE SELECTED THE FOLLOWING OPTIONS ----
+  add_row(term_function = "2", n = 0) |>
+  add_row(term_function = "1 (never heard of it)", n = 0) |>
+  
+  # reorder factors ----
+  mutate(term_function = fct_relevel(term_function, 
+                                 c("1 (never heard of it)", "2", 
+                                 "3 (vague sense of what it means)", "4", "5 (very familiar)"))) |>
+
+  # add col for percentages ----
+  mutate(percentage = round((n/(sum(n)))*100, 1),
+         perc_label = paste0(percentage, "%"))
+
+#..............................plot..............................
+ggplot(q19a_term_fxn, aes(x = term_function, y = n, label = perc_label)) +
+  geom_col(fill = "#047C91") +
+  coord_flip() +
+  geom_text(position = position_stack(vjust = 0.5), size = 3, color = "white", family = "nunito") +
+  labs(y = "Number of MEDS students", x = "Familiarity level",
+       title = "How familiar are you with the term 'function' as it relates to\nprogramming?",
+       caption = "Question 19a (choosing '1 (never heard of it)' skips respondent to question 20)") +
+  meds_theme
+```
+
+::: {.callout-note}
+## All students answered all parts of question 19
+**`r q19_num_answers` / 29 student respondents (`r ((q19_num_answers/29)*100)`%)** chose a familiarity level of 2 or greater, and therefore were directed to answer all parts of question 19.
+:::
+
+```{r}
+# ............................wrangle.............................
+q19b_writing_fxns <- medsJune2023_clean |> 
+  
+  # select necessary cols ----
+  select(writing_functions) |> 
+  
+  # sum ----
+  group_by(writing_functions) |>
+  count() |>
+  ungroup() |> 
+  
+  # ONLY ADDING BC NO ONE SELECTED THE FOLLOWING OPTIONS ----
+  add_row(writing_functions = "1 (not at all)", n = 0) |>
+  
+  # reorder factors ----
+  mutate(writing_functions = fct_relevel(writing_functions, 
+                                        c("1 (not at all)", "2", 
+                                        "3", "4", "5 (very comfortable)"))) |>
+
+  # add col for percentages ----
+  mutate(percentage = round((n/(sum(n)))*100, 1),
+         perc_label = paste0(percentage, "%"))
+
+#..............................plot..............................
+ggplot(q19b_writing_fxns, aes(x = writing_functions, y = n, label = perc_label)) +
+  geom_col(fill = "#047C91") +
+  coord_flip() +
+  geom_text(position = position_stack(vjust = 0.5), size = 3, color = "white", family = "nunito") +
+  labs(y = "Number of MEDS students", x = "Comfortability level",
+       title = "How comfortable are you creating a function in code?",
+       caption = "Question 19b (choosing '1 (not at all)' skips respondent to question 20)") +
+  meds_theme
+```
+
+The following code (in R) defines a function:
+
 ```{r}
 #| eval: false
 #| echo: true
@@ -734,23 +1108,292 @@ maxheight = 20
 power_turbine_a <- compute_turbine_power(10, flowrate, 0.5, maxheight)
 ```
 
-What is the value of power_turbine_A?
-
 ```{r}
+# ............................wrangle.............................
+q19c_fxn_output <- medsJune2023_clean |> 
+  
+  # select necessary cols ----
+  select(fxn_output) |> 
+  
+  # sum ----
+  group_by(fxn_output) |>
+  count() |>
+  ungroup() |> 
 
+  # add col for percentages ----
+  mutate(percentage = round((n/(sum(n)))*100, 1),
+         perc_label = paste0(percentage, "%"))
+
+#..............................plot..............................
+ggplot(q19c_fxn_output, aes(x = fxn_output, y = n, label = perc_label)) +
+  geom_col(fill = "#047C91") +
+  geom_text(position = position_stack(vjust = 0.5), size = 3, color = "white", family = "nunito") +
+  labs(y = "Number of MEDS students", x = "Selection",
+       title = "What is the value of power_turbine_A?",
+       caption = "Question 19c") +
+  meds_theme
 ```
 
 ## **Part 7: Environmental Modeling**
-#### 20. Have you run a model to learn something about (or predict something about) the environment?
--  Have you done a sensitivity analysis to assess how model results change with changes in inputs or parameters?
-If you want to explore how parameter interactions impact model results, you would do?
+
+```{r}
+# ............................wrangle.............................
+q20a_run_env_mod <- medsJune2023_clean |> 
+  
+  # select necessary cols ----
+  select(run_environ_model) |> 
+  
+  # sum ----
+  group_by(run_environ_model) |>
+  count() |>
+  ungroup() |> 
+  
+  # ONLY ADDING BC NO ONE SELECTED THE FOLLOWING OPTIONS ----
+  add_row(run_environ_model = "No", n = 0) |>
+  
+  # coerce to factors ----
+  mutate(run_environ_model = as_factor(run_environ_model)) |> 
+  
+  # add col for percentages ----
+  mutate(percentage = round((n/(sum(n)))*100, 1),
+         perc_label = paste0(percentage, "%"))
+
+#..............................plot..............................
+ggplot(q20a_run_env_mod, aes(x = fct_reorder(run_environ_model, desc(n)), y = n, label = perc_label)) +
+  geom_col(fill = "#047C91") +
+  geom_text(position = position_stack(vjust = 0.5), size = 3, color = "white", family = "nunito") +
+  labs(y = "Number of MEDS students", x = "Selection",
+       title = "Have you run a model to learn something about (or predict\nsomething about) the environment?",
+       caption = "Question 20a (choosing 'No' skips respondent to question 21)") +
+  meds_theme  
+```
+
+```{r}
+# ............................wrangle.............................
+q20b_sa <- medsJune2023_clean |> 
+  
+  # select necessary cols ----
+  select(sensitivity_analysis) |> 
+  
+  # sum ----
+  group_by(sensitivity_analysis) |>
+  count() |>
+  ungroup() |> 
+  
+  # coerce to factors ----
+  mutate(sensitivity_analysis = as_factor(sensitivity_analysis)) |> 
+  
+  # add col for percentages ----
+  mutate(percentage = round((n/(sum(n)))*100, 1),
+         perc_label = paste0(percentage, "%"))
+
+#..............................plot..............................
+ggplot(q20b_sa, aes(x = fct_reorder(sensitivity_analysis, desc(n)), y = n, label = perc_label)) +
+  geom_col(fill = "#047C91") +
+  geom_text(position = position_stack(vjust = 0.5), size = 3, color = "white", family = "nunito") +
+  labs(y = "Number of MEDS students", x = "Selection",
+       title = "Have you done a sensitivity analysis to assess how model results\nchange with changes in inputs or parameters?",
+       caption = "Question 20b (choosing 'No' skips respondent to question 21)") +
+  meds_theme  
+```
+
+```{r}
+# ............................wrangle.............................
+q20c_param_int <- medsJune2023_clean |> 
+  
+  # select necessary cols ----
+  select(param_interactions) |> 
+  
+  # replace NA (from respondent who selected 'No' for previous question) ----
+  replace_na(list(param_interactions = "No response")) |> 
+  
+  # sum ----
+  group_by(param_interactions) |>
+  count() |>
+  ungroup() |> 
+  
+  # coerce to factors ----
+  mutate(param_interactions = as_factor(param_interactions)) |> 
+  
+  # add col for percentages ----
+  mutate(percentage = round((n/(sum(n)))*100, 1),
+         perc_label = paste0(percentage, "%"))
+
+#..............................plot..............................
+ggplot(q20c_param_int, aes(x = fct_reorder(param_interactions, desc(n)), y = n, label = perc_label)) +
+  geom_col(fill = "#047C91") +
+  geom_text(position = position_stack(vjust = 0.5), size = 3, color = "white", family = "nunito") +
+  labs(y = "Number of MEDS students", x = "Selection",
+       title = "If you want to explore how parameter interactions impact model\nresults, you would do...",
+       caption = "Question 20c; No Response == answered 'No' to Q20b") +
+  meds_theme +
+  theme(
+    axis.text.x = element_text(angle = 15)
+  )
+```
 
 ## **Part 8: Geospatial Analysis & Remote Sensing**
-#### 21. How comfortable are you working with spatial data?
--  What are the two primary ways of representing spatial data (select two; options: raster, tabular, relational, vector, I'm not sure):
--  Is the following a vector or raster?
 
-**INSERT SCREENSHOT HERE**
+```{r}
+# ............................wrangle.............................
+q21a_num_answers <- medsJune2023_clean |> 
+  select(spatial_data) |> 
+  count() |> 
+  pull()
+
+q21a_spatial_comfort <- medsJune2023_clean |> 
+  
+  # select necessary cols ----
+  select(spatial_data) |> 
+  
+  # sum ----
+  group_by(spatial_data) |>
+  count() |>
+  ungroup() |> 
+  
+  # ONLY ADDING BC NO ONE SELECTED THE FOLLOWING OPTIONS ----
+  add_row(spatial_data = "1 (never worked with it before)", n = 0) |>
+  
+  # reorder factors ----
+  mutate(spatial_data = fct_relevel(spatial_data, 
+                                   c("1 (never worked with it before)", "2", 
+                                   "3", "4", "5 (work with it all the time)"))) |>
+
+  # add col for percentages ----
+  mutate(percentage = round((n/(sum(n)))*100, 1),
+         perc_label = paste0(percentage, "%"))
+
+#..............................plot..............................
+ggplot(q21a_spatial_comfort, aes(x = spatial_data, y = n, label = perc_label)) +
+  geom_col(fill = "#047C91") +
+  coord_flip() +
+  geom_text(position = position_stack(vjust = 0.5), size = 3, color = "white", family = "nunito") +
+  labs(y = "Number of MEDS students", x = "Comfortability level",
+       title = "How comfortable are you working with spatial data?",
+       caption = "Question 21a (choosing '1 (never worked with it before)' skips respondent to question 22)") +
+  meds_theme
+```
+
+::: {.callout-note}
+## All students answered all parts of question 21
+**`r q21a_num_answers` / 29 student respondents (`r ((q21a_num_answers/29)*100)`%)** chose a familiarity level of 2 or greater, and therefore were directed to answer all parts of question 21.
+:::
+
+```{r}
+# ............................wrangle.............................
+# ---- for calculating percentages in wrangling step below ----
+q21b_num_answers <- medsJune2023_clean |> 
+  select(rep_spatial_data) |> 
+  count() |> 
+  pull()
+
+# ---- wrangle for individual selection correctness ----
+q21b_rep_spatial <- medsJune2023_clean |>
+
+  # select necessary cols ----
+  select(rep_spatial_data) |>
+
+  # split strings by `,` delim ----
+  separate_longer_delim(rep_spatial_data, delim = ",") |>
+
+  # sum ----
+  group_by(rep_spatial_data) |>
+  count() |>
+  ungroup() |>
+  
+  # ONLY ADDING BC NO ONE SELECTED THE FOLLOWING OPTIONS ----
+  add_row(rep_spatial_data = "tabular", n = 0) |>
+  add_row(rep_spatial_data = "relational", n = 0) |>
+
+  # add col for percentages ----
+  mutate(percentage = round((n/q21b_num_answers)*100, 1),
+         perc_label = paste0(percentage, "%"))
+
+# ---- wrangle for answer correctness ----
+q21b_full_correct <- medsJune2023_clean |> 
+  
+  # select necessary cols ----
+  select(rep_spatial_data) |> 
+    
+  mutate(correctness = case_when(
+    rep_spatial_data == "raster,vector" ~ "yes",
+  )) |> 
+  
+  # sum ----
+  group_by(correctness) |>
+  count() |>
+  ungroup() |> 
+  
+  # add no for plotting ----
+  add_row(correctness = "no", n = 0) |>
+  
+  # add col for percentages ----
+  mutate(percentage = round((n/(sum(n)))*100, 1),
+         perc_label = paste0(percentage, "%"))
+```
+
+```{r}
+#| column: margin
+#| fig-cap: "100% of respondents correctly answered question 21b (i.e. chose exactly the following options: raster, vector)"
+#| #..............................plot..............................
+pal <- c("yes" = "#7ECD7A", "no" = "#047C91")
+
+ggplot(q21b_full_correct, aes(x = fct_reorder(correctness, desc(n)), y = n, label = perc_label, fill = correctness)) +
+  geom_col() +
+  geom_text(position = position_stack(vjust = 0.5), size = 3, color = "white", family = "nunito") +
+  labs(y = "Number of MEDS students", x = "Did they get the question fully correct?",
+       caption = "Question 21b") +
+  scale_fill_manual(values = pal, limits = names(pal)) +
+  meds_theme
+```
+
+```{r}
+#..............................plot..............................
+pal <- c("vector" = "#7ECD7A", "raster" = "#7ECD7A", "tabular" = "#047C91", "relational" = "#047C91")
+
+ggplot(q21b_rep_spatial, aes(x = fct_reorder(rep_spatial_data, desc(n)), y = n, label = perc_label, fill = rep_spatial_data)) +
+  geom_col() +
+  geom_text(position = position_stack(vjust = 0.5), size = 3, color = "white", family = "nunito") +
+  labs(y = "Number of MEDS students", x = "Selection",
+       title = "What are the two primary ways of representing spatial data (select two)?",
+       caption = "Question 21b") +
+  scale_fill_manual(values = pal, limits = names(pal)) +
+  meds_theme
+```
+
+```{r}
+# ............................wrangle.............................
+q21c_vec_ras <- medsJune2023_clean |> 
+  
+  # select necessary cols ----
+  select(vec_or_ras) |> 
+  
+  # sum ----
+  group_by(vec_or_ras) |>
+  count() |>
+  ungroup() |> 
+  
+  # add col for percentages ----
+  mutate(percentage = round((n/(sum(n)))*100, 1),
+         perc_label = paste0(percentage, "%"))
+
+#| #..............................plot..............................
+pal <- c("vector" = "#7ECD7A", "raster" = "#047C91", "I'm not sure" = "#047C91")
+
+ggplot(q21c_vec_ras, aes(x = fct_reorder(vec_or_ras, desc(n)), y = n, label = perc_label, fill = vec_or_ras)) +
+  geom_col() +
+  geom_text(position = position_stack(vjust = 0.5), size = 3, color = "white", family = "nunito") +
+  labs(y = "Number of MEDS students", x = "Selection",
+       title = "Is the following a vector or raster?",
+       caption = "Question 21c") +
+  scale_fill_manual(values = pal, limits = names(pal)) +
+  meds_theme
+```
+
+```{r}
+#| fig-align: center
+knitr::include_graphics("images/21c-vector.png")
+```
 
 #### 22. How comfortable are you working with remotely sensed data?
 -  The type of remote sensing that relies on reflected radiation generated by the sun is called ___? (fill in the blank)
@@ -812,7 +1455,7 @@ q31_what_lang <- medsJune2023_clean |>
   count() |>
   ungroup() |> 
   
-    # ONLY ADDING BC NO ONE SELECTED THE FOLLOWING OPTIONS ----
+  # ONLY ADDING BC NO ONE SELECTED THE FOLLOWING OPTIONS ----
   add_row(what_lang_is_this = "SQL", n = 0) |>
 
   # add col for percentages ----
