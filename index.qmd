@@ -713,12 +713,15 @@ q16_median <- medsJune2023_clean |>
          perc_label = paste0(percentage, "%"))
   
 #..............................plot..............................
-ggplot(q16_median, aes(x = fct_reorder(median, desc(n)), y = n, label = perc_label)) +
-  geom_col(fill = "#047C91") +
+pal <- c("14" = "#7ECD7A", "0" = "#047C91", "10" = "#047C91")
+
+ggplot(q16_median, aes(x = fct_reorder(median, desc(n)), y = n, label = perc_label, fill = median)) +
+  geom_col() +
   geom_text(position = position_stack(vjust = 0.5), size = 3, color = "white", family = "nunito") +
   labs(y = "Number of MEDS students", x = "Selection",
        title = "Calculate the median of this sample distribution: 5, 17, 0, 14, 14",
        caption = "Question 16a (free response)") +
+  scale_fill_manual(values = pal, limits = names(pal)) +
   meds_theme
 ```
 
@@ -742,12 +745,15 @@ q16_mode <- medsJune2023_clean |>
          perc_label = paste0(percentage, "%"))
   
 #..............................plot..............................
-ggplot(q16_mode, aes(x = fct_reorder(mode, desc(n)), y = n, label = perc_label)) +
-  geom_col(fill = "#047C91") +
+pal <- c("14" = "#7ECD7A")
+
+ggplot(q16_mode, aes(x = fct_reorder(mode, desc(n)), y = n, label = perc_label, fill = mode)) +
+  geom_col() +
   geom_text(position = position_stack(vjust = 0.5), size = 3, color = "white", family = "nunito") +
   labs(y = "Number of MEDS students", x = "Selection",
        title = "Calculate the mode of this sample distribution: 5, 17, 0, 14, 14",
        caption = "Question 16b (free response)") +
+  scale_fill_manual(values = pal, limits = names(pal)) +
   meds_theme
 ```
 
