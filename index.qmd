@@ -13,7 +13,7 @@ format:
       toggle: false
     theme: 
       - styles.scss
-    mainfont: nunito
+    mainfont: Nunito
     
 execute: 
   eval: true
@@ -2356,7 +2356,7 @@ ggplot(q31_what_lang, aes(x = what_lang_is_this, y = n, label = perc_label, fill
   geom_col() +
   geom_text(position = position_stack(vjust = 0.5), size = 3, color = "white", family = "nunito") +
   labs(y = "Number of MEDS students", x = "Language",
-       title = "What  programming language is the above code written in?",
+       title = "What programming language is the above code written in?",
        caption = "Question 31") +
   scale_fill_manual(
     values = pal, limits = names(pal) 
