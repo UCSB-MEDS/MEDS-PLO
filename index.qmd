@@ -1205,12 +1205,15 @@ q19c_fxn_output <- medsJune2023_clean |>
          perc_label = paste0(percentage, "%"))
 
 #..............................plot..............................
-ggplot(q19c_fxn_output, aes(x = fxn_output, y = n, label = perc_label)) +
-  geom_col(fill = "#047C91") +
+pal <- c("10" = "#7ECD7A")
+
+ggplot(q19c_fxn_output, aes(x = fxn_output, y = n, label = perc_label, fill = fxn_output)) +
+  geom_col() +
   geom_text(position = position_stack(vjust = 0.5), size = 3, color = "white", family = "nunito") +
   labs(y = "Number of MEDS students", x = "Selection",
        title = "What is the value of power_turbine_A?",
        caption = "Question 19c") +
+   scale_fill_manual(values = pal, limits = names(pal)) +
   meds_theme
 ```
 
@@ -1870,7 +1873,7 @@ ggplot(q25b_unsup_alg, aes(x = implemented_algo, y = n, label = perc_label)) +
   geom_col(fill = "#047C91") +
   coord_flip() +
   geom_text(position = position_stack(vjust = 0.5), size = 3, color = "white", family = "nunito") +
-  labs(y = "Number of MEDS students", x = "Familiarity level",
+  labs(y = "Number of MEDS students", x = "Selection",
        title = "Have you ever implemented an unsupervised learning algorithm?",
        caption = "Question 25b (choosing '1 (definitely not)' skips respondent to question 26)") +
   scale_x_discrete(labels = function(x) str_wrap(x, width = 15)) +
@@ -2364,9 +2367,7 @@ ggplot(q31_what_lang, aes(x = what_lang_is_this, y = n, label = perc_label, fill
   labs(y = "Number of MEDS students", x = "Language",
        title = "What programming language is the above code written in?",
        caption = "Question 31") +
-  scale_fill_manual(
-    values = pal, limits = names(pal) 
-  ) +
+  scale_fill_manual(values = pal, limits = names(pal)) +
   meds_theme
 ```
 
