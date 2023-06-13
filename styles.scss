@@ -1,0 +1,14 @@
+/*-- scss:defaults --*/
+
+// import fonts
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@200;400;700&family=Sanchez&display=swap');
+
+// fonts
+$font-family-serif: 'Sanchez', serif;
+$font-family-sans-serif: 'Nunito', sans-serif;
+
+/*-- scss:rules --*/
+
+h1, h2, h3, h4 {
+  font-family: $font-family-serif;
+}

@@ -3,6 +3,7 @@ title: "Master of Environmental Data Science (MEDS)"
 subtitle: "Program Learning Outcome (PLO) #1 Assessment - Core Knowledge"
 author: "Sam Csik"
 date: June 9, 2023
+
 format: 
   html:
     toc: true
@@ -10,6 +11,10 @@ format:
     code-tools: 
       source: true
       toggle: false
+    theme: 
+      - styles.scss
+    mainfont: nunito
+    
 execute: 
   eval: true
   echo: false
@@ -48,6 +53,7 @@ library(showtext)
 library(ggtext)
 library(DT)
 library(tidytext)
+library(wordcloud)
 
 #..........................import data...........................
 medsJune2023 <- read_sheet("https://docs.google.com/spreadsheets/d/1Sq1rOmBP-g6iOCBS7NoexCj4K-j3OpeErMJ2Hxd3AHo/edit?usp=sharing")
@@ -2247,7 +2253,7 @@ ggplot(q29_create_viz, aes(x = data_viz_programming, y = n, label = perc_label))
   meds_theme
 ```
 
-#### 30. Identify 4 areas for improvement in the following data visualization that shows information about Michigan counties with highest college attendance.
+#### Identify 4 areas for improvement in the following data visualization that shows information about Michigan counties with highest college attendance.
 
 ```{r}
 #| fig-align: center
@@ -2255,16 +2261,38 @@ knitr::include_graphics("images/30-plot.png")
 ```
 
 ```{r}
-# q30_improve_dv <- medsJune2023_clean |> 
-#   
-#   # select necessary cols ----
-#   select(improve_data_viz) |> 
-#   
-#   unnest_tokens(output = ngram, token = "ngrams", n = 10) 
+#| fig-width: 3
+#| fig-align: center
+#| fig-cap: "Wordcloud of most frequently occurring words used to describe suggested improvements to the above data visualization (Question 30)" 
+#| fig-cap-location: top
+# ............................wrangle.............................
+q30_improve_dv <- medsJune2023_clean |>
+
+  # select necessary cols ----
+  select(improve_data_viz) |> 
   
+  # split strings by `,` delim ----
+  separate_longer_delim(improve_data_viz, " ")  |> 
+  separate_longer_delim(improve_data_viz, ",") |> 
+  separate_longer_delim(improve_data_viz, ".") |>  
+  separate_longer_delim(improve_data_viz, ")") |>  
+  separate_longer_delim(improve_data_viz, "(") |> 
+  separate_longer_delim(improve_data_viz, ";") |> 
+  filter(improve_data_viz != "") |> 
+  filter(!improve_data_viz %in% c("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "-")) |> 
+  mutate(improve_data_viz = str_to_lower(improve_data_viz)) |> 
+  group_by(improve_data_viz) |> 
+  count() |> 
+  arrange(desc(n)) |> 
+  rename(word = improve_data_viz) |> 
+  anti_join(y = stop_words)
+
+#..............................plot..............................
+wordcloud(q30_improve_dv$word, freq = q30_improve_dv$n,
+          min.freq = 1, max.words = 85, 
+          random.order = FALSE, rot.per = 0.35,
+          scale = c(4, .5), colors = brewer.pal(8, "Dark2")) 
 ```
-
-
 
 ::: {.callout-note}
 ## Question 30 raw responses
@@ -2287,32 +2315,6 @@ DT::datatable(q30_improve_dv, colnames = c("Free Response Answer to Q30"),
               )
 ```
 :::
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 ## **Part 13: Programming 2**
 
