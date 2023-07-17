@@ -1536,10 +1536,10 @@ ggplot(q21c_vec_ras, aes(x = fct_reorder(vec_or_ras, desc(n)), y = n, label = pe
 knitr::include_graphics("images/21c-vector.png")
 ```
 
-::: {.callout-warning}
-## **UPDATE FOR NEXT YEAR**
-**This question was missing from assessment:** How familiar are you with the term *remote sensing*? 1 (never hear of it), 2, 3 (vague sense of what it means), 4, 5 (very familiar)
-:::
+<!-- ::: {.callout-warning} -->
+<!-- ## **UPDATE FOR NEXT YEAR** -->
+<!-- **This question was missing from assessment:** How familiar are you with the term *remote sensing*? 1 (never hear of it), 2, 3 (vague sense of what it means), 4, 5 (very familiar) -->
+<!-- ::: -->
 
 ```{r}
 # ............................wrangle.............................
@@ -1734,10 +1734,10 @@ ggplot(q23b_convert_geo_coord, aes(x = fct_reorder(convert_geo_to_coord, desc(n)
   meds_theme 
 ```
 
-::: {.callout-warning}
-## **UPDATE FOR NEXT YEAR**
-Add "I'm not sure" option
-:::
+<!-- ::: {.callout-warning} -->
+<!-- ## **UPDATE FOR NEXT YEAR** -->
+<!-- Add "I'm not sure" option -->
+<!-- ::: -->
 
 ```{r}
 # ............................wrangle.............................
