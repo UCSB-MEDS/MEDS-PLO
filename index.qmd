@@ -66,6 +66,14 @@ source("R/q17_linear_regression.R")
 source("R/q18_prob_dist.R")
 source("R/q19_functions.R")
 source("R/q20_env_mod.R")
+source("R/q21_spatial_data.R")
+source("R/q22_remote_sensing.R")
+source("R/q23_map_projections.R")
+source("R/q24_reflectance.R")
+source("R/q25_ML.R")
+source("R/q26_TrainValidSplit.R")
+source("R/q27_data_justice.R")
+source("R/q28_bias.R")
 
 #..........................import data...........................
 medsJune2023 <- read_sheet("https://docs.google.com/spreadsheets/d/1Sq1rOmBP-g6iOCBS7NoexCj4K-j3OpeErMJ2Hxd3AHo/edit?usp=sharing")
@@ -435,9 +443,6 @@ q18b_num_answers <- medsJune2023_clean |>
   count() |>
   pull()
 
-# wrangle (INDIV RESPONSES; moved into code chunk) ----
-# q18b_prob_dist_terms_data <- clean_q18b_prob_dist_terms(medsJune2023_clean)
-
 # wrangle (FULLY CORRECT; margin plot) ----
 q18b_prob_dist_FULLY_CORRECT_data <- clean_q18b_FULLY_CORRECT(medsJune2023_clean)
 
@@ -453,7 +458,6 @@ q18b_prob_dist_terms_data <- clean_q18b_prob_dist_terms(medsJune2023_clean)
 # plot (INDIV RESPONSES) ----
 pal <- c("normal" = "#7ECD7A", "uniform" = "#7ECD7A", "bimodal" = "#7ECD7A", "symmetric" = "#7ECD7A", "variable" = "#047C91")
 plot_q18b_prob_dist_terms(q18b_prob_dist_terms_data)
-
 ```
 
 ## **Part 6: Programming 1**
@@ -550,156 +554,68 @@ plot_q20c_param_int(q20c_param_int_data)
 ## **Part 8: Geospatial Analysis & Remote Sensing**
 
 ```{r}
-# ............................wrangle.............................
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##  ~ Question 21a: Comfort with Spatial Data  ----
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# for calculating percentages in wrangling step below ----
 q21a_num_answers <- medsJune2023_clean |> 
   select(spatial_data) |> 
   count() |> 
   pull()
 
-q21a_spatial_comfort <- medsJune2023_clean |> 
-  
-  # select necessary cols ----
-  select(spatial_data) |> 
-  
-  # sum ----
-  group_by(spatial_data) |>
-  count() |>
-  ungroup() |> 
-  
-  # ONLY ADDING BC NO ONE SELECTED THE FOLLOWING OPTIONS ----
-  add_row(spatial_data = "1 (never worked with it before)", n = 0) |>
-  
-  # reorder factors ----
-  mutate(spatial_data = fct_relevel(spatial_data, 
-                                   c("1 (never worked with it before)", "2", 
-                                   "3", "4", "5 (work with it all the time)"))) |>
+# wrangle ----
+q21a_comfort_spatial_data <- clean_q21a_comfort_spatial(medsJune2023_clean)
 
-  # add col for percentages ----
-  mutate(percentage = round((n/(sum(n)))*100, 1),
-         perc_label = paste0(percentage, "%"))
-
-#..............................plot..............................
-ggplot(q21a_spatial_comfort, aes(x = spatial_data, y = n, label = perc_label)) +
-  geom_col(fill = "#047C91") +
-  coord_flip() +
-  geom_text(position = position_stack(vjust = 0.5), size = 3, color = "white", family = "nunito") +
-  labs(y = "Number of MEDS students", x = "Comfort level",
-       title = "How comfortable are you working with spatial data?",
-       caption = "Question 21a (choosing '1 (never worked with it before)' skips respondent to question 22)") +
-  meds_theme
+# plot ----
+plot_q21a_comfort_spatial(q21a_comfort_spatial_data)
 ```
 
 {{< include /sections/q21-callout-inline-code.qmd >}}
 
 ```{r}
-# ............................wrangle.............................
+#| column: margin
+#| fig-cap: "100% of respondents correctly answered question 21b (i.e. chose exactly the following options: raster, vector)"
+
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##  ~ Question 21b: Representing Spatial Data  ----
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 # ---- for calculating percentages in wrangling step below ----
 q21b_num_answers <- medsJune2023_clean |> 
   select(rep_spatial_data) |> 
   count() |> 
   pull()
 
-# ---- wrangle for individual selection correctness ----
-q21b_rep_spatial <- medsJune2023_clean |>
+# wrangle (FULLY CORRECT; margin) ----
+q21b_FULLY_CORRECT_data <- clean_q21b_FULLY_CORRECT(medsJune2023_clean)
 
-  # select necessary cols ----
-  select(rep_spatial_data) |>
-
-  # split strings by `,` delim ----
-  separate_longer_delim(rep_spatial_data, delim = ",") |>
-
-  # sum ----
-  group_by(rep_spatial_data) |>
-  count() |>
-  ungroup() |>
-  
-  # ONLY ADDING BC NO ONE SELECTED THE FOLLOWING OPTIONS ----
-  add_row(rep_spatial_data = "tabular", n = 0) |>
-  add_row(rep_spatial_data = "relational", n = 0) |>
-
-  # add col for percentages ----
-  mutate(percentage = round((n/q21b_num_answers)*100, 1),
-         perc_label = paste0(percentage, "%"))
-
-# ---- wrangle for answer correctness ----
-q21b_full_correct <- medsJune2023_clean |> 
-  
-  # select necessary cols ----
-  select(rep_spatial_data) |> 
-    
-  mutate(correctness = case_when(
-    rep_spatial_data == "raster,vector" ~ "yes",
-  )) |> 
-  
-  # sum ----
-  group_by(correctness) |>
-  count() |>
-  ungroup() |> 
-  
-  # add no for plotting ----
-  add_row(correctness = "no", n = 0) |>
-  
-  # add col for percentages ----
-  mutate(percentage = round((n/(sum(n)))*100, 1),
-         perc_label = paste0(percentage, "%"))
-```
-
-```{r}
-#| column: margin
-#| fig-cap: "100% of respondents correctly answered question 21b (i.e. chose exactly the following options: raster, vector)"
-#| #..............................plot..............................
+# plot (FULLY CORRECT; margin) ----
 pal <- c("yes" = "#7ECD7A", "no" = "#047C91")
+plot_q21b_FULLY_CORRECT(q21b_FULLY_CORRECT_data)
 
-ggplot(q21b_full_correct, aes(x = fct_reorder(correctness, desc(n)), y = n, label = perc_label, fill = correctness)) +
-  geom_col() +
-  geom_text(position = position_stack(vjust = 0.5), size = 3, color = "white", family = "nunito") +
-  labs(y = "Number of MEDS students", x = "Did they get the question fully correct?",
-       caption = "Question 21b") +
-  scale_fill_manual(values = pal, limits = names(pal)) +
-  meds_theme
 ```
 
 ```{r}
-#..............................plot..............................
+# wrangle (INDIV RESPONSES) ----
+q21b_rep_spatial_data <- clean_q21b_rep_spatial(medsJune2023_clean)
+
+# plot (INDIV RESPONSES) ----
 pal <- c("vector" = "#7ECD7A", "raster" = "#7ECD7A", "tabular" = "#047C91", "relational" = "#047C91")
-
-ggplot(q21b_rep_spatial, aes(x = fct_reorder(rep_spatial_data, desc(n)), y = n, label = perc_label, fill = rep_spatial_data)) +
-  geom_col() +
-  geom_text(position = position_stack(vjust = 0.5), size = 3, color = "white", family = "nunito") +
-  labs(y = "Number of MEDS students", x = "Selection",
-       title = "What are the two primary ways of representing spatial data (select\ntwo)?",
-       caption = "Question 21b") +
-  scale_fill_manual(values = pal, limits = names(pal)) +
-  meds_theme
+plot_q21b_rep_spatial(q21b_rep_spatial_data)
 ```
 
 ```{r}
-# ............................wrangle.............................
-q21c_vec_ras <- medsJune2023_clean |> 
-  
-  # select necessary cols ----
-  select(vec_or_ras) |> 
-  
-  # sum ----
-  group_by(vec_or_ras) |>
-  count() |>
-  ungroup() |> 
-  
-  # add col for percentages ----
-  mutate(percentage = round((n/(sum(n)))*100, 1),
-         perc_label = paste0(percentage, "%"))
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##  ~ Question 21c: Vector vs. Raster  ----
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-#| #..............................plot..............................
+# wrangle ----
+q21c_vec_ras_data <- clean_q21c_vec_ras(medsJune2023_clean)
+
+# plot ----
 pal <- c("vector" = "#7ECD7A", "raster" = "#047C91", "I'm not sure" = "#047C91")
-
-ggplot(q21c_vec_ras, aes(x = fct_reorder(vec_or_ras, desc(n)), y = n, label = perc_label, fill = vec_or_ras)) +
-  geom_col() +
-  geom_text(position = position_stack(vjust = 0.5), size = 3, color = "white", family = "nunito") +
-  labs(y = "Number of MEDS students", x = "Selection",
-       title = "Is the following a vector or raster?",
-       caption = "Question 21c") +
-  scale_fill_manual(values = pal, limits = names(pal)) +
-  meds_theme
+plot_q21c_vec_ras(q21c_vec_ras_data)
 ```
 
 ```{r}
