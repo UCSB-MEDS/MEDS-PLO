@@ -1,4 +1,4 @@
-clean_data <- function(PLO_data_raw){
+clean_PLO_data <- function(PLO_data_raw){
   
   PLO_data_raw |> 
     filter(!row_number() %in% c(1, 2)) |> 

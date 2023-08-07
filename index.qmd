@@ -42,19 +42,23 @@ library(tidytext)
 library(wordcloud)
 
 #........................import functions........................
-source("R/clean_data.R")
+source("R/clean_PLO_data.R")
 source("R/meds_theme.R")
 source("R/q1_os.R")
 source("R/q2_store_data.R")
 source("R/part2_plot_freq_use.R")
 source("R/q3_gui.R")
 source("R/q4_prog_lang.R")
+source("R/q5_databases.R")
+source("R/q6_version_control.R")
+source("R/q7_command_shell.R")
+source("R/q8_workflow_satisfaction.R")
 
 #..........................import data...........................
 medsJune2023 <- read_sheet("https://docs.google.com/spreadsheets/d/1Sq1rOmBP-g6iOCBS7NoexCj4K-j3OpeErMJ2Hxd3AHo/edit?usp=sharing")
 
 #...........................clean data...........................
-medsJune2023_clean <- clean_data(medsJune2023)
+medsJune2023_clean <- clean_PLO_data(medsJune2023)
   
 #......................import Google fonts.......................
 sysfonts::font_add_google(name = "Sanchez", family = "sanchez")
@@ -106,7 +110,6 @@ q1_os_plot(q1_os_data)
 
 ```{r}
 #| fig-cap: "NOTE: Percentages will not sum to 100%"
-
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ##  ~ Question 2: Where do you store data?  ----
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -145,146 +148,48 @@ plot_frequency_use(data = q4_prog_lang_data,
 ```
 
 ```{r}
-#............................wrangle.............................
-q5_databases <- medsJune2023_clean |> 
-  
-  # select necessary cols ----
-  select(databases) |>
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##  ~ Question 5: Databases  ----
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  # sum ----
-  group_by(databases) |>
-  count() |>
-  ungroup() |> 
-
-  # reorder factors ----
-  mutate(databases = fct_relevel(databases, c("Never", "Less than once per year", "Several times per year",
-                                            "Monthly", "Weekly", "Daily"))) |>
-
-  # add col for percentages ----
-  mutate(percentage = round((n/(sum(n)))*100, 1),
-         perc_label = paste0(percentage, "%"))
-
-#..............................plot..............................
-ggplot(q5_databases, aes(x = databases, y = n, label = perc_label)) +
-  geom_col(fill = "#047C91") +
-  coord_flip() +
-  geom_text(position = position_stack(vjust = 0.5), size = 4, color = "white", family = "nunito") +
-  labs(y = "Number of MEDS students", x = "Frequency of use",
-       title = "Databases (SQL, Access, etc.)",
-       caption = "Question 5") +
-  meds_theme
+q5_databases_data <- q5_databases_clean(medsJune2023_clean)
+plot_frequency_use(data = q5_databases_data, 
+                   title = "Databases (SQL, Access, etc.)",
+                   caption = "Question 5")
 ```
 
 ```{r}
-#............................wrangle.............................
-q6_version_control <- medsJune2023_clean |> 
-  
-  # select necessary cols ----
-  select(version_control) |>
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##  ~ Question 6: Version Control  ----
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  # sum ----
-  group_by(version_control) |>
-  count() |>
-  ungroup() |> 
-  
-  # ONLY ADDING BC NO ONE SELECTED THE FOLLOWING OPTIONS ----
-  add_row(version_control = "Monthly", n = 0) |> 
-  add_row(version_control = "Several times per year", n = 0) |> 
-  add_row(version_control = "Less than once per year", n = 0) |> 
-  add_row(version_control = "Never", n = 0) |>
+q6_version_control_data <- q6_version_control_clean(medsJune2023_clean)
+plot_frequency_use(data = q6_version_control_data,
+                   title = "Version control software (Git, Subversion (SVN), Mercurial, etc.)",
+                   caption = "Question 6")
 
-  # reorder factors ----
-  mutate(version_control = fct_relevel(version_control, c("Never", "Less than once per year", "Several times per year",
-                                            "Monthly", "Weekly", "Daily"))) |>
-
-  # add col for percentages ----
-  mutate(percentage = round((n/(sum(n)))*100, 1),
-         perc_label = paste0(percentage, "%"))
-
-#..............................plot..............................
-ggplot(q6_version_control, aes(x = version_control, y = n, label = perc_label)) +
-  geom_col(fill = "#047C91") +
-  coord_flip() +
-  geom_text(position = position_stack(vjust = 0.5), size = 4, color = "white", family = "nunito") +
-  labs(y = "Number of MEDS students", x = "Frequency of use",
-       title = "Version control software (Git, Subversion (SVN), Mercurial, etc.)",
-       caption = "Question 6") +
-  meds_theme
 ```
 
 ```{r}
-#............................wrangle.............................
-q7_command_shell <- medsJune2023_clean |> 
-  
-  # select necessary cols ----
-  select(command_shell) |>
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##  ~ Question 7: Command Shell  ----
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  # sum ----
-  group_by(command_shell) |>
-  count() |>
-  ungroup() |> 
-  
-  # ONLY ADDING BC NO ONE SELECTED THE FOLLOWING OPTIONS ----
-  add_row(command_shell = "Less than once per year", n = 0) |> 
-  add_row(command_shell = "Never", n = 0) |>
-
-  # reorder factors ----
-  mutate(command_shell = fct_relevel(command_shell, c("Never", "Less than once per year", "Several times per year",
-                                            "Monthly", "Weekly", "Daily"))) |>
-
-  # add col for percentages ----
-  mutate(percentage = round((n/(sum(n)))*100, 1),
-         perc_label = paste0(percentage, "%"))
-
-#..............................plot..............................
-ggplot(q7_command_shell, aes(x = command_shell, y = n, label = perc_label)) +
-  geom_col(fill = "#047C91") +
-  coord_flip() +
-  geom_text(position = position_stack(vjust = 0.5), size = 4, color = "white", family = "nunito") +
-  labs(y = "Number of MEDS students", x = "Frequency of use",
-       title = "A command shell (usually accessed through Terminal on macOS or\nPowerShell on Windows)",
-       caption = "Question 7") +
-  meds_theme
+q7_command_shell_data <- q7_command_shell_clean(medsJune2023_clean)
+plot_frequency_use(data = q7_command_shell_data,
+                   title = "A command shell (usually accessed through Terminal on macOS or\nPowerShell on Windows)",
+                   caption = "Question 7")
 ```
 
 ## **Part 3: Workflow satisfaction**
 
 ```{r}
-#............................wrangle.............................
-q8_satisfaction <- medsJune2023_clean |> 
-  
-  # select necessary cols ----
-  select(rate_satisfaction) |>
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##  ~ Question 8: Workflow Satisfaction  ----
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  # sum ----
-  group_by(rate_satisfaction) |>
-  count() |>
-  ungroup() |> 
-  
-  # ONLY ADDING BC NO ONE SELECTED THE FOLLOWING OPTIONS ----
-  add_row(rate_satisfaction = "Very unsatisfied", n = 0) |> 
-  add_row(rate_satisfaction = "Not sure", n = 0) |>
-  add_row(rate_satisfaction = "Never thought about this", n = 0) |>
-  add_row(rate_satisfaction = "Not applicable", n = 0) |>
-
-  # reorder factors ----
-  mutate(rate_satisfaction = fct_relevel(rate_satisfaction, c("Not applicable", "Never thought about this", "Not sure",
-                                                              "Very unsatisfied", "Unsatisfied", "Neutral",
-                                                              "Satisfied", "Very Satisfied"))) |>
-
-  # add col for percentages ----
-  mutate(percentage = round((n/(sum(n)))*100, 1),
-         perc_label = paste0(percentage, "%"))
-
-#..............................plot..............................
-ggplot(q8_satisfaction, aes(x = rate_satisfaction, y = n, label = perc_label)) +
-  geom_col(fill = "#047C91") +
-  coord_flip() +
-  geom_text(position = position_stack(vjust = 0.5), size = 3, color = "white", family = "nunito") +
-  labs(y = "Number of MEDS students", x = "Satisfaction level",
-       title = "Please rate your level of satisfaction with your current data\nmanagement and analysis workflow (i.e. how you collect, organize,\nstore, and analyze your data).",
-       caption = "Question 8") +
-  meds_theme
+q8_workflow_satisfaction_data <- q8_workflow_satisfaction_clean(medsJune2023_clean)
+q8_workflow_satisfaction_plot(q8_workflow_satisfaction_data)
 ```
 
 ## **Part 4: Rank the following from 1 (strongly disagree) to 5 (strongly agree)**

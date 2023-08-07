@@ -1,6 +1,6 @@
 
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-##                            clean Question 3 data                         ----
+##                            clean Question 4 data                         ----
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 q4_prog_lang_clean <- function(PLO_data_clean){
@@ -29,8 +29,7 @@ q4_prog_lang_clean <- function(PLO_data_clean){
   mutate(percentage = round((n/(sum(n)))*100, 1),
          perc_label = paste0(percentage, "%")) |> 
     
-    
-  # create col with cvar name for plotting consistency ----
+  # create col with xvar name for plotting consistency ----
   mutate(xvar = program_lang)
   
 }
