@@ -26,25 +26,7 @@ editor_options:
 
 # **Background**
 
-::: {.callout-note collapse=true}
-## Expand this drop-down for background information on the PLO Assessment process
-
-### Who is this survey for?
-
-All students enrolled in the Master of Environmental Data Science (MEDS) program during the 2023 - 2025 academic years will receive this survey to complete just before beginning the program and just after completing the program.
-
-### What is a PLO and where can I find the MEDS PLO?
-
-Each degree-granting program at UCSB has its own list of educational aims: the conceptual knowledge, practical skills, experiences, perspective-awareness, and/or values that students will be familiar with by the time they complete the program. These [Program Learning Outcomes](https://www.assessment.ucsb.edu/learning-outcomes) (PLOs) are defined by department faculty and approved by the Council on Assessment and the Academic Senate's Graduate Council. Find the [approved PLO](https://www.assessment.ucsb.edu/sites/default/files/sitefiles/Environmental%20Data%20Science%20%28MEDS%29_2022updated_0.pdf) for the Master of Environmental Data Science program.
-
-### How are PLOs assessed?
-
-Departments self-assess their PLO performance on a three-year cycle. A single educational aim is assessed in a cycle.
-
-### What does that mean for the MEDS program?
-
-Bren has entered its assessment cycle, which will last from 2023 - 2025. During this 3-year span, MEDS PLO 1 (Core Knowledge) will be assessed by delivering a pre- and post-program survey to MEDS students in the form of a Qualtrics survey. This survey is not a test of individual students, but rather an assessment of the MEDS program.
-:::
+{{< include /sections/background.qmd >}}
 
 # **Summary**
 
@@ -59,48 +41,20 @@ library(DT)
 library(tidytext)
 library(wordcloud)
 
+#........................import functions........................
+source("R/clean_data.R")
+source("R/meds_theme.R")
+source("R/q1_os.R")
+source("R/q2_store_data.R")
+source("R/part2_plot_freq_use.R")
+source("R/q3_gui.R")
+source("R/q4_prog_lang.R")
+
 #..........................import data...........................
 medsJune2023 <- read_sheet("https://docs.google.com/spreadsheets/d/1Sq1rOmBP-g6iOCBS7NoexCj4K-j3OpeErMJ2Hxd3AHo/edit?usp=sharing")
 
 #...........................clean data...........................
-medsJune2023_clean <- medsJune2023 |> 
-  filter(!row_number() %in% c(1, 2)) |> 
-  clean_names() |> 
-  
-  # coerce data types ----
-  mutate(#start_date = as_datetime(start_date, origin = "1981-01-01"),
-         #start_date = as_datetime(start_date)
-         progress = as.numeric(progress),
-         duration_in_seconds = as.numeric(duration_in_seconds),
-         finished = as.character(finished),
-         operating_system = as_factor(operating_system),
-         raw_data = as.character(raw_data),
-         small_program = as.character(small_program),
-         find_help_online = as.character(find_help_online),
-         overcoming_problems = as.character(overcoming_problems),
-         confident_programmer = as.character(confident_programmer),
-         easier_analyses = as.character(easier_analyses),
-         increase_efficiency = as.character(increase_efficiency),
-         median = as.numeric(median),
-         mode = as.numeric(mode),
-         linear_regression = as.character(linear_regression),
-         microplastics_lr = as.character(microplastics_lr),
-         prob_dist = as.character(prob_dist),
-         term_function = as.character(term_function),
-         writing_functions = as.character(writing_functions),
-         fxn_output = as.character(fxn_output),
-         spatial_data = as.character(spatial_data),
-         remote_sense_comfort = as.character(remote_sense_comfort),
-         map_proj_comfort = as.character(map_proj_comfort), 
-         reflec_spec = as.character(reflec_spec),
-         sup_vs_unsup_learn = as.character(sup_vs_unsup_learn),
-         implemented_algo = as.character(implemented_algo),
-         ml_div_data = as.character(ml_div_data),
-         train_valid_split = as.character(train_valid_split),
-         data_justice = as.character(data_justice),
-         bias = as.character(bias),
-         data_viz_programming = as.character(data_viz_programming),
-         sc0 = as.numeric(sc0)) 
+medsJune2023_clean <- clean_data(medsJune2023)
   
 #......................import Google fonts.......................
 sysfonts::font_add_google(name = "Sanchez", family = "sanchez")
@@ -108,38 +62,9 @@ sysfonts::font_add_google(name = "Nunito", family = "nunito")
 
 # automatically use showtext to render text for future devices ----
 showtext::showtext_auto()
-
-#......................create ggplot theme.......................
-
-meds_theme <- theme_minimal() + 
-  theme(
-    axis.title.x = element_text(margin = margin(t = 15, r = 0, b = 0, l = 0), family = "sanchez", size = 13),
-    axis.title.y = element_text(margin = margin(t = 0, r = 15, b = 0, l = 0), family = "sanchez", size = 13), 
-    axis.text = element_text(family = "nunito", size = 10),
-    plot.title = element_text(margin = margin(t = 5, r = 0, b = 15, l = 0), size = 15, family = "sanchez"),
-    plot.subtitle = element_text(margin = margin(t = 5, r = 0, b = 15, l = 0), size = 13, family = "sanchez"),
-    plot.caption = element_text(family = "sanchez"),
-    plot.title.position = "plot",
-    legend.position = "none"
-  )
-
-#........................source functions........................
-# source("functions.R")
 ```
 
-This post-program PLO assessment was administered to the MEDS class of 2023 **(response rate = `r nrow(medsJune2023_clean)` / 31 students)** on June 7, 2023.
-
-::: {.callout-warning}
-## Heads-up! No pre-program PLO assessment data for the Class of 2023
-This assessment of MEDS PLO #1 (Core Knowledge) was developed by the MEDS Curriculum Cohesion Committee in winter/spring 2023, and therefore *was not* administered to the MEDS Class of 2023 before beginning the program in August 2022 (i.e. no pre-program assessment was conducted). No benchmark data is available for the Class of 2023. 
-:::
-
-The survey consists of **31 questions (28 multiple choice, 3 short free-response)** and takes ~30 minutes to complete. Questions 1 - 15 ask respondents to rank how often they use certain data science tools or workflows, or familiarity/comfort levels with particular topics (see [Part 1](#part-1-os-and-datadocument-storage) through [Part 4](#part-4-rank-the-following-from-1-strongly-disagree-to-5-strongly-agree), below). Questions 16 - 31 assess respondents' familiarity and application of domain-specific knowledge/tools taught during the MEDS program (see [Part 5](#part-5-stats) onward, below). Many of these question types are multi-part and begin with a question phrased as:
-
--  "How familiar/comfortable are you with X" (rank 1 (never heard of it) > 5 (very familiar))
--  "Have often have you done/implemented Y" (rank 1 (never) > 5 (all the time))
-
-If a respondent chooses a level of 2 or greater, they proceed to the remaining part(s) of the question to be tested on their knowledge/understanding of that topic. If a respondent chooses a level 1, they are skipped to the next question (to prevent respondents from guessing at answers). A perfect score is 14 points. See the distribution of scores, below: 
+{{< include /sections/summary.qmd >}}
 
 ```{r}
 #| fig-align: center
@@ -162,7 +87,6 @@ ggplot(scores, aes(x = sc0)) +
   meds_theme
 ```
 
-
 # **Individual Questions**
 
 ::: {.callout-note}
@@ -172,163 +96,52 @@ Questions that have a correct answer are color-coded green.
 ## **Part 1: OS and data/document storage**
 
 ```{r}
-#............................wrangle.............................
-q1_os <- medsJune2023_clean |> 
-  
-  # select necessary cols ----
-  select(operating_system, operating_system_4_text) |> 
-  
-  # if "Other", replace with written-in response ----
-  mutate(os = case_when(
-    operating_system == "Other" ~ operating_system_4_text,
-    TRUE ~ operating_system
-  )) |> 
-  
-  # remove unnecessary cols ----
-  select(os) |> 
-  
-  # count ----
-  group_by(os) |> 
-  count() |> 
-  ungroup() |> 
-  
-  # add col for percentages ----
-  mutate(percentage = round((n/(sum(n)))*100, 1),
-         perc_label = paste0(percentage, "%"))
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##  ~ Question 1: What OS?  ----
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-#..............................plot..............................
-ggplot(q1_os, aes(x = fct_reorder(os, desc(n)), y = n, label = perc_label)) +
-  geom_col(fill = "#047C91") +
-  geom_text(position = position_stack(vjust = 0.5), size = 4, color = "white", family = "nunito") +
-  labs(x = "Operating System", y = "Number of MEDS students",
-       title = "What operating system is on the computer you are using?",
-       caption = "Question 1") +
-  meds_theme
+q1_os_data <- q1_os_clean(medsJune2023_clean)
+q1_os_plot(q1_os_data)
 ```
 
 ```{r}
 #| fig-cap: "NOTE: Percentages will not sum to 100%"
+
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##  ~ Question 2: Where do you store data?  ----
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 # combine written-in "server" option ----
 server <- c("Server", "Taylor server", "external server")
 
-#............................wrangle.............................
-q2_store_data <- medsJune2023_clean |> 
-  
-  # select necessary cols ----
-  select(where_store_data, where_store_data_6_text) |> 
-  
-  # split strings by `,` delim ----
-  separate_longer_delim(where_store_data, delim = ",") |> 
-  
-  # if "Other", replace with written-in response ----
-  mutate(store_data_new = case_when(
-    where_store_data == "Other" ~ where_store_data_6_text,
-    TRUE ~ where_store_data
-  )) |>
-  
-  # remove unnecessary cols ----
-  select(where_store_data = store_data_new) |> 
-  
-  # combine similar "other" choices ----
-  mutate(where_store_data = case_when(
-    where_store_data %in% server ~ "Server",
-    TRUE ~ where_store_data
-  )) |> 
-  
-  # change "Locally on my computer" to "Locally" ----
-  mutate(across('where_store_data', str_replace, 'Locally on my computer', 'Locally')) |> 
-  
-  # count ----
-  group_by(where_store_data) |> 
-  count() |> 
-  ungroup() |> 
-  
-  # add col for percentages ----
-  mutate(percentage = round((n/(sum(n)))*100, 1),
-         perc_label = paste0(percentage, "%"))
-
-#..............................plot..............................
-ggplot(q2_store_data, aes(x = fct_reorder(where_store_data, desc(n)), y = n, label = perc_label)) +
-  geom_col(fill = "#047C91") +
-  geom_text(position = position_stack(vjust = 0.5), size = 4, color = "white", family = "nunito") +
-  labs(x = "Data Storage Location", y = "Number of MEDS students",
-       title = "Where do you store data and/or documents (select all that apply)",
-       caption = "Question 2") +
-  meds_theme
+# wrangle & plot ----
+q2_store_data <- q2_store_data_clean(medsJune2023_clean)
+q2_store_data_plot(q2_store_data)
 ```
 
 ## **Part 2: How often do you currently use the following?**
 
 ```{r}
-#............................wrangle.............................
-q3_gui <- medsJune2023_clean |> 
-  
-  # select necessary cols ----
-  select(point_and_click_gui) |> 
-  
-  # sum ----
-  group_by(point_and_click_gui) |> 
-  count() |> 
-  ungroup() |> 
-  
-  # ONLY ADDING BC NO ONE SELECTED 'Daily' ----
-  add_row(point_and_click_gui = "Daily", n = 0) |> 
-  
-  # reorder factors ----
-  mutate(point_and_click_gui = fct_relevel(point_and_click_gui,
-                                           c("Never", "Less than once per year", "Several times per year",
-                                           "Monthly", "Weekly", "Daily"))) |>
+##~~~~~~~~~~~~~~~~~~~~~~~~~
+##  ~ Question 3: GUI  ----
+##~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  # add col for percentages ----
-  mutate(percentage = round((n/(sum(n)))*100, 1),
-         perc_label = paste0(percentage, "%"))
+q3_gui_data <- q3_gui_clean(medsJune2023_clean)
+plot_frequency_use(data = q3_gui_data,
+                   title = "A specialized software with a point-and-click graphical user\ninterface (e.g., for statistical analysis: SPSS, SAS...;for Geospatial\nanalysis: ArcGIS, QGIS...; for Genomics analysis: Geneious, …)",
+                   caption = "Question 3")
 
-#..............................plot..............................
-ggplot(q3_gui, aes(x = point_and_click_gui, y = n, label = perc_label)) +
-  geom_col(fill = "#047C91") +
-  coord_flip() +
-  geom_text(position = position_stack(vjust = 0.5), size = 4, color = "white", family = "nunito") +
-  labs(y = "Number of MEDS students", x = "Frequency of use",
-       title = "A specialized software with a point-and-click graphical user\ninterface (e.g., for statistical analysis: SPSS, SAS...;for Geospatial\nanalysis: ArcGIS, QGIS...; for Genomics analysis: Geneious, …)",
-       caption = "Question 3") +
-  meds_theme
 ```
 
 ```{r}
-#............................wrangle.............................
-q4_prog_lang <- medsJune2023_clean |> 
-  
-  # select necessary cols ----
-  select(program_lang) |>
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##  ~ Question 4: Programming Languages  ----
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  # sum ----
-  group_by(program_lang) |>
-  count() |>
-  ungroup() |> 
-
-  # ONLY ADDING BC NO ONE SELECTED THE FOLLOWING OPTIONS ----
-  add_row(program_lang = "Monthly", n = 0) |> 
-  add_row(program_lang = "Several times per year", n = 0) |> 
-  add_row(program_lang = "Less than once per year", n = 0) |> 
-  add_row(program_lang = "Never", n = 0) |>
-
-  # reorder factors ----
-  mutate(program_lang = fct_relevel(program_lang, c("Never", "Less than once per year", "Several times per year",
-                                           "Monthly", "Weekly", "Daily"))) |>
-
-  # add col for percentages ----
-  mutate(percentage = round((n/(sum(n)))*100, 1),
-         perc_label = paste0(percentage, "%"))
-
-#..............................plot..............................
-ggplot(q4_prog_lang, aes(x = program_lang, y = n, label = perc_label)) +
-  geom_col(fill = "#047C91") +
-  coord_flip() +
-  geom_text(position = position_stack(vjust = 0.5), size = 4, color = "white", family = "nunito") +
-  labs(y = "Number of MEDS students", x = "Frequency of use",
-       title = "Programming languages (R, Python, etc.)",
-       caption = "Question 4") +
-  meds_theme
+q4_prog_lang_data <- q4_prog_lang_clean(medsJune2023_clean)
+plot_frequency_use(data = q4_prog_lang_data,
+                   title = "Programming languages (R, Python, etc.)",
+                   caption = "Question 4")
 ```
 
 ```{r}
