@@ -3,7 +3,7 @@
 ##                            clean Question 2 data                         ----
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-q2_store_data_clean <- function(PLO_data_clean){
+clean_q2_store_data <- function(PLO_data_clean){
   
   PLO_data_clean |> 
     
@@ -46,7 +46,7 @@ q2_store_data_clean <- function(PLO_data_clean){
 ##                            plot Question 2 data                          ----
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-q2_store_data_plot <- function(q2_store_data_clean){
+plot_q2_store_data <- function(q2_store_data_clean){
   
   ggplot(q2_store_data_clean, aes(x = fct_reorder(where_store_data, desc(n)), y = n, label = perc_label)) +
     geom_col(fill = "#047C91") +

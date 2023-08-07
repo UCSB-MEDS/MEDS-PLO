@@ -3,7 +3,7 @@
 ##                            clean Question 5 data                         ----
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-q5_databases_clean <- function(PLO_data_clean){
+clean_q5_databases <- function(PLO_data_clean){
   
   PLO_data_clean |> 
     

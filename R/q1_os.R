@@ -3,7 +3,7 @@
 ##                            clean Question 1 data                         ----
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-q1_os_clean <- function(PLO_data_clean){
+clean_q1_os <- function(PLO_data_clean){
   
   PLO_data_clean |> 
     
@@ -35,7 +35,7 @@ q1_os_clean <- function(PLO_data_clean){
 ##                            plot Question 1 data                          ----
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-q1_os_plot <- function(q1_data_clean){
+plot_q1_os <- function(q1_data_clean){
   
   ggplot(q1_data_clean, aes(x = fct_reorder(os, desc(n)), y = n, label = perc_label)) +
     geom_col(fill = "#047C91") +

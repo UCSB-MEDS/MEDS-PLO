@@ -3,7 +3,7 @@
 ##                            clean Question 3 data                         ----
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-q3_gui_clean <- function(PLO_data_clean){
+clean_q3_gui <- function(PLO_data_clean){
   
   PLO_data_clean |> 
     

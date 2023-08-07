@@ -3,7 +3,7 @@
 ##                            clean Question 6 data                         ----
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-q6_version_control_clean <- function(PLO_data_clean){
+clean_q6_version_control <- function(PLO_data_clean){
   
   PLO_data_clean |> 
     

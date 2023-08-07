@@ -2,7 +2,7 @@
 ##                            clean Question 8 data                         ----
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-q8_workflow_satisfaction_clean <- function(PLO_data_clean){
+clean_q8_workflow_satisfaction <- function(PLO_data_clean){
   
   PLO_data_clean |> 
       
@@ -36,7 +36,7 @@ q8_workflow_satisfaction_clean <- function(PLO_data_clean){
 ##                            plot Question 8 data                          ----
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-q8_workflow_satisfaction_plot <- function(q8_workflow_satisfaction_clean){
+plot_q8_workflow_satisfaction <- function(q8_workflow_satisfaction_clean){
   
   ggplot(q8_workflow_satisfaction_clean, aes(x = rate_satisfaction, y = n, label = perc_label)) +
     geom_col(fill = "#047C91") +

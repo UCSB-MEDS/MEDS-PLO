@@ -2,7 +2,7 @@
 ##                            clean Question 7 data                         ----
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-q7_command_shell_clean <- function(PLO_data_clean){
+clean_q7_command_shell <- function(PLO_data_clean){
   
   PLO_data_clean |> 
     

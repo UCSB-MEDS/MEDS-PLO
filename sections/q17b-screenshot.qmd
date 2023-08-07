@@ -1,0 +1,6 @@
+Below is a chunk of code showing a simple linear regression relating the number of pieces of microplastics to the number of days per year with rainfall.
+
+```{r}
+#| fig-align: center
+knitr::include_graphics("images/17-microplastics-lm.png")
+```

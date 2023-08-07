@@ -1,0 +1,31 @@
+The following code (in R) defines a function:
+
+```{r}
+#| eval: false
+#| echo: true
+compute_turbine_power <- function(height, flowrate, efficiency, maxheight){
+  
+  if (height < maxheight) {
+    
+    power = height * flowrate * efficiency
+    
+  } else {
+    
+    power = maxheight * flowrate * efficiency
+    
+  }
+  
+  return(power)
+  
+}
+```
+
+This R code applies this function to data:
+
+```{r}
+#| eval: false
+#| echo: true
+flowrate = 2
+maxheight = 20
+power_turbine_a <- compute_turbine_power(10, flowrate, 0.5, maxheight)
+```

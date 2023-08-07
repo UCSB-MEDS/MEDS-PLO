@@ -3,7 +3,7 @@
 ##                            clean Question 4 data                         ----
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-q4_prog_lang_clean <- function(PLO_data_clean){
+clean_q4_prog_lang <- function(PLO_data_clean){
   
   PLO_data_clean |> 
     
