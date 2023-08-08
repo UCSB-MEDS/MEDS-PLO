@@ -1,0 +1,19 @@
+<!-- ::: {.callout-note collapse=true} -->
+<!-- ## Expand this drop-down for background information on the PLO Assessment process -->
+
+### Who is this survey for?
+
+All students enrolled in the Master of Environmental Data Science (MEDS) program during the 2023 - 2025 academic years will receive this survey to complete just before beginning the program and just after completing the program.
+
+### What is a PLO and where can I find the MEDS PLO?
+
+Each degree-granting program at UCSB has its own list of educational aims: the conceptual knowledge, practical skills, experiences, perspective-awareness, and/or values that students will be familiar with by the time they complete the program. These [Program Learning Outcomes](https://www.assessment.ucsb.edu/learning-outcomes) (PLOs) are defined by department faculty and approved by the Council on Assessment and the Academic Senate's Graduate Council. Find the [approved PLO](https://www.assessment.ucsb.edu/sites/default/files/sitefiles/Environmental%20Data%20Science%20%28MEDS%29_2022updated_0.pdf) for the Master of Environmental Data Science program.
+
+### How are PLOs assessed?
+
+Departments self-assess their PLO performance on a three-year cycle. A single educational aim is assessed in a cycle.
+
+### What does that mean for the MEDS program?
+
+Bren has entered its assessment cycle, which will last from 2023 - 2025. During this 3-year span, MEDS PLO 1 (Core Knowledge) will be assessed by delivering a pre- and post-program survey to MEDS students in the form of a Qualtrics survey. This survey is not a test of individual students, but rather an assessment of the MEDS program.
+<!-- ::: -->

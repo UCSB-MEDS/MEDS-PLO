@@ -1,0 +1,381 @@
+---
+title: "MEDS - Class of 2024"
+subtitle: "Program Learning Outcome (PLO) #1 Assessment - Core Knowledge"
+author: "Sam Csik"
+date: August 4, 2023
+format: 
+  html:
+    
+    toc: true
+    toc-location: left
+    code-tools: 
+      source: true
+      toggle: false
+    theme: 
+      - styles.scss
+    mainfont: Nunito
+execute: 
+  eval: true
+  echo: false
+  message: false
+  warning: false
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r}
+#..........................load packages.........................
+library(googlesheets4)
+library(tidyverse)
+library(janitor)
+library(showtext)
+library(ggtext)
+library(DT)
+library(tidytext)
+library(wordcloud)
+
+#........................import functions........................
+source("functions.R")
+
+#..........................import data...........................
+meds2024_before <- read_sheet("https://docs.google.com/spreadsheets/d/1cJddylTu-eyb2fjbnVuvv-tvy6Knq1HfHjz_5zlW0fc/edit?usp=sharing")
+
+#...........................clean data...........................
+meds2024_before_clean <- clean_PLO_data(meds2024_before)
+  
+#......................import Google fonts.......................
+sysfonts::font_add_google(name = "Sanchez", family = "sanchez")
+sysfonts::font_add_google(name = "Nunito", family = "nunito")
+
+# automatically use showtext to render text for future devices ----
+showtext::showtext_auto()
+```
+
+# **Summary**
+
+{{< include /sections/class2024_before/summary.qmd >}}
+
+```{r}
+#| fig-align: center
+scores <- meds2024_before_clean |> 
+  select(sc0)
+
+mean_score <- mean(scores$sc0)
+median_score <- median(scores$sc0)
+
+ggplot(scores, aes(x = sc0)) +
+  geom_histogram(binwidth = 1, color = "white", fill = "#047C91") +
+  geom_vline(xintercept = median_score,  linetype = "dashed", color = "black") +
+  annotate(geom = "label", x = 9.8, y = 8, label = paste0("Median Score = ", median_score), hjust = "right") +
+  annotate(geom = "segment", x = 7, y = 8, xend = median_score, yend = 7.5,
+           arrow = arrow(length = unit(3, "mm"))) +
+  scale_x_continuous(breaks = seq(1, 14, 1)) +
+  labs(x = "Score", y = "Number of MEDS studnets",
+       title = "Distribution of scores",
+       caption = "Out of 14 available points") +
+  meds_theme
+```
+
+# **Individual Questions**
+
+::: {.callout-note}
+Questions that have a correct answer are color-coded green.
+:::
+
+## **Part 1: OS and data/document storage**
+
+```{r}
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##  ~ Question 1: What OS?  ----
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+q1_os_data <- clean_q1_os(meds2024_before_clean)
+plot_q1_os(q1_os_data)
+```
+
+```{r}
+#| fig-cap: "NOTE: Percentages will not sum to 100%"
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##  ~ Question 2: Where do you store data?  ----
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# combine written-in "server" option ----
+server <- c("Server", "Taylor server", "external server")
+
+# wrangle & plot ----
+q2_store_data <- clean_q2_store_data(meds2024_before_clean)
+plot_q2_store_data(q2_store_data)
+```
+
+## **Part 2: How often do you currently use the following?**
+
+```{r}
+##~~~~~~~~~~~~~~~~~~~~~~~~~
+##  ~ Question 3: GUI  ----
+##~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# wrangle ----
+q3_gui_data <- clean_q3_gui(meds2024_before_clean)
+
+# plot ----
+plot_frequency_use(data = q3_gui_data,
+                   title = "A specialized software with a point-and-click graphical user\ninterface (e.g., for statistical analysis: SPSS, SAS...;for Geospatial\nanalysis: ArcGIS, QGIS...; for Genomics analysis: Geneious, …)",
+                   caption = "Question 3")
+
+```
+
+```{r}
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##  ~ Question 4: Programming Languages  ----
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# wrangle ----
+q4_prog_lang_data <- clean_q4_prog_lang(meds2024_before_clean)
+
+# plot ----
+plot_frequency_use(data = q4_prog_lang_data,
+                   title = "Programming languages (R, Python, etc.)",
+                   caption = "Question 4")
+```
+
+```{r}
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##  ~ Question 5: Databases  ----
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# wrangle ----
+q5_databases_data <- clean_q5_databases(meds2024_before_clean)
+
+# plot ----
+plot_frequency_use(data = q5_databases_data, 
+                   title = "Databases (SQL, Access, etc.)",
+                   caption = "Question 5")
+```
+
+```{r}
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##  ~ Question 6: Version Control  ----
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# wrangle ----
+q6_version_control_data <- clean_q6_version_control(meds2024_before_clean)
+
+# plot ----
+plot_frequency_use(data = q6_version_control_data,
+                   title = "Version control software (Git, Subversion (SVN), Mercurial, etc.)",
+                   caption = "Question 6")
+
+```
+
+```{r}
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##  ~ Question 7: Command Shell  ----
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# wrangle ----
+q7_command_shell_data <- clean_q7_command_shell(meds2024_before_clean)
+
+# plot ----
+plot_frequency_use(data = q7_command_shell_data,
+                   title = "A command shell (usually accessed through Terminal on macOS or\nPowerShell on Windows)",
+                   caption = "Question 7")
+```
+
+## **Part 3: Workflow satisfaction**
+
+```{r}
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##  ~ Question 8: Workflow Satisfaction  ----
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# wrangle ----
+q8_workflow_satisfaction_data <- clean_q8_workflow_satisfaction(meds2024_before_clean)
+
+# plot ----
+plot_q8_workflow_satisfaction(q8_workflow_satisfaction_data)
+```
+
+## **Part 4: Rank the following from 1 (strongly disagree) to 5 (strongly agree)**
+
+```{r}
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##  ~ Question 9: Raw Data  ----
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# wrangle ----
+q9_raw_data_data <- clean_q9_raw_data(meds2024_before_clean)
+
+# plot ----
+plot_rank_agreement(data = q9_raw_data_data,
+                    title = "Having access to the original, raw data is important to be able to\nrepeat an analysis",
+                    caption = "Question 9")
+```
+
+```{r}
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##  ~ Question 10: Small Program  ----
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# wrangle ----
+q10_small_program_data <- clean_q10_small_program(meds2024_before_clean)
+
+# plot ----
+plot_rank_agreement(data = q10_small_program_data,
+                    title = "I can write a small program, script, or macro to address a problem\nin my own work",
+                    caption = "Question 10")
+```
+
+```{r}
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##  ~ Question 11: Find Help Online  ----
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# wrangle ----
+q11_find_help_online_data <- clean_q11_find_help_online(meds2024_before_clean)
+
+# plot ----
+plot_rank_agreement(data = q11_find_help_online_data ,
+                    title = "I know how to search for answers to my technical questions online",
+                    caption = "Question 11")
+```
+
+```{r}
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##  ~ Question 12: Overcoming Problems  ----
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# wrangle ----
+q12_overcoming_problems_data <- clean_q12_overcoming_problems(meds2024_before_clean)
+
+# plot ----
+plot_rank_agreement(data = q12_overcoming_problems_data,
+                    title = "While working on a programming project, if I get stuck, I can find\nways of overcoming the problem",
+                    caption = "Question 12")
+```
+
+```{r}
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##  ~ Question 13: Confidence  ----
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# wrangle ----
+q13_confidence_data <- clean_q13_confidence(meds2024_before_clean)
+
+# plot ----
+plot_rank_agreement(data = q13_confidence_data,
+                    title = "I am confident in my ability to make use of programming software\nto work with data",
+                    caption = "Question 13")
+```
+
+```{r}
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##  ~ Question 14: Easier Analyses  ----
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# wrangle ----
+q14_easier_analysis_data <- clean_q14_easier_analysis(meds2024_before_clean)
+
+# plot ----
+plot_rank_agreement(data = q14_easier_analysis_data,
+                     title = "Using a programming language (like R or Python) can make my\nanalyses easier to reproduce",
+                    caption = "Question 14")
+```
+
+```{r}
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##  ~ Question 15: Increase Efficiency  ----
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# wrangle ----
+q15_increase_efficiency_data <- clean_q15_increase_efficiency(meds2024_before_clean)
+
+# plot ----
+plot_rank_agreement(data = q15_increase_efficiency_data,
+                    title = "Using a programming language (like R or Python) can make me\nmore efficient at working with data",
+                    caption = "Question 15")
+```
+
+## **Part 5: Stats**
+
+<!-- NOTE TO MAINTAINERS: plotting functions expect palette to be called `pal` -->
+
+```{r}
+
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##  ~ Question 16a: Median  ----
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# wrangle ----
+q16a_median_data <- clean_q16a_median(meds2024_before_clean)
+
+# plot ----
+pal <- c("14" = "#7ECD7A", "0" = "#047C91", "10" = "#047C91", "5" = "#047C91", "10.1" = "#047C91")
+plot_q16a_median(q16a_median_data)
+```
+
+```{r}
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##  ~ Question 16b: Mode  ----
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# wrangle ----
+q16b_mode_data <- clean_q16b_mode(meds2024_before_clean)
+
+# plot ----
+pal <- c("14" = "#7ECD7A", "2" = "#047C91", "9.5" = "#047C91", "10" = "#047C91", "17" = "#047C91")
+plot_q16b_mode(q16b_mode_data)
+```
+
+```{r}
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##  ~ Question 17a: Linear Regression Familiarity  ----
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# wrangle ----
+q17a_familiarity_lr_data <- clean_q17a_familiar_lr(meds2024_before_clean)
+
+# plot ----
+plot_q17a_familiar_lr(q17a_familiarity_lr_data)
+```
+
+<!-- {{< include /sections/class2023_after/q17-callout-inline-code.qmd >}} -->
+
+<!-- {{< include /sections/class2023_after/q17b-screenshot.qmd >}} -->
+
+<!-- NOTE TO MAINTAINERS: see `q17_linear_regression.R` for free response cleaning; will need to be modified for each new set of survey data -->
+
+```{r}
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##  ~ Question 17b: Microplastics  ----
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# wrangle ----
+q17b_microplastics_data <- clean_q17b_microplastics(meds2024_before_clean)
+
+# plot ----
+pal <- c("47" = "#7ECD7A", "27" = "#047C91", "900" = "#047C91", "26" = "#047C91", 
+         "956" = "#047C91","43" = "#047C91", "911" = "#047C91", "46" = "#047C91")
+plot_q17b_microplastics(q17b_microplastics_data)
+```
+
+::: {.callout-note}
+## Question 17b raw responses
+Some respondents recorded their answers in sentence form, while others did not round their answers to the nearest integer. Cleaned responses are shown in the plot, above. Responses as they were recorded are included in the table, below:
+
+```{r}
+#............................wrangle.............................
+q17_microplastics_dt <- meds2024_before_clean |> 
+  
+  # select necessary cols ----
+  select(microplastics_lr)
+
+DT::datatable(q17_microplastics_dt, colnames = c("Free Response Answer to Q17b"),
+              
+               options = list(autoWidth = TRUE, 
+                              pageLength = 5,
+                              lengthMenu = c(5, 10, 20, 30),
+                              dom = 'ltp')
+              
+              )
+```
+:::

@@ -1,0 +1,13 @@
+This PLO assessment was administered to the MEDS class of 2024 **(response rate = `r nrow(meds2024_before_clean)` / 31 students)** on August 4, 2023.
+
+::: {.callout-note}
+## This is the first cohort to receive the PLO before beginning the program
+The same survey will be administered during the last week of MEDS (June 2024).
+:::
+
+The survey consists of **31 questions (28 multiple choice, 3 short free-response)** and takes ~30 minutes to complete. Questions 1 - 15 ask respondents to rank how often they use certain data science tools or workflows, or familiarity/comfort levels with particular topics (see [Part 1](#part-1-os-and-datadocument-storage) through [Part 4](#part-4-rank-the-following-from-1-strongly-disagree-to-5-strongly-agree), below). Questions 16 - 31 assess respondents' familiarity and application of domain-specific knowledge/tools taught during the MEDS program (see [Part 5](#part-5-stats) onward, below). Many of these question types are multi-part and begin with a question phrased as:
+
+-  "How familiar/comfortable are you with X" (rank 1 (never heard of it) > 5 (very familiar))
+-  "Have often have you done/implemented Y" (rank 1 (never) > 5 (all the time))
+
+If a respondent chooses a level of 2 or greater, they proceed to the remaining part(s) of the question to be tested on their knowledge/understanding of that topic. If a respondent chooses a level 1, they are skipped to the next question (to prevent respondents from guessing at answers). A perfect score is 14 points. See the distribution of scores, below: 

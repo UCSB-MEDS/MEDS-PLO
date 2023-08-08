@@ -1,64 +1,4 @@
----
-title: "MEDS Class of 2023"
-subtitle: "Program Learning Outcome (PLO) #1 Assessment - Core Knowledge"
-author: "Sam Csik"
-date: June 9, 2023
-
-format: 
-  html:
-    toc: true
-    toc-location: left
-    code-tools: 
-      source: true
-      toggle: false
-    theme: 
-      - styles.scss
-    mainfont: Nunito
-    
-execute: 
-  eval: true
-  echo: false
-  message: false
-  warning: false
-editor_options: 
-  chunk_output_type: console
----
-
-```{r}
-#..........................load packages.........................
-library(googlesheets4)
-library(tidyverse)
-library(janitor)
-library(showtext)
-library(ggtext)
-library(DT)
-library(tidytext)
-library(wordcloud)
-
-#........................import functions........................
-source("functions.R")
-
-#..........................import data...........................
-medsJune2023 <- read_sheet("https://docs.google.com/spreadsheets/d/1Sq1rOmBP-g6iOCBS7NoexCj4K-j3OpeErMJ2Hxd3AHo/edit?usp=sharing")
-
-#...........................clean data...........................
-medsJune2023_clean <- clean_PLO_data(medsJune2023)
-  
-#......................import Google fonts.......................
-sysfonts::font_add_google(name = "Sanchez", family = "sanchez")
-sysfonts::font_add_google(name = "Nunito", family = "nunito")
-
-# automatically use showtext to render text for future devices ----
-showtext::showtext_auto()
-```
-
-<!-- # **Background** -->
-
-<!-- {{< include /sections/background.qmd >}} -->
-
-# **Summary**
-
-{{< include /sections/class2023_after/summary.qmd >}}
+{{< include /sections/summary.qmd >}}
 
 ```{r}
 #| fig-align: center
@@ -343,9 +283,9 @@ q17a_familiarity_lr_data <- clean_q17a_familiar_lr(medsJune2023_clean)
 plot_q17a_familiar_lr(q17a_familiarity_lr_data)
 ```
 
-{{< include /sections/class2023_after/q17-callout-inline-code.qmd >}}
+{{< include /sections/q17-callout-inline-code.qmd >}}
 
-{{< include /sections/class2023_after/q17b-screenshot.qmd >}}
+{{< include /sections/q17b-screenshot.qmd >}}
 
 <!-- NOTE TO MAINTAINERS: see `q17_linear_regression.R` for free response cleaning; will need to be modified for each new set of survey data -->
 
@@ -397,7 +337,7 @@ q18a_familiar_prob_dist_data <- clean_q18a_familiar_prob_dist(medsJune2023_clean
 plot_q18a_familiar_prob_dist(q18a_familiar_prob_dist_data)
 ```
 
-{{< include /sections/class2023_after/q18-callout-inline-code.qmd >}}
+{{< include /sections/q18-callout-inline-code.qmd >}}
 
 ```{r}
 #| column: margin
@@ -449,7 +389,7 @@ q19a_familiar_functions_data <- clean_q19a_familiar_functions(medsJune2023_clean
 plot_q19a_familiar_functions(q19a_familiar_functions_data)
 ```
 
-{{< include /sections/class2023_after/q19b-callout-inline-code.qmd >}}
+{{< include /sections/q19b-callout-inline-code.qmd >}}
 
 ```{r}
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -463,9 +403,9 @@ q19b_writing_functions_data <- clean_q19b_writing_functions(medsJune2023_clean)
 plot_q19b_writing_functions(q19b_writing_functions_data)
 ```
 
-{{< include /sections/class2023_after/q19c-callout-inline-code.qmd >}}
+{{< include /sections/q19c-callout-inline-code.qmd >}}
 
-{{< include /sections/class2023_after/q19c-turbine-function.qmd >}}
+{{< include /sections/q19c-turbine-function.qmd >}}
 
 ```{r}
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -540,7 +480,7 @@ q21a_comfort_spatial_data <- clean_q21a_comfort_spatial(medsJune2023_clean)
 plot_q21a_comfort_spatial(q21a_comfort_spatial_data)
 ```
 
-{{< include /sections/class2023_after/q21-callout-inline-code.qmd >}}
+{{< include /sections/q21-callout-inline-code.qmd >}}
 
 ```{r}
 #| column: margin
@@ -604,7 +544,7 @@ q22a_comfort_rs_data <- clean_q22a_comfort_rs(medsJune2023_clean)
 plot_q22a_comfort_rs(q22a_comfort_rs_data)
 ```
 
-{{< include /sections/class2023_after/q22-callout-inline-code.qmd >}}
+{{< include /sections/q22-callout-inline-code.qmd >}}
 
 ```{r}
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -637,7 +577,7 @@ q23a_comfort_map_proj_data <- clean_q23a_comfort_map_proj(medsJune2023_clean)
 plot_q23a_comfort_map_proj(q23a_comfort_map_proj_data)
 ```
 
-{{< include /sections/class2023_after/q23-callout-inline-code.qmd >}}
+{{< include /sections/q23-callout-inline-code.qmd >}}
 
 ```{r}
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -665,7 +605,7 @@ q24a_familiarity_rs_data <- clean_q24a_familiarity_rs(medsJune2023_clean)
 plot_q24a_familiarity_rs(q24a_familiarity_rs_data)
 ```
 
-{{< include /sections/class2023_after/q24-callout-inline-code.qmd >}}
+{{< include /sections/q24-callout-inline-code.qmd >}}
 
 ```{r}
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -695,7 +635,7 @@ q25a_familiar_ml_data <- clean_q25a_familiar_ml(medsJune2023_clean)
 plot_q25a_familiar_ml(q25a_familiar_ml_data)
 ```
 
-{{< include /sections/class2023_after/q25a-callout-inline-code.qmd >}}
+{{< include /sections/q25a-callout-inline-code.qmd >}}
 
 ```{r}
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -709,7 +649,7 @@ q25b_unsup_alg_data <- clean_q25b_unsup_alg(medsJune2023_clean)
 plot_q25b_unsup_alg(q25b_unsup_alg_data)
 ```
 
-{{< include /sections/class2023_after/q25b-callout-inline-code.qmd >}}
+{{< include /sections/q25b-callout-inline-code.qmd >}}
 
 ```{r}
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -740,7 +680,7 @@ q26a_div_data <- clean_q26a_div_data(medsJune2023_clean)
 plot_q26a_div_data(q26a_div_data)
 ```
 
-{{< include /sections/class2023_after/q26a-callout-inline-code.qmd >}}
+{{< include /sections/q26a-callout-inline-code.qmd >}}
 
 ```{r}
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -754,7 +694,7 @@ q26b_tvs_data <- clean_q26b_tvs(medsJune2023_clean)
 plot_q26b_tvs(q26b_tvs_data)
 ```
 
-{{< include /sections/class2023_after/q26b-callout-inline-code.qmd >}}
+{{< include /sections/q26b-callout-inline-code.qmd >}}
 
 ```{r}
 #| column: margin
@@ -877,7 +817,7 @@ DT::datatable(q30_improve_dv, colnames = c("Free Response Answer to Q30"),
 ```
 :::
 
-## **Part 12: Programming 2**
+## **Part 13: Programming 2**
 
 ```{r}
 #| eval: false
@@ -904,16 +844,3 @@ pal <- c("Python" = "#7ECD7A", "R" = "#047C91", "SQL" = "#047C91")
 plot_q31_lang(q31_lang_data)
 ```
 
-
-
-<!-- ::: {.panel-tabset} -->
-
-<!-- ## Class of 2023 (EOY ONLY) -->
-
-<!-- {{< include class2023.qmd >}} -->
-
-<!-- ## Class of 2024 -->
-
-<!-- ## Class of 2025 -->
-
-<!-- ::: -->
