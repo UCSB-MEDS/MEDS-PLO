@@ -9,6 +9,7 @@ q22a_num_answers <- medsJune2023_clean |>
 q22a_not1 <- medsJune2023_clean |> 
   select(remote_sense_comfort) |> 
   group_by(remote_sense_comfort) |>
+  filter(remote_sense_comfort != "1 (never worked with it before)") |> 
   count() |>
   ungroup() |> 
   summarize(n = sum(n)) |> 

@@ -1,0 +1,33 @@
+
+```{r in-line code q25a}
+# total respondents ----
+q25a_num_answers <- meds2024_before_clean |>
+  select(sup_vs_unsup_learn) |>
+  count() |>
+  pull()
+
+# total not answer 1 ----
+q25a_not1 <- meds2024_before_clean |>
+  select(sup_vs_unsup_learn) |>
+  group_by(sup_vs_unsup_learn) |>
+  count() |>
+  ungroup() |>
+  filter(sup_vs_unsup_learn != "1 (never heard of either of those terms)") |> 
+  summarize(n = sum(n)) |>
+  pull()
+
+# answered 1 ----
+q25a_1 <- meds2024_before_clean |>
+  select(sup_vs_unsup_learn) |>
+  group_by(sup_vs_unsup_learn) |>
+  count() |>
+  ungroup() |>
+  filter(sup_vs_unsup_learn == "1 (never heard of either of those terms)") |> 
+  summarize(n = sum(n)) |>
+  pull()
+```
+
+::: {.callout-note}
+## `r q25a_not1` / `r q25a_num_answers` respondents advanced to Question 25b
+**`r q25a_not1` / `r q25a_num_answers` student respondents (`r ((q25a_not1/q25a_num_answers)*100)`%)** chose a familiarity level of 2 or greater – these respondents were directed to answer Question 25b. `r q25a_1` respondents selected **1 (never heard of either of those terms)** in response to Question 25a and were jumped directly to Question 26 -- they are recorded as `NULL` in Question 25b, below.
+:::

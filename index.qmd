@@ -25,7 +25,7 @@ editor_options:
 
 # **Background**
 
-{{< include /sections/background.qmd >}}
+{{< include /sections/all_classes/background.qmd >}}
 
 # PLO Assessments by Class
 

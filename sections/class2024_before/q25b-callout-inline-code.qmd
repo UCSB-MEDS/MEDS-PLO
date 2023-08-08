@@ -1,0 +1,32 @@
+```{r in-line code q25b}
+# total respondents ----
+q25b_num_answers <- meds2024_before_clean |>
+  select(implemented_algo) |>
+  count() |>
+  pull()
+
+# total not answer 1 ----
+q25b_not1 <- meds2024_before_clean |>
+  select(implemented_algo) |>
+  group_by(implemented_algo) |>
+  count() |>
+  ungroup() |>
+  filter(implemented_algo != "1 (definitely not)") |> 
+  summarize(n = sum(n)) |>
+  pull()
+
+# answered 1 ----
+q25b_1 <- meds2024_before_clean |>
+  select(implemented_algo) |>
+  group_by(implemented_algo) |>
+  count() |>
+  ungroup() |>
+  filter(implemented_algo == "1 (definitely not)") |> 
+  summarize(n = sum(n)) |>
+  pull()
+```
+
+::: {.callout-note}
+## `r q25b_not1` / `r q25b_num_answers` respondents advanced to Question 25b
+**`r q25b_not1` / `r q25b_num_answers` student respondents (`r ((q25b_not1/q25a_num_answers)*100)`%)** chose a familiarity level of 2 or greater – these respondents were directed to answer Question 25b. `r q25a_1` respondents selected **1 (definitely not)** in response to Question 25b and were jumped directly to Question 26 -- they are recorded as `NULL` in Question 25c, below.
+:::

@@ -9,6 +9,7 @@ q21a_num_answers <- medsJune2023_clean |>
 q21a_not1 <- medsJune2023_clean |> 
   select(spatial_data) |> 
   group_by(spatial_data) |>
+  filter(spatial_data != "1 (never worked with it before)") |> 
   count() |>
   ungroup() |> 
   summarize(n = sum(n)) |> 

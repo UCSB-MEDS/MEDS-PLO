@@ -16,7 +16,7 @@ clean_q17a_familiar_lr <- function(PLO_data_clean){
     
   # ADDING BC NO ONE SELECTED THE FOLLOWING OPTIONS ----
   add_row(linear_regression = "2", n = 0) |>
-    add_row(linear_regression = "1 - never heard of it", n = 0) |>
+  add_row(linear_regression = "1 - never heard of it", n = 0) |>
     
   # reorder factors ----
   mutate(linear_regression = fct_relevel(linear_regression, 
@@ -54,28 +54,38 @@ clean_q17b_microplastics <- function(PLO_data_clean){
   
   PLO_data_clean |> 
     
-    # select necessary cols ----
+  # select necessary cols ----
   select(microplastics_lr) |> 
     
-    # round values and remove sentences for plotting purposes ----
+  # round values and remove sentences for plotting purposes ----
   mutate_if(is.character, str_replace_all, 
             pattern = "For 45 days of rain per year, we expect 27 pieces of microplastic, ceteris paribus.", replacement = "27") |> 
-    mutate_if(is.character, str_replace_all, pattern = "26.52", replacement = "27") |> 
-    mutate_if(is.character, str_replace_all, pattern = "46.76823", replacement = "47") |> 
-    mutate_if(is.character, str_replace_all, pattern = "46.77", replacement = "47") |> 
-    mutate_if(is.character, str_replace_all, pattern = "900.28", replacement = "900") |> 
-    mutate_if(is.character, str_replace_all, pattern = "47 mg", replacement = "47") |> 
-    mutate_if(is.character, str_replace_all, pattern = "27 pieces", replacement = "27") |> 
+  
+  # class 2023 after ----
+  mutate_if(is.character, str_replace_all, pattern = "26.52", replacement = "27") |> 
+  mutate_if(is.character, str_replace_all, pattern = "46.76823", replacement = "47") |> 
+  mutate_if(is.character, str_replace_all, pattern = "46.77", replacement = "47") |> 
+  mutate_if(is.character, str_replace_all, pattern = "900.28", replacement = "900") |> 
+  mutate_if(is.character, str_replace_all, pattern = "47 mg", replacement = "47") |> 
+  mutate_if(is.character, str_replace_all, pattern = "27 pieces", replacement = "27") |> 
+  # class 2024 before ----
+  mutate_if(is.character, str_replace_all, pattern = "Unsure", replacement = "I don't know") |> 
+  mutate_if(is.character, str_replace_all, pattern = "i dont know", replacement = "I don't know") |> 
+  mutate_if(is.character, str_replace_all, pattern = "no idea", replacement = "I don't know") |> 
+  mutate_if(is.character, str_replace_all, pattern = "26.5", replacement = "27") |> 
+  mutate_if(is.character, str_replace_all, pattern = "42.7", replacement = "43") |> 
+  mutate_if(is.character, str_replace_all, pattern = "1.1511", replacement = "1") |> 
+  mutate_if(is.character, str_replace_all, pattern = "0.58942", replacement = "1") |> 
     
-    # convert to factor ----
+  # convert to factor ----
   mutate(microplastics_lr = as_factor(microplastics_lr)) |> 
     
-    # sum ----
+  # sum ----
   group_by(microplastics_lr) |>
     count() |>
     ungroup() |>
     
-    # add col for percentages ----
+  # add col for percentages ----
   mutate(percentage = round((n/(sum(n)))*100, 1),
          perc_label = paste0(percentage, "%"))
   

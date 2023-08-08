@@ -17,9 +17,9 @@ clean_q6_version_control <- function(PLO_data_clean){
     
   # ADDING BC NO ONE SELECTED THE FOLLOWING OPTIONS ----
   add_row(version_control = "Monthly", n = 0) |> 
-    add_row(version_control = "Several times per year", n = 0) |> 
-    add_row(version_control = "Less than once per year", n = 0) |> 
-    add_row(version_control = "Never", n = 0) |>
+  add_row(version_control = "Several times per year", n = 0) |> 
+  add_row(version_control = "Less than once per year", n = 0) |> 
+  add_row(version_control = "Never", n = 0) |>
     
   # reorder factors ----
   mutate(version_control = fct_relevel(version_control, c("Never", "Less than once per year", "Several times per year",

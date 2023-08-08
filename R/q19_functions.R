@@ -121,7 +121,7 @@ clean_q19c_fxn_output <- function(PLO_data_clean){
 
 plot_q19c_fxn_output <- function(data){
   
-  ggplot(data, aes(x = fxn_output, y = n, label = perc_label, fill = fxn_output)) +
+  ggplot(data, aes(x = fct_reorder(fxn_output, desc(n)), y = n, label = perc_label, fill = fxn_output)) +
     geom_col() +
     geom_text(position = position_stack(vjust = 0.5), size = 3, color = "white", family = "nunito") +
     labs(y = "Number of MEDS students", x = "Selection",
@@ -129,7 +129,7 @@ plot_q19c_fxn_output <- function(data){
          caption = "Question 19c") +
     scale_fill_manual(values = pal, limits = names(pal)) +
     meds_theme
-  
+
 }
 
 

@@ -14,6 +14,9 @@ clean_q24a_familiarity_rs <- function(PLO_data_clean){
     count() |>
     ungroup() |>
     
+  # ADDING BC NO ONE SELECTED THE FOLLOWING OPTIONS ----
+  add_row(reflec_spec = "5 (very familiar)", n = 0) |>
+    
   # reorder factors ----
   mutate(reflec_spec = fct_relevel(reflec_spec,
                                    c("1 (never heard of it)", "2",

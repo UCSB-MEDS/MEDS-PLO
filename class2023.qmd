@@ -345,7 +345,7 @@ plot_q17a_familiar_lr(q17a_familiarity_lr_data)
 
 {{< include /sections/class2023_after/q17-callout-inline-code.qmd >}}
 
-{{< include /sections/class2023_after/q17b-screenshot.qmd >}}
+{{< include /sections/all_classes/q17b-screenshot.qmd >}}
 
 <!-- NOTE TO MAINTAINERS: see `q17_linear_regression.R` for free response cleaning; will need to be modified for each new set of survey data -->
 
@@ -401,7 +401,7 @@ plot_q18a_familiar_prob_dist(q18a_familiar_prob_dist_data)
 
 ```{r}
 #| column: margin
-#| fig-cap: "62% of respondents correctly answered question 18b (i.e. chose exactly the following options: noraml, uniform, bimodal, symmedtric)"
+#| fig-cap: "62% of respondents correctly answered question 18b (i.e. chose exactly the following options: normal, uniform, bimodal, symmedtric)"
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ##  ~ Question 18b: Probabilty Distribution Terms  ----
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -465,7 +465,7 @@ plot_q19b_writing_functions(q19b_writing_functions_data)
 
 {{< include /sections/class2023_after/q19c-callout-inline-code.qmd >}}
 
-{{< include /sections/class2023_after/q19c-turbine-function.qmd >}}
+{{< include /sections/all_classes/q19c-turbine-function.qmd >}}
 
 ```{r}
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -689,7 +689,7 @@ plot_q24b_veg_wave(q24b_veg_wave_data)
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q25a_familiar_ml_data <- clean_q25a_familiar_ml(medsJune2023_clean)
+q25a_familiar_ml_data <- clean_q25a_familiar_ml(medsJune2023_clean) 
 
 # plot ----
 plot_q25a_familiar_ml(q25a_familiar_ml_data)

@@ -41,7 +41,7 @@ plot_q18a_familiar_prob_dist <- function(data){
     geom_text(position = position_stack(vjust = 0.5), size = 3, color = "white", family = "nunito") +
     labs(y = "Number of MEDS students", x = "Familiarity level",
          title = "How familiar are you with the term probability distribution?",
-         caption = "Question 18a (choosing '1 (never heard of it)' skips respondent to question 18)") +
+         caption = "Question 18a (choosing '1 (never heard of it)' skips respondent to question 19)") +
     meds_theme
   
 }
@@ -96,15 +96,15 @@ clean_q18b_FULLY_CORRECT <- function(PLO_data_clean){
   
   PLO_data_clean |> 
     
-    # select necessary cols ----
+  # select necessary cols ----
   select(prob_dist_terms) |> 
     
-    # sum ----
+  # sum ----
   group_by(prob_dist_terms) |>
     count() |>
     ungroup() |> 
     
-    # add correct or incorrect label ----
+  # add correct or incorrect label ----
   mutate(correctness = case_when(
     prob_dist_terms == "normal" ~ "no",
     prob_dist_terms == "normal,bimodal,symmetric" ~ "no",
@@ -114,17 +114,20 @@ clean_q18b_FULLY_CORRECT <- function(PLO_data_clean){
     prob_dist_terms == "normal,uniform,bimodal,variable,symmetric" ~ "no"
   )) |> 
     
-    # coerce data types ----
+  # coerce data types ----
   mutate(correctness = as_factor(correctness)) |> 
     
-    # sum ----
+  # sum ----
   group_by(correctness) |> 
     summarize(total = sum(n)) |> 
     ungroup() |> 
     
-    # add col for percentages ----
+  # reorder factors ----
+  # mutate(correctness = fct_relevel(correctness, c("Yes", "No", "NA")))
+    
+  # add col for percentages ----
   mutate(percentage = round((total/(sum(total)))*100, 1),
-         perc_label = paste0(percentage, "%"))
+         perc_label = paste0(percentage, "%")) 
   
 }
 
