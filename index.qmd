@@ -1,5 +1,5 @@
 ---
-title: "Master of Environmental Data Science (MEDS)"
+title: "Master of Environmental Data Science (MEDS) - Class of 2023"
 subtitle: "Program Learning Outcome (PLO) #1 Assessment - Core Knowledge"
 author: "Sam Csik"
 date: June 9, 2023
