@@ -4,32 +4,62 @@
 
 clean_q15_increase_efficiency <- function(PLO_data_clean){
   
-  PLO_data_clean |> 
+  # to iterate over ----
+  options <- c("1 (strongly disagree)", "2", "3 (neutral)", "4", "5 (strongly agree)")
+  
+  # select var of interest ----
+  df1 <- PLO_data_clean |> 
     
-  # select necessary cols ----
-  select(increase_efficiency) |>
+    # select necessary cols ----
+  select(increase_efficiency) |> 
     
-  # sum ----
-  group_by(increase_efficiency) |>
-    count() |>
-    ungroup() |> 
+    # sum ----
+  group_by(increase_efficiency) |> 
+    count() |> 
+    ungroup() 
+  
+  for (i in 1:length(options)){
     
-  # ADDING BC NO ONE SELECTED THE FOLLOWING OPTIONS ----
-  add_row(increase_efficiency = "3 (neutral)", n = 0) |>
-    add_row(increase_efficiency = "2", n = 0) |>
-    add_row(increase_efficiency = "1 (strongly disagree)", n = 0) |> 
+    cat_name <- options[i]
     
-  # reorder factors ----
-  mutate(increase_efficiency = fct_relevel(increase_efficiency, 
-                                           c("1 (strongly disagree)", "2", 
-                                             "3 (neutral)", "4", "5 (strongly agree)"))) |>
+    # if category already exists in df, skip to next one
+    if (cat_name %in% pull(df1[,1])) {
+      
+      message(cat_name, " already exists. Moving to next option.")
+      df1 <- df1
+      
+      # if category doesn't already exist, add it with n = 0 so that it still shows up on plot
+    } else {
+      
+      message(cat_name, " does not exist. Adding now.")
+      new_row <- data.frame(increase_efficiency = cat_name, n = 0)
+      df1 <- rbind(df1, new_row)
+      
+    }
     
-  # add col for percentages ----
+    message("----------------------")
+    
+  } 
+  
+  # finish wrangling ----
+  df2 <- df1 |> 
+    
+    # reorder factors ----
+  mutate(increase_efficiency = fct_relevel(increase_efficiency,
+                                       c("1 (strongly disagree)", "2", 
+                                         "3 (neutral)", "4", "5 (strongly agree)"))) |>
+    
+    # add col for percentages ----
   mutate(percentage = round((n/(sum(n)))*100, 1),
          perc_label = paste0(percentage, "%")) |> 
     
-  # create col with xvar name for plotting consistency ----
+    # create col with xvar name for plotting consistency ----
   mutate(xvar = increase_efficiency)
   
+  # return final wrangled df
+  return(df2)
+  
 }
+
+
   

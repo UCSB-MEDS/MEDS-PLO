@@ -169,7 +169,6 @@ q6_version_control_data <- clean_q6_version_control(medsJune2023_clean)
 plot_frequency_use(data = q6_version_control_data,
                    title = "Version control software (Git, Subversion (SVN), Mercurial, etc.)",
                    caption = "Question 6")
-
 ```
 
 ```{r}
@@ -310,12 +309,12 @@ plot_rank_agreement(data = q15_increase_efficiency_data,
 ##  ~ Question 16a: Median  ----
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-# wrangle ----
-q16a_median_data <- clean_q16a_median(medsJune2023_clean)
-
-# plot ----
-pal <- c("14" = "#7ECD7A", "0" = "#047C91", "10" = "#047C91")
-plot_q16a_median(q16a_median_data)
+# # wrangle ----
+# q16a_median_data <- clean_q16a_median(medsJune2023_clean)
+# 
+# # plot ----
+# pal <- c("14" = "#7ECD7A", "0" = "#047C91", "10" = "#047C91")
+# plot_q16a_median(q16a_median_data)
 ```
 
 ```{r}
@@ -358,7 +357,7 @@ plot_q17a_familiar_lr(q17a_familiarity_lr_data)
 q17b_microplastics_data <- clean_q17b_microplastics(medsJune2023_clean)
 
 # plot ----
-pal <- c("47" = "#7ECD7A", "27" = "#047C91", "900" = "#047C91", "26" = "#047C91", 
+pal <- c("47" = "#7ECD7A", "27" = "#047C91", "900" = "#047C91", "26" = "#047C91",
          "956" = "#047C91","43" = "#047C91", "911" = "#047C91", "46" = "#047C91")
 plot_q17b_microplastics(q17b_microplastics_data)
 ```
@@ -369,18 +368,18 @@ Some respondents recorded their answers in sentence form, while others did not r
 
 ```{r}
 #............................wrangle.............................
-q17_microplastics_dt <- medsJune2023_clean |> 
-  
+q17_microplastics_dt <- medsJune2023_clean |>
+
   # select necessary cols ----
   select(microplastics_lr)
 
 DT::datatable(q17_microplastics_dt, colnames = c("Free Response Answer to Q17b"),
-              
-               options = list(autoWidth = TRUE, 
+
+               options = list(autoWidth = TRUE,
                               pageLength = 5,
                               lengthMenu = c(5, 10, 20, 30),
                               dom = 'ltp')
-              
+
               )
 ```
 :::
@@ -437,9 +436,9 @@ plot_q18b_prob_dist_terms(q18b_prob_dist_terms_data)
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # for calculating percentages in wrangling step below ----
-q19_num_answers <- medsJune2023_clean |> 
-  select(term_function) |> 
-  count() |> 
+q19_num_answers <- medsJune2023_clean |>
+  select(term_function) |>
+  count() |>
   pull()
 
 # wrangle ----
@@ -456,11 +455,11 @@ plot_q19a_familiar_functions(q19a_familiar_functions_data)
 ##  ~ Question 19b: Writing Functions  ----
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-# wrangle ----
-q19b_writing_functions_data <- clean_q19b_writing_functions(medsJune2023_clean)
-
-# plot ----
-plot_q19b_writing_functions(q19b_writing_functions_data)
+# # wrangle ----
+# q19b_writing_functions_data <- clean_q19b_writing_functions(medsJune2023_clean)
+# 
+# # plot ----
+# plot_q19b_writing_functions(q19b_writing_functions_data)
 ```
 
 {{< include /sections/class2023_after/q19c-callout-inline-code.qmd >}}
@@ -515,7 +514,7 @@ plot_q20b_sa(q20b_sa_data)
 q20c_param_int_data <- clean_q20c_param_int(medsJune2023_clean)
 
 # plot ----
-pal <- c("a global sensitivity analysis" = "#7ECD7A", "a local sensitivity analysis" = "#047C91", 
+pal <- c("a global sensitivity analysis" = "#7ECD7A", "a local sensitivity analysis" = "#047C91",
          "I'm not sure" = "#047C91", "No response" = "#047C91")
 plot_q20c_param_int(q20c_param_int_data)
 ```
@@ -528,9 +527,9 @@ plot_q20c_param_int(q20c_param_int_data)
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # for calculating percentages in wrangling step below ----
-q21a_num_answers <- medsJune2023_clean |> 
-  select(spatial_data) |> 
-  count() |> 
+q21a_num_answers <- medsJune2023_clean |>
+  select(spatial_data) |>
+  count() |>
   pull()
 
 # wrangle ----
@@ -551,9 +550,9 @@ plot_q21a_comfort_spatial(q21a_comfort_spatial_data)
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # for calculating percentages in wrangling step below ----
-q21b_num_answers <- medsJune2023_clean |> 
-  select(rep_spatial_data) |> 
-  count() |> 
+q21b_num_answers <- medsJune2023_clean |>
+  select(rep_spatial_data) |>
+  count() |>
   pull()
 
 # wrangle (FULLY CORRECT; margin) ----
@@ -562,7 +561,6 @@ q21b_FULLY_CORRECT_data <- clean_q21b_FULLY_CORRECT(medsJune2023_clean)
 # plot (FULLY CORRECT; margin) ----
 pal <- c("yes" = "#7ECD7A", "no" = "#047C91")
 plot_q21b_FULLY_CORRECT(q21b_FULLY_CORRECT_data)
-
 ```
 
 ```{r}
@@ -625,9 +623,9 @@ plot_q22b_rs_sun(q22b_rs_sun_data)
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # for calculating percentages in wrangling step below ----
-q23a_num_answers <- medsJune2023_clean |> 
-  select(map_proj_comfort) |> 
-  count() |> 
+q23a_num_answers <- medsJune2023_clean |>
+  select(map_proj_comfort) |>
+  count() |>
   pull()
 
 # wrangle ----
@@ -648,7 +646,7 @@ plot_q23a_comfort_map_proj(q23a_comfort_map_proj_data)
 q23b_reproj_data <- clean_q23b_reproj(medsJune2023_clean)
 
 # plot ----
-pal <- c("3D to 2D" = "#7ECD7A", "Imprecise locations to precise locations" = "#047C91", 
+pal <- c("3D to 2D" = "#7ECD7A", "Imprecise locations to precise locations" = "#047C91",
          "Meters to latitude/longitude" = "#047C91", "No response" = "#047C91")
 plot_q23b_reproj(q23b_reproj_data)
 ```
@@ -689,7 +687,7 @@ plot_q24b_veg_wave(q24b_veg_wave_data)
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q25a_familiar_ml_data <- clean_q25a_familiar_ml(medsJune2023_clean) 
+q25a_familiar_ml_data <- clean_q25a_familiar_ml(medsJune2023_clean)
 
 # plot ----
 plot_q25a_familiar_ml(q25a_familiar_ml_data)
@@ -720,10 +718,10 @@ plot_q25b_unsup_alg(q25b_unsup_alg_data)
 q25c_kmeans_data <- clean_q25c_kmeans(medsJune2023_clean)
 
 # plot ----
-pal <- c("unsupervised, does not require expert labeling of data" = "#7ECD7A", 
+pal <- c("unsupervised, does not require expert labeling of data" = "#7ECD7A",
          "unsupervised, requires expert labeling of data" = "#047C91",
          "supervised, does not require expert labeling of data" = "#047C91",
-         "supervised and requires expert labeling of data" = "#047C91", 
+         "supervised and requires expert labeling of data" = "#047C91",
          "I'm not sure" = "#047C91")
 plot_q25c_kmeans(q25c_kmeans_data)
 ```
@@ -783,8 +781,8 @@ plot_q26c_FULLY_CORRECT(q26c_FULLY_CORRECT_data)
 q26c_mod_perf_data <- clean_q26c_mod_perf(medsJune2023_clean)
 
 # plot (INDIV RESPONSES) ----
-pal <- c("My model is unlikely to perform well when applied to new data" = "#7ECD7A", 
-         "My model is overfitting the training set" = "#7ECD7A", 
+pal <- c("My model is unlikely to perform well when applied to new data" = "#7ECD7A",
+         "My model is overfitting the training set" = "#7ECD7A",
          "My model is likely to perform very well when applied to new data" = "#047C91",
          "My test set has data entry errors in it" = "#047C91")
 plot_q26c_mod_perf(q26c_mod_perf_data)
@@ -860,19 +858,19 @@ Free responses as they were recorded are included in the table, below:
 
 ```{r}
 # wrangle ----
-q30_improve_dv <- medsJune2023_clean |> 
-  
+q30_improve_dv <- medsJune2023_clean |>
+
   # select necessary cols ----
   select(improve_data_viz)
 
 # create table ----
 DT::datatable(q30_improve_dv, colnames = c("Free Response Answer to Q30"),
-              
-               options = list(autoWidth = TRUE, 
+
+               options = list(autoWidth = TRUE,
                               pageLength = 5,
                               lengthMenu = c(5, 10, 20, 30),
                               dom = 'ltp')
-              
+
               )
 ```
 :::
@@ -903,17 +901,3 @@ q31_lang_data <- clean_q31_lang(medsJune2023_clean)
 pal <- c("Python" = "#7ECD7A", "R" = "#047C91", "SQL" = "#047C91")
 plot_q31_lang(q31_lang_data)
 ```
-
-
-
-<!-- ::: {.panel-tabset} -->
-
-<!-- ## Class of 2023 (EOY ONLY) -->
-
-<!-- {{< include class2023.qmd >}} -->
-
-<!-- ## Class of 2024 -->
-
-<!-- ## Class of 2025 -->
-
-<!-- ::: -->

@@ -1,11 +1,10 @@
 ---
-title: "MEDS - Class of 2024"
+title: "MEDS Class of 2024"
 subtitle: "Program Learning Outcome (PLO) #1 Assessment - Core Knowledge"
 author: "Sam Csik"
 date: August 4, 2023
 format: 
   html:
-    
     toc: true
     toc-location: left
     code-tools: 
@@ -14,6 +13,7 @@ format:
     theme: 
       - styles.scss
     mainfont: Nunito
+    
 execute: 
   eval: true
   echo: false
@@ -104,7 +104,7 @@ server <- c("Server", "Taylor server", "external server")
 
 # wrangle & plot ----
 q2_store_data <- clean_q2_store_data(meds2024_before_clean)
-plot_q2_store_data(q2_store_data)
+plot_q2_store_data(q2_store_data) + coord_flip()
 ```
 
 ## **Part 2: How often do you currently use the following?**
@@ -371,7 +371,7 @@ plot_q17b_microplastics(q17b_microplastics_data) +
 Some respondents recorded their answers in sentence form, while others did not round their answers to the nearest integer. Cleaned responses are shown in the plot, above. Responses as they were recorded are included in the table, below:
 
 ```{r}
-#............................wrangle.............................
+#~..........................wrangle.............................
 q17_microplastics_dt <- meds2024_before_clean |> 
   
   # select necessary cols ----
