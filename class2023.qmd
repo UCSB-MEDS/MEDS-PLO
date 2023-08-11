@@ -309,12 +309,12 @@ plot_rank_agreement(data = q15_increase_efficiency_data,
 ##  ~ Question 16a: Median  ----
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-# # wrangle ----
-# q16a_median_data <- clean_q16a_median(medsJune2023_clean)
-# 
-# # plot ----
-# pal <- c("14" = "#7ECD7A", "0" = "#047C91", "10" = "#047C91")
-# plot_q16a_median(q16a_median_data)
+# wrangle ----
+q16a_median_data <- clean_q16a_median(medsJune2023_clean)
+
+# plot ----
+pal <- c("14" = "#7ECD7A", "0" = "#047C91", "10" = "#047C91")
+plot_q16a_median(q16a_median_data)
 ```
 
 ```{r}
@@ -455,11 +455,11 @@ plot_q19a_familiar_functions(q19a_familiar_functions_data)
 ##  ~ Question 19b: Writing Functions  ----
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-# # wrangle ----
-# q19b_writing_functions_data <- clean_q19b_writing_functions(medsJune2023_clean)
-# 
-# # plot ----
-# plot_q19b_writing_functions(q19b_writing_functions_data)
+# wrangle ----
+q19b_writing_functions_data <- clean_q19b_writing_functions(medsJune2023_clean)
+
+# plot ----
+plot_q19b_writing_functions(q19b_writing_functions_data)
 ```
 
 {{< include /sections/class2023_after/q19c-callout-inline-code.qmd >}}

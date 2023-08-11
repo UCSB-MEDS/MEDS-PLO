@@ -4,7 +4,12 @@
 
 clean_q26a_div_data <- function(PLO_data_clean){
   
-  PLO_data_clean |>
+  # to iterate over ----
+  options <- c("1 (never heard of it)", "2",
+               "3 (vague sense of what it means)", 
+               "4", "5 (very familiar)")
+  
+  df1 <- PLO_data_clean |>
     
   # select necessary cols ----
   select(ml_div_data) |>
@@ -12,11 +17,36 @@ clean_q26a_div_data <- function(PLO_data_clean){
   # sum ----
   group_by(ml_div_data) |>
     count() |>
-    ungroup() |>
+    ungroup() 
     
   # ADDING BC NO ONE SELECTED THE FOLLOWING OPTIONS ----
-  add_row(ml_div_data = "1 (never heard of it)", n = 0) |>
-    add_row(ml_div_data = "2", n = 0) |>
+  # add_row(ml_div_data = "1 (never heard of it)", n = 0) |>
+  #   add_row(ml_div_data = "2", n = 0) |>
+  for (i in 1:length(options)){
+    
+    cat_name <- options[i]
+    
+    # if category already exists in df, skip to next one
+    if (cat_name %in% pull(df1[,1])) {
+      
+      message(cat_name, " already exists. Moving to next option.")
+      df1 <- df1
+      
+      # if category doesn't already exist, add it with n = 0 so that it still shows up on plot
+    } else {
+      
+      message(cat_name, " does not exist. Adding now.")
+      new_row <- data.frame(ml_div_data = cat_name, n = 0)
+      df1 <- rbind(df1, new_row)
+      
+    }
+    
+    message("----------------------")
+    
+  } 
+  
+  # finish wrangling ----
+  df2 <- df1 |> 
     
   # reorder factors ----
   mutate(ml_div_data = fct_relevel(ml_div_data,
@@ -53,8 +83,11 @@ plot_q26a_div_data <- function(data){
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 clean_q26b_tvs <- function(PLO_data_clean){
+ 
+  # to iterate over ----
+  options <- c("1 (never)", "2", "3", "4", "5 (all the time)")
   
-  PLO_data_clean |>
+  df1 <- PLO_data_clean |>
     
   # select necessary cols ----
   select(train_valid_split) |>
@@ -62,10 +95,35 @@ clean_q26b_tvs <- function(PLO_data_clean){
   # sum ----
   group_by(train_valid_split) |>
     count() |>
-    ungroup() |>
+    ungroup()
     
   # ADDING BC NO ONE SELECTED THE FOLLOWING OPTIONS ----
-  add_row(train_valid_split = "1 (never)", n = 0) |>
+  # add_row(train_valid_split = "1 (never)", n = 0) |>
+  for (i in 1:length(options)){
+    
+    cat_name <- options[i]
+    
+    # if category already exists in df, skip to next one
+    if (cat_name %in% pull(df1[,1])) {
+      
+      message(cat_name, " already exists. Moving to next option.")
+      df1 <- df1
+      
+      # if category doesn't already exist, add it with n = 0 so that it still shows up on plot
+    } else {
+      
+      message(cat_name, " does not exist. Adding now.")
+      new_row <- data.frame(train_valid_split = cat_name, n = 0)
+      df1 <- rbind(df1, new_row)
+      
+    }
+    
+    message("----------------------")
+    
+  } 
+  
+  # finish wrangling ----
+  df2 <- df1 |> 
     
   # reorder factors ----
   mutate(train_valid_split = fct_relevel(train_valid_split,

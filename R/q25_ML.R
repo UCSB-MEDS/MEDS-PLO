@@ -4,7 +4,12 @@
 
 clean_q25a_familiar_ml <- function(PLO_data_clean){
   
-  PLO_data_clean |>
+  # to iterate over ----
+  options <- c("1 (never heard of either of these terms)", "2",
+               "3 (vague sense of these terms, but not why they are distinct from one another)", 
+               "4", "5 (very familiar with both concepts and how they differ)")
+  
+  df1 <- PLO_data_clean |>
     
   # select necessary cols ----
   select(sup_vs_unsup_learn) |>
@@ -12,10 +17,35 @@ clean_q25a_familiar_ml <- function(PLO_data_clean){
   # sum ----
   group_by(sup_vs_unsup_learn) |>
     count() |>
-    ungroup() |>
+    ungroup() 
     
   # ADDING BC NO ONE SELECTED THE FOLLOWING OPTIONS ----
-  add_row(sup_vs_unsup_learn = "1 (never heard of either of these terms)", n = 0) |>
+  # add_row(sup_vs_unsup_learn = "1 (never heard of either of these terms)", n = 0) |>
+  for (i in 1:length(options)){
+    
+    cat_name <- options[i]
+    
+    # if category already exists in df, skip to next one
+    if (cat_name %in% pull(df1[,1])) {
+      
+      message(cat_name, " already exists. Moving to next option.")
+      df1 <- df1
+      
+    # if category doesn't already exist, add it with n = 0 so that it still shows up on plot
+    } else {
+      
+      message(cat_name, " does not exist. Adding now.")
+      new_row <- data.frame(sup_vs_unsup_learn = cat_name, n = 0)
+      df1 <- rbind(df1, new_row)
+      
+    }
+    
+    message("----------------------")
+    
+  } 
+  
+  # finish wrangling ----
+  df2 <- df1 |> 
     
   # reorder factors ----
   mutate(sup_vs_unsup_learn = fct_relevel(sup_vs_unsup_learn,
