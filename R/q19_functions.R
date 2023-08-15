@@ -4,7 +4,10 @@
 
 clean_q19a_familiar_functions <- function(PLO_data_clean){
   
-  PLO_data_clean |> 
+  # to iterate over ----
+  options <- c("1 (never heard of it)", "2", "3 (vague sense of what it means)", "4", "5 (very familiar)")
+  
+  df1 <- PLO_data_clean |> 
     
   # select necessary cols ----
   select(term_function) |> 
@@ -12,11 +15,37 @@ clean_q19a_familiar_functions <- function(PLO_data_clean){
   # sum ----
   group_by(term_function) |>
     count() |>
-    ungroup() |> 
+    ungroup() 
     
-  # ADDING BC NO ONE SELECTED THE FOLLOWING OPTIONS ----
-  add_row(term_function = "2", n = 0) |>
-    add_row(term_function = "1 (never heard of it)", n = 0) |>
+  # # ADDING BC NO ONE SELECTED THE FOLLOWING OPTIONS ----
+  # add_row(term_function = "2", n = 0) |>
+  #   add_row(term_function = "1 (never heard of it)", n = 0) |>
+  
+  for (i in 1:length(options)){
+    
+    cat_name <- options[i]
+    
+    # if category already exists in df, skip to next one
+    if (cat_name %in% pull(df1[,1])) {
+      
+      message(cat_name, " already exists. Moving to next option.")
+      df1 <- df1
+      
+    # if category doesn't already exist, add it with n = 0 so that it still shows up on plot
+    } else {
+      
+      message(cat_name, " does not exist. Adding now.")
+      new_row <- data.frame(term_function = cat_name, n = 0)
+      df1 <- rbind(df1, new_row)
+      
+    }
+    
+    message("----------------------")
+    
+  } 
+  
+  # finish wrangling ----
+  df2 <- df1 |> 
     
   # reorder factors ----
   mutate(term_function = fct_relevel(term_function, 
@@ -52,7 +81,10 @@ plot_q19a_familiar_functions <- function(data){
 
 clean_q19b_writing_functions <- function(PLO_data_clean){
   
-  PLO_data_clean |> 
+  # to iterate over ----
+  options <- c("5 (very comfortable)", "4", "3", "2", "1 (not at all comfortable)")
+  
+  df1 <- PLO_data_clean |> 
     
   # select necessary cols ----
   select(writing_functions) |> 
@@ -60,14 +92,40 @@ clean_q19b_writing_functions <- function(PLO_data_clean){
   # sum ----
   group_by(writing_functions) |>
     count() |>
-    ungroup() |> 
+    ungroup() 
     
   # ADDING BC NO ONE SELECTED THE FOLLOWING OPTIONS ----
-  add_row(writing_functions = "1 (not at all)", n = 0) |>
+  # add_row(writing_functions = "1 (not at all)", n = 0) |>
+  
+  for (i in 1:length(options)){
+    
+    cat_name <- options[i]
+    
+    # if category already exists in df, skip to next one
+    if (cat_name %in% pull(df1[,1])) {
+      
+      message(cat_name, " already exists. Moving to next option.")
+      df1 <- df1
+      
+      # if category doesn't already exist, add it with n = 0 so that it still shows up on plot
+    } else {
+      
+      message(cat_name, " does not exist. Adding now.")
+      new_row <- data.frame(writing_functions = cat_name, n = 0)
+      df1 <- rbind(df1, new_row)
+      
+    }
+    
+    message("----------------------")
+    
+  } 
+  
+  # finish wrangling ----
+  df2 <- df1 |> 
     
   # reorder factors ----
   mutate(writing_functions = fct_relevel(writing_functions, 
-                                         c("1 (not at all)", "2", 
+                                         c("1 (not at all comfortable)", "2", 
                                            "3", "4", "5 (very comfortable)"))) |>
     
   # add col for percentages ----
@@ -121,7 +179,7 @@ clean_q19c_fxn_output <- function(PLO_data_clean){
 
 plot_q19c_fxn_output <- function(data){
   
-  ggplot(data, aes(x = fxn_output, y = n, label = perc_label, fill = fxn_output)) +
+  ggplot(data, aes(x = fct_reorder(fxn_output, desc(n)), y = n, label = perc_label, fill = fxn_output)) +
     geom_col() +
     geom_text(position = position_stack(vjust = 0.5), size = 3, color = "white", family = "nunito") +
     labs(y = "Number of MEDS students", x = "Selection",
@@ -129,7 +187,7 @@ plot_q19c_fxn_output <- function(data){
          caption = "Question 19c") +
     scale_fill_manual(values = pal, limits = names(pal)) +
     meds_theme
-  
+
 }
 
 

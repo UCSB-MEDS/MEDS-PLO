@@ -4,26 +4,55 @@
 
 clean_q18a_familiar_prob_dist <- function(PLO_data_clean){
   
-  PLO_data_clean |> 
+  # to iterate over ----
+  options <- c("1 (never heard of it)", "2", "3 (vague sense of what it means)", "4", "5 (very familiar)")
+  
+  df1 <- PLO_data_clean |> 
     
-    # select necessary cols ----
+  # select necessary cols ----
   select(prob_dist) |> 
     
-    # sum ----
+  # sum ----
   group_by(prob_dist) |>
     count() |>
-    ungroup() |> 
+    ungroup() 
+  
+  for (i in 1:length(options)){
     
-    # ONLY ADDING BC NO ONE SELECTED THE FOLLOWING OPTIONS ----
-  add_row(prob_dist = "2", n = 0) |>
-    add_row(prob_dist = "1 (never heard of it)", n = 0) |>
+    cat_name <- options[i]
     
-    # reorder factors ----
+    # if category already exists in df, skip to next one
+    if (cat_name %in% pull(df1[,1])) {
+      
+      message(cat_name, " already exists. Moving to next option.")
+      df1 <- df1
+      
+    # if category doesn't already exist, add it with n = 0 so that it still shows up on plot
+    } else {
+      
+      message(cat_name, " does not exist. Adding now.")
+      new_row <- data.frame(prob_dist = cat_name, n = 0)
+      df1 <- rbind(df1, new_row)
+      
+    }
+    
+    message("----------------------")
+    
+  } 
+  
+  #   # ONLY ADDING BC NO ONE SELECTED THE FOLLOWING OPTIONS ----
+  # add_row(prob_dist = "2", n = 0) |>
+  #   add_row(prob_dist = "1 (never heard of it)", n = 0) |>
+  
+  # finish wrangling ----
+  df2 <- df1 |> 
+    
+  # reorder factors ----
   mutate(prob_dist = fct_relevel(prob_dist, 
                                  c("1 (never heard of it)", "2", 
                                    "3 (vague sense of what it means)", "4", "5 (very familiar)"))) |>
     
-    # add col for percentages ----
+  # add col for percentages ----
   mutate(percentage = round((n/(sum(n)))*100, 1),
          perc_label = paste0(percentage, "%"))
   
@@ -41,7 +70,7 @@ plot_q18a_familiar_prob_dist <- function(data){
     geom_text(position = position_stack(vjust = 0.5), size = 3, color = "white", family = "nunito") +
     labs(y = "Number of MEDS students", x = "Familiarity level",
          title = "How familiar are you with the term probability distribution?",
-         caption = "Question 18a (choosing '1 (never heard of it)' skips respondent to question 18)") +
+         caption = "Question 18a (choosing '1 (never heard of it)' skips respondent to question 19)") +
     meds_theme
   
 }
@@ -96,15 +125,15 @@ clean_q18b_FULLY_CORRECT <- function(PLO_data_clean){
   
   PLO_data_clean |> 
     
-    # select necessary cols ----
+  # select necessary cols ----
   select(prob_dist_terms) |> 
     
-    # sum ----
+  # sum ----
   group_by(prob_dist_terms) |>
     count() |>
     ungroup() |> 
     
-    # add correct or incorrect label ----
+  # add correct or incorrect label ----
   mutate(correctness = case_when(
     prob_dist_terms == "normal" ~ "no",
     prob_dist_terms == "normal,bimodal,symmetric" ~ "no",
@@ -114,17 +143,20 @@ clean_q18b_FULLY_CORRECT <- function(PLO_data_clean){
     prob_dist_terms == "normal,uniform,bimodal,variable,symmetric" ~ "no"
   )) |> 
     
-    # coerce data types ----
+  # coerce data types ----
   mutate(correctness = as_factor(correctness)) |> 
     
-    # sum ----
+  # sum ----
   group_by(correctness) |> 
     summarize(total = sum(n)) |> 
     ungroup() |> 
     
-    # add col for percentages ----
+  # reorder factors ----
+  # mutate(correctness = fct_relevel(correctness, c("Yes", "No", "NA")))
+    
+  # add col for percentages ----
   mutate(percentage = round((total/(sum(total)))*100, 1),
-         perc_label = paste0(percentage, "%"))
+         perc_label = paste0(percentage, "%")) 
   
 }
 

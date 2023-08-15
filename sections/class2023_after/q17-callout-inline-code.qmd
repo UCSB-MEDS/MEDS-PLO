@@ -10,6 +10,7 @@ q17_num_answers <- medsJune2023_clean |>
 q17_not1 <- medsJune2023_clean |> 
   select(linear_regression) |> 
   group_by(linear_regression) |>
+  filter(linear_regression != "1 - never heard of it") |> 
   count() |>
   ungroup() |> 
   summarize(n = sum(n)) |> 

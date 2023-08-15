@@ -9,6 +9,7 @@ q18a_num_answers <- medsJune2023_clean |>
 q18a_not1 <- medsJune2023_clean |> 
   select(prob_dist) |> 
   group_by(prob_dist) |>
+  filter(prob_dist != "1 (never heard of it)") |> 
   count() |>
   ungroup() |> 
   summarize(n = sum(n)) |> 

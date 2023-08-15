@@ -4,30 +4,58 @@
 
 clean_q8_workflow_satisfaction <- function(PLO_data_clean){
   
-  PLO_data_clean |> 
-      
+  # to iterate over ----
+  options <- c("Very Satisfied", "Satisfied", "Neutral", "Unsatisfied", "Very unsatisfied", "Not sure", "Never thought about this", "Not applicable")
+  
+  # select var of interest ----
+  df1 <- PLO_data_clean |> 
+    
     # select necessary cols ----
-    select(rate_satisfaction) |>
-      
+  select(rate_satisfaction) |> 
+    
     # sum ----
-    group_by(rate_satisfaction) |>
-      count() |>
-      ungroup() |>
+  group_by(rate_satisfaction) |> 
+    count() |> 
+    ungroup() 
+  
+  for (i in 1:length(options)){
+    
+    cat_name <- options[i]
+    
+    # if category already exists in df, skip to next one
+    if (cat_name %in% pull(df1[,1])) {
       
-    # ADDING BC NO ONE SELECTED THE FOLLOWING OPTIONS ----
-    add_row(rate_satisfaction = "Very unsatisfied", n = 0) |>
-      add_row(rate_satisfaction = "Not sure", n = 0) |>
-      add_row(rate_satisfaction = "Never thought about this", n = 0) |>
-      add_row(rate_satisfaction = "Not applicable", n = 0) |>
+      message(cat_name, " already exists. Moving to next option.")
+      df1 <- df1
       
+      # if category doesn't already exist, add it with n = 0 so that it still shows up on plot
+    } else {
+      
+      message(cat_name, " does not exist. Adding now.")
+      new_row <- data.frame(rate_satisfaction = cat_name, n = 0)
+      df1 <- rbind(df1, new_row)
+      
+    }
+    
+    message("----------------------")
+    
+  } 
+  
+  # finish wrangling ----
+  df2 <- df1 |> 
+    
     # reorder factors ----
-    mutate(rate_satisfaction = fct_relevel(rate_satisfaction, c("Not applicable", "Never thought about this", "Not sure",
-                                                                "Very unsatisfied", "Unsatisfied", "Neutral",
-                                                                "Satisfied", "Very Satisfied"))) |>
-      
+  mutate(rate_satisfaction = fct_relevel(rate_satisfaction,
+                                        c("Not applicable", "Never thought about this", "Not sure",
+                                          "Very unsatisfied", "Unsatisfied", "Neutral",
+                                           "Satisfied", "Very Satisfied"))) |>
+    
     # add col for percentages ----
-    mutate(percentage = round((n/(sum(n)))*100, 1),
-           perc_label = paste0(percentage, "%"))
+  mutate(percentage = round((n/(sum(n)))*100, 1),
+         perc_label = paste0(percentage, "%")) 
+    
+  # return final wrangled df
+  return(df2)
   
 }
 

@@ -1,0 +1,22 @@
+```{r in-line code q19b}
+# total respondents ----
+q19b_num_answers <- meds2024_before_clean |> 
+  select(writing_functions) |> 
+  count() |> 
+  pull()
+
+# total not answer 1 ----
+q19b_not1 <- meds2024_before_clean |> 
+  select(writing_functions) |> 
+  group_by(writing_functions) |>
+  filter(writing_functions != "1 (never heard of it)") |> 
+  count() |>
+  ungroup() |> 
+  summarize(n = sum(n)) |> 
+  pull()
+```
+
+::: {.callout-note}
+## All students answered all parts of question 19
+**`r q19b_not1` / `r q19b_num_answers` student respondents (`r ((q19b_not1/q19b_num_answers)*100)`%)** chose a comfort level of 2 or greater, and therefore were directed to part c of question 19.
+:::

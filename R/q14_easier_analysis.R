@@ -4,31 +4,61 @@
 
 clean_q14_easier_analysis <- function(PLO_data_clean){
   
-  PLO_data_clean |> 
+  # to iterate over ----
+  options <- c("1 (strongly disagree)", "2", "3 (neutral)", "4", "5 (strongly agree)")
+  
+  # select var of interest ----
+  df1 <- PLO_data_clean |> 
     
-  # select necessary cols ----
-  select(easier_analyses) |>
+    # select necessary cols ----
+  select(easier_analyses) |> 
     
-  # sum ----
-  group_by(easier_analyses) |>
-    count() |>
-    ungroup() |> 
+    # sum ----
+  group_by(easier_analyses) |> 
+    count() |> 
+    ungroup() 
+  
+  for (i in 1:length(options)){
     
-  # ADDING BC NO ONE SELECTED THE FOLLOWING OPTIONS ----
-  add_row(easier_analyses = "3 (neutral)", n = 0) |>
-    add_row(easier_analyses = "1 (strongly disagree)", n = 0) |> 
+    cat_name <- options[i]
     
-  # reorder factors ----
-  mutate(easier_analyses = fct_relevel(easier_analyses, 
+    # if category already exists in df, skip to next one
+    if (cat_name %in% pull(df1[,1])) {
+      
+      message(cat_name, " already exists. Moving to next option.")
+      df1 <- df1
+      
+      # if category doesn't already exist, add it with n = 0 so that it still shows up on plot
+    } else {
+      
+      message(cat_name, " does not exist. Adding now.")
+      new_row <- data.frame(easier_analyses = cat_name, n = 0)
+      df1 <- rbind(df1, new_row)
+      
+    }
+    
+    message("----------------------")
+    
+  } 
+  
+  # finish wrangling ----
+  df2 <- df1 |> 
+    
+    # reorder factors ----
+  mutate(easier_analyses = fct_relevel(easier_analyses,
                                        c("1 (strongly disagree)", "2", 
-                                         "3 (neutral)", "4", "5 (strongly agree)"))) |>
+                                       "3 (neutral)", "4", "5 (strongly agree)"))) |>
     
-  # add col for percentages ----
+    # add col for percentages ----
   mutate(percentage = round((n/(sum(n)))*100, 1),
          perc_label = paste0(percentage, "%")) |> 
     
-  # create col with xvar name for plotting consistency ----
+    # create col with xvar name for plotting consistency ----
   mutate(xvar = easier_analyses)
   
-}
+  # return final wrangled df
+  return(df2)
   
+}
+
+
