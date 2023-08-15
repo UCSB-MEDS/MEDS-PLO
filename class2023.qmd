@@ -344,7 +344,15 @@ plot_q17a_familiar_lr(q17a_familiarity_lr_data)
 
 {{< include /sections/class2023_after/q17-callout-inline-code.qmd >}}
 
-{{< include /sections/all_classes/q17b-screenshot.qmd >}}
+<!-- {{< include /sections/all_classes/q17b-screenshot.qmd >}} -->
+
+Below is a chunk of code showing a simple linear regression relating the number of pieces of microplastics to the number of days per year with rainfall.
+
+```{r}
+#| fig-align: center
+knitr::include_graphics("images/17-microplastics-lm.png")
+```
+
 
 <!-- NOTE TO MAINTAINERS: see `q17_linear_regression.R` for free response cleaning; will need to be modified for each new set of survey data -->
 

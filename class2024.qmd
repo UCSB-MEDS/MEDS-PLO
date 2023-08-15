@@ -340,7 +340,15 @@ plot_q17a_familiar_lr(q17a_familiarity_lr_data)
 
 {{< include /sections/class2024_before/q17-callout-inline-code.qmd >}}
 
-{{< include /sections/all_classes/q17b-screenshot.qmd >}}
+<!-- {{< include /sections/all_classes/q17b-screenshot.qmd >}} -->
+
+Below is a chunk of code showing a simple linear regression relating the number of pieces of microplastics to the number of days per year with rainfall.
+
+```{r}
+#| fig-align: center
+knitr::include_graphics("images/17-microplastics-lm.png")
+```
+
 
 <!-- NOTE TO MAINTAINERS: see `q17_linear_regression.R` for free response cleaning; will need to be modified for each new set of survey data -->
 
@@ -686,7 +694,7 @@ pal <- c("green" = "#7ECD7A", "red" = "#047C91", "blue" = "#047C91", "blue and t
 plot_q24b_veg_wave(q24b_veg_wave_data)
 ```
 
-## **Part 9: Machine Learning -- COME BACK TO THIS, NOT WORKING CORRECTLY**
+## **Part 9: Machine Learning**
 
 ```{r}
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -797,7 +805,7 @@ pal <- c("My model is unlikely to perform well when applied to new data" = "#7EC
 plot_q26c_mod_perf(q26c_mod_perf_data)
 ```
 
-## **Part 10: Environmental Justice COME BACK TO Q27 TO ADD 5 TO PLOT**
+## **Part 10: Environmental Justice**
 
 ```{r}
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
