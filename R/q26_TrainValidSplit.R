@@ -74,7 +74,7 @@ plot_q26a_div_data <- function(data){
          title = "How familiar are you with the procedure that divides your data into\nseparate “training”, “validation”, and “testing” sets?",
          caption = "Question 26a (choosing '1 (never heard of it)' skips respondent to question 27)") +
     scale_x_discrete(labels = function(x) str_wrap(x, width = 15)) +
-    meds_theme
+    meds_theme()
   
 }
 
@@ -149,7 +149,7 @@ plot_q26b_tvs <- function(data){
          title = "How often have you implemented a train, validation, test split?",
          caption = "Question 26b (choosing '1 (never)' skips respondent to question 27)") +
     scale_x_discrete(labels = function(x) str_wrap(x, width = 15)) +
-    meds_theme
+    meds_theme()
   
 }
 
@@ -196,7 +196,7 @@ plot_q26c_mod_perf <- function(data){
          caption = "Question 26c") +
     scale_fill_manual(values = pal, limits = names(pal)) +
     scale_x_discrete(labels = function(x) str_wrap(x, width = 15)) +
-    meds_theme  
+    meds_theme()  
   
 }
 
@@ -248,7 +248,7 @@ plot_q26c_FULLY_CORRECT <- function(data){
     labs(y = "Number of MEDS students", x = "Did they get the question fully correct?",
          caption = "Question 26c") +
     scale_fill_manual(values = pal, limits = names(pal)) +
-    meds_theme
+    meds_theme()
   
 }
 

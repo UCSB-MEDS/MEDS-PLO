@@ -70,7 +70,7 @@ plot_q27_data_justice <- function(data){
     labs(y = "Number of MEDS students", x = "Familiarity level",
          title = " How familiar are you with the term Data Justice?",
          caption = "Question 27") +
-    meds_theme
+    meds_theme()
   
 }
 

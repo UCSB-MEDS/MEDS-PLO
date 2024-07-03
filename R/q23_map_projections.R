@@ -70,7 +70,7 @@ plot_q23a_comfort_map_proj <- function(data){
     labs(y = "Number of MEDS students", x = "Comfort level",
          title = "How comfortable are you working with map projections?",
          caption = "Question 23a (choosing '1 (never worked with it before)' skips respondent to question 24)") +
-    meds_theme
+    meds_theme()
   
 }
 
@@ -116,7 +116,7 @@ plot_q23b_reproj <- function(data){
          caption = "Question 23b") +
     scale_x_discrete(labels = function(x) str_wrap(x, width = 15)) +
     scale_fill_manual(values = pal, limits = names(pal)) +
-    meds_theme 
+    meds_theme() 
   
 }
 

@@ -66,7 +66,7 @@ plot_q20a_run_env_mod <- function(data){
     labs(y = "Number of MEDS students", x = "Selection",
          title = "Have you run a model to learn something about (or predict\nsomething about) the environment?",
          caption = "Question 20a (choosing 'No' skips respondent to question 21)") +
-    meds_theme 
+    meds_theme() 
   
 }
 
@@ -136,7 +136,7 @@ plot_q20b_sa <- function(data){
     labs(y = "Number of MEDS students", x = "Selection",
          title = "Have you done a sensitivity analysis to assess how model results\nchange with changes in inputs or parameters?",
          caption = "Question 20b (choosing 'No' skips respondent to question 21)") +
-    meds_theme  
+    meds_theme()  
   
 }
 
@@ -182,7 +182,7 @@ plot_q20c_param_int <- function(data){
          caption = "Question 20c; No Response == answered 'No' to Q20b") +
     scale_x_discrete(labels = function(x) str_wrap(x, width = 15)) +
     scale_fill_manual(values = pal, limits = names(pal)) +
-    meds_theme 
+    meds_theme() 
   
 }
 

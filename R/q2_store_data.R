@@ -54,7 +54,7 @@ plot_q2_store_data <- function(q2_store_data_clean){
     labs(x = "Data Storage Location", y = "Number of MEDS students",
          title = "Where do you store data and/or documents (select all that apply)",
          caption = "Question 2") +
-    meds_theme
+    meds_theme()
   
 }
 

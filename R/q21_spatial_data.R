@@ -69,7 +69,7 @@ plot_q21a_comfort_spatial <- function(data){
     labs(y = "Number of MEDS students", x = "Comfort level",
          title = "How comfortable are you working with spatial data?",
          caption = "Question 21a (choosing '1 (never worked with it before)' skips respondent to question 22)") +
-    meds_theme
+    meds_theme()
   
 }
 
@@ -115,7 +115,7 @@ plot_q21b_rep_spatial <- function(data){
          title = "What are the two primary ways of representing spatial data (select\ntwo)?",
          caption = "Question 21b") +
     scale_fill_manual(values = pal, limits = names(pal)) +
-    meds_theme
+    meds_theme()
   
 }
 
@@ -161,7 +161,7 @@ plot_q21b_FULLY_CORRECT <- function(data){
     labs(y = "Number of MEDS students", x = "Did they get the question fully correct?",
          caption = "Question 21b") +
     scale_fill_manual(values = pal, limits = names(pal)) +
-    meds_theme
+    meds_theme()
   
 }
 
@@ -200,7 +200,7 @@ plot_q21c_vec_ras <- function(data){
          title = "Is the following a vector or raster?",
          caption = "Question 21c") +
     scale_fill_manual(values = pal, limits = names(pal)) +
-    meds_theme
+    meds_theme()
   
 }
 

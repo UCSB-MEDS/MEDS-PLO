@@ -3,8 +3,10 @@ title: "MEDS Class of 2024"
 subtitle: "Program Learning Outcome (PLO) #1 Assessment - Core Knowledge"
 author: "Sam Csik"
 date: August 4, 2023
+date-modified: last-modified
 format: 
   html:
+    
     toc: true
     toc-location: left
     code-tools: 
@@ -13,7 +15,6 @@ format:
     theme: 
       - styles.scss
     mainfont: Nunito
-    
 execute: 
   eval: true
   echo: false
@@ -39,9 +40,11 @@ source("functions.R")
 
 #..........................import data...........................
 meds2024_before <- read_sheet("https://docs.google.com/spreadsheets/d/1cJddylTu-eyb2fjbnVuvv-tvy6Knq1HfHjz_5zlW0fc/edit?usp=sharing")
-
+meds2024_after <- read_sheet("https://docs.google.com/spreadsheets/d/1qBGprUADckBLDlSFOx2LjlF4ZbH_qvvq18BCGLciFl4/edit?usp=sharing")
+  
 #...........................clean data...........................
-meds2024_before_clean <- clean_PLO_data(meds2024_before)
+meds2024_before_clean <- clean_PLO_data(meds2024_before) |> mutate(timepoint = rep("before"))
+meds2024_after_clean <- clean_PLO_data(meds2024_after) |> mutate(timepoint = rep("after"))
   
 #......................import Google fonts.......................
 sysfonts::font_add_google(name = "Sanchez", family = "sanchez")
@@ -49,31 +52,120 @@ sysfonts::font_add_google(name = "Nunito", family = "nunito")
 
 # automatically use showtext to render text for future devices ----
 showtext::showtext_auto()
+
+#......................create color palette......................
+meds_pal <- c("before" = "#047C91",
+              "after" = "#003660")
 ```
 
 # **Summary**
 
-{{< include /sections/class2024_before/summary.qmd >}}
+{{< include /sections/class2024/summary.qmd >}}
 
-```{r}
+```{r overall-scores}
 #| fig-align: center
-scores <- meds2024_before_clean |> 
+
+#........................Pre-MEDS scores.........................
+scores_before <- meds2024_before_clean |> 
+  select(sc0) 
+
+mean_score_before <- mean(scores_before$sc0)
+median_score_before <- median(scores_before$sc0)
+
+# ggplot(scores_before, aes(x = sc0)) +
+#   geom_histogram(binwidth = 1, color = "white", fill = meds_pal["before"]) +
+#   geom_vline(xintercept = median_score_before,  linetype = "dashed", color = "black") +
+#   annotate(geom = "label", x = 9.8, y = 8, label = paste0("Median Score (before) = ", median_score_before), hjust = "right") +
+#   annotate(geom = "segment", x = 7, y = 8, xend = median_score_before, yend = 7.5,
+#            arrow = arrow(length = unit(3, "mm"))) +
+#   scale_x_continuous(breaks = seq(1, 14, 1)) +
+#   labs(x = "Score", y = "Number of MEDS students",
+#        title = "Distribution of scores",
+#        caption = "Out of 14 available points") +
+#   meds_theme()
+
+#........................Post-MEDS scores........................
+scores_after <- meds2024_after_clean |> 
   select(sc0)
 
-mean_score <- mean(scores$sc0)
-median_score <- median(scores$sc0)
+mean_score_after <- mean(scores_after$sc0)
+median_score_after <- median(scores_after$sc0)
 
-ggplot(scores, aes(x = sc0)) +
-  geom_histogram(binwidth = 1, color = "white", fill = "#047C91") +
-  geom_vline(xintercept = median_score,  linetype = "dashed", color = "black") +
-  annotate(geom = "label", x = 9.8, y = 8, label = paste0("Median Score = ", median_score), hjust = "right") +
-  annotate(geom = "segment", x = 7, y = 8, xend = median_score, yend = 7.5,
-           arrow = arrow(length = unit(3, "mm"))) +
+# ggplot(scores_after, aes(x = sc0)) +
+#   geom_histogram(binwidth = 1, color = "white", fill = meds_pal["after"]) +
+#   geom_vline(xintercept = median_score_after,  linetype = "dashed", color = "black") +
+#   annotate(geom = "label", x = 9.8, y = 8, label = paste0("Median Score (before) = ", median_score_after), hjust = "right") +
+#   annotate(geom = "segment", x = 7, y = 8, xend = median_score_after, yend = 7.5,
+#            arrow = arrow(length = unit(3, "mm"))) +
+#   scale_x_continuous(breaks = seq(1, 14, 1)) +
+#   labs(x = "Score", y = "Number of MEDS students",
+#        title = "Distribution of scores",
+#        caption = "Out of 14 available points") +
+#   meds_theme()
+
+#..................combine before & after data...................
+all2024_scores <- rbind(meds2024_before_clean, meds2024_after_clean) |> 
+  mutate(timepoint = fct_relevel(timepoint,
+                                 c("before", "after")))
+
+#..........................combined plot.........................
+ggplot(all2024_scores, aes(x = sc0)) +
+  geom_histogram(aes(fill = timepoint), color = "white", 
+                 binwidth = 1, position = "identity", 
+                 alpha = 0.8) +
+  
+  # add "Pre-MEDS" median score ----
+  geom_vline(xintercept = median_score_before,  linetype = "dashed", color = "#047C91") +
+  annotate(geom = "segment", x = 7, y = 8, xend = median_score_before, yend = 7.5,
+           arrow = arrow(length = unit(3, "mm")), color = "#047C91") +
+  annotate(geom = "label", x = 9.8, y = 8, 
+           label = paste0("Median Score = ", median_score_before),
+           hjust = "right", color = "#047C91") +
+
+  # add "Post-MEDS" median score ----
+  geom_vline(xintercept = median_score_after,  linetype = "dashed", color = "#003660") +
+  annotate(geom = "segment", x = 13, y = 8, xend = median_score_after, yend = 7.5,
+           arrow = arrow(length = unit(3, "mm")), color = "#003660") +
+  annotate(geom = "label", x = 14, y = 8, 
+           label = paste0("Median Score = ", median_score_after), 
+           hjust = "center", color = "#003660") +
+  
+  # make pretty ----
+  coord_cartesian(clip = "off") +
+  scale_fill_manual(values = meds_pal,
+                    labels = c("Pre-MEDS", "Post-MEDS")) +
   scale_x_continuous(breaks = seq(1, 14, 1)) +
-  labs(x = "Score", y = "Number of MEDS studnets",
+  labs(x = "Score", y = "Number of MEDS students",
        title = "Distribution of scores",
        caption = "Out of 14 available points") +
-  meds_theme
+  meds_theme()
+  # theme_minimal() + 
+  #   theme(
+  #     axis.title.x = element_text(margin = margin(t = 15, r = 0, b = 0, l = 0), 
+  #                                 family = "sanchez", size = 13),
+  #     axis.title.y = element_text(margin = margin(t = 0, r = 15, b = 0, l = 0), 
+  #                                 family = "sanchez", size = 13), 
+  #     axis.text = element_text(family = "nunito", size = 10),
+  #     plot.title = element_text(margin = margin(t = 5, r = 0, b = 15, l = 0), 
+  #                               size = 15, family = "sanchez"),
+  #     plot.subtitle = element_text(margin = margin(t = 5, r = 0, b = 15, l = 0), 
+  #                                  size = 13, family = "sanchez"),
+  #     plot.caption = element_text(family = "sanchez"),
+  #     plot.title.position = "plot",
+  #     legend.position = "top",
+  #     legend.title = element_blank(),
+  #     legend.text = element_text(family = "nunito"),
+  #     plot.margin = margin(t = 10, r = 25, b = 10, l = 10)
+  #   )
+
+# ggplot() +
+#   geom_histogram(data = scores_before, aes(x = sc0), binwidth = 1, color = "white", fill = meds_pal["before"], alpha = 0.8) +
+#   geom_histogram(data = scores_after, aes(x = sc0), binwidth = 1, color = "white", fill = meds_pal["after"], alpha = 0.8) +
+#   scale_x_continuous(breaks = seq(1, 14, 1)) +
+#   labs(x = "Score", y = "Number of MEDS studnets",
+#        title = "Distribution of scores",
+#        caption = "Out of 14 available points") +
+#   meds_theme()
 ```
 
 # **Individual Questions**
@@ -89,8 +181,10 @@ Questions that have a correct answer are color-coded green.
 ##  ~ Question 1: What OS?  ----
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-q1_os_data <- clean_q1_os(meds2024_before_clean)
-plot_q1_os(q1_os_data)
+# q1_os_data <- clean_q1_os(meds2024_before_clean)
+# plot_q1_os(q1_os_data)
+q1_os_data <- clean_q1_os_bothPP(all2024_scores)
+plot_q1_os_bothPP(q1_os_data)
 ```
 
 ```{r}
@@ -338,7 +432,7 @@ q17a_familiarity_lr_data <- clean_q17a_familiar_lr(meds2024_before_clean)
 plot_q17a_familiar_lr(q17a_familiarity_lr_data)
 ```
 
-{{< include /sections/class2024_before/q17-callout-inline-code.qmd >}}
+{{< include /sections/class2024/q17-callout-inline-code.qmd >}}
 
 <!-- {{< include /sections/all_classes/q17b-screenshot.qmd >}} -->
 
@@ -408,7 +502,7 @@ q18a_familiar_prob_dist_data <- clean_q18a_familiar_prob_dist(meds2024_before_cl
 plot_q18a_familiar_prob_dist(q18a_familiar_prob_dist_data)
 ```
 
-{{< include /sections/class2024_before/q18-callout-inline-code.qmd >}}
+{{< include /sections/class2024/q18-callout-inline-code.qmd >}}
 
 ```{r}
 #| column: margin
@@ -460,7 +554,7 @@ q19a_familiar_functions_data <- clean_q19a_familiar_functions(meds2024_before_cl
 plot_q19a_familiar_functions(q19a_familiar_functions_data)
 ```
 
-{{< include /sections/class2024_before/q19b-callout-inline-code.qmd >}}
+{{< include /sections/class2024/q19b-callout-inline-code.qmd >}}
 
 ```{r}
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -474,7 +568,7 @@ q19b_writing_functions_data <- clean_q19b_writing_functions(meds2024_before_clea
 plot_q19b_writing_functions(q19b_writing_functions_data)
 ```
 
-{{< include /sections/class2024_before/q19c-callout-inline-code.qmd >}}
+{{< include /sections/class2024/q19c-callout-inline-code.qmd >}}
 
 {{< include /sections/all_classes/q19c-turbine-function.qmd >}}
 
@@ -505,7 +599,7 @@ q20a_run_env_mod_data <- clean_q20a_run_env_mod(meds2024_before_clean)
 plot_q20a_run_env_mod(q20a_run_env_mod_data)
 ```
 
-{{< include /sections/class2024_before/q20a-callout.qmd >}}
+{{< include /sections/class2024/q20a-callout.qmd >}}
 
 ```{r}
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -553,7 +647,7 @@ q21a_comfort_spatial_data <- clean_q21a_comfort_spatial(meds2024_before_clean)
 plot_q21a_comfort_spatial(q21a_comfort_spatial_data)
 ```
 
-{{< include /sections/class2024_before/q21-callout-inline-code.qmd >}}
+{{< include /sections/class2024/q21-callout-inline-code.qmd >}}
 
 ```{r}
 #| column: margin
@@ -617,7 +711,7 @@ q22a_comfort_rs_data <- clean_q22a_comfort_rs(meds2024_before_clean)
 plot_q22a_comfort_rs(q22a_comfort_rs_data)
 ```
 
-{{< include /sections/class2024_before/q22-callout-inline-code.qmd >}}
+{{< include /sections/class2024/q22-callout-inline-code.qmd >}}
 
 ```{r}
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -650,7 +744,7 @@ q23a_comfort_map_proj_data <- clean_q23a_comfort_map_proj(meds2024_before_clean)
 plot_q23a_comfort_map_proj(q23a_comfort_map_proj_data)
 ```
 
-{{< include /sections/class2024_before/q23-callout-inline-code.qmd >}}
+{{< include /sections/class2024/q23-callout-inline-code.qmd >}}
 
 ```{r}
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -678,7 +772,7 @@ q24a_familiarity_rs_data <- clean_q24a_familiarity_rs(meds2024_before_clean)
 plot_q24a_familiarity_rs(q24a_familiarity_rs_data)
 ```
 
-{{< include /sections/class2024_before/q24-callout-inline-code.qmd >}}
+{{< include /sections/class2024/q24-callout-inline-code.qmd >}}
 
 ```{r}
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -709,7 +803,7 @@ q25a_familiar_ml_data <- clean_q25a_familiar_ml(meds2024_before_clean) |>
 plot_q25a_familiar_ml(q25a_familiar_ml_data)
 ```
 
-{{< include /sections/class2024_before/q25a-callout-inline-code.qmd >}}
+{{< include /sections/class2024/q25a-callout-inline-code.qmd >}}
 
 ```{r}
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -723,7 +817,7 @@ q25b_unsup_alg_data <- clean_q25b_unsup_alg(meds2024_before_clean)
 plot_q25b_unsup_alg(q25b_unsup_alg_data)
 ```
 
-{{< include /sections/class2024_before/q25b-callout-inline-code.qmd >}}
+{{< include /sections/class2024/q25b-callout-inline-code.qmd >}}
 
 ```{r}
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -755,7 +849,7 @@ q26a_div_data <- clean_q26a_div_data(meds2024_before_clean)
 plot_q26a_div_data(q26a_div_data)
 ```
 
-{{< include /sections/class2024_before/q26a-callout-inline-code.qmd >}}
+{{< include /sections/class2024/q26a-callout-inline-code.qmd >}}
 
 ```{r}
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -769,7 +863,7 @@ q26b_tvs_data <- clean_q26b_tvs(meds2024_before_clean)
 plot_q26b_tvs(q26b_tvs_data)
 ```
 
-{{< include /sections/class2024_before/q26b-callout-inline-code.qmd >}}
+{{< include /sections/class2024/q26b-callout-inline-code.qmd >}}
 
 ```{r}
 #| column: margin

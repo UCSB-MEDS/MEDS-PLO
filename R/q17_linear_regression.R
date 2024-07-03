@@ -71,7 +71,7 @@ plot_q17a_familiar_lr <- function(data){
     labs(y = "Number of MEDS students", x = "Familiarity level",
          title = "How familiar are you with the term linear regression?",
          caption = "Question 17a (choosing '1 - never heard of it' skips respondent to question 18)") +
-    meds_theme
+    meds_theme()
   
 }
 
@@ -133,7 +133,7 @@ plot_q17b_microplastics <- function(data){
          title = "How many pieces of microplastic do we predict will be present\nin a location with 45 days of rain per year (round your answer up to\nthe nearest integer)?",
          caption = "Question 17b (free response)") +
     scale_fill_manual(values = pal, limits = names(pal)) +
-    meds_theme
+    meds_theme()
   
 }
 

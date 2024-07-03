@@ -71,6 +71,6 @@ plot_q28_bias <- function(data){
     labs(y = "Number of MEDS students", x = "Agreement level",
          title = "I can identify areas of bias in approaches to data analysis.",
          caption = "Question 28") +
-    meds_theme
+    meds_theme()
   
 }

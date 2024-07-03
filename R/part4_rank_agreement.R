@@ -78,6 +78,6 @@ plot_rank_agreement <- function(data, title, caption){
     labs(y = "Number of MEDS students", x = "Agreement level",
          title = title,
          caption = caption) +
-    meds_theme
+    meds_theme()
   
 }

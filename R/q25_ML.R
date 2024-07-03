@@ -72,7 +72,7 @@ plot_q25a_familiar_ml <- function(data){
          title = "How familiar are you with the difference between supervised and\nunsupervised learning?",
          caption = "Question 25a (choosing '1 (never heard of it)' skips respondent to question 26)") +
     scale_x_discrete(labels = function(x) str_wrap(x, width = 15)) +
-    meds_theme
+    meds_theme()
   
 }
 
@@ -120,7 +120,7 @@ plot_q25b_unsup_alg <- function(data){
          title = "Have you ever implemented an unsupervised learning algorithm?",
          caption = "Question 25b (choosing '1 (definitely not)' skips respondent to question 26)") +
     scale_x_discrete(labels = function(x) str_wrap(x, width = 15)) +
-    meds_theme
+    meds_theme()
   
 }
 
@@ -163,6 +163,6 @@ plot_q25c_kmeans <- function(data){
          caption = "Question 25c") +
     scale_x_discrete(labels = function(x) str_wrap(x, width = 15)) +
     scale_fill_manual(values = pal, limits = names(pal)) +
-    meds_theme
+    meds_theme()
   
 }

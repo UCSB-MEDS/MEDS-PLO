@@ -37,7 +37,7 @@ plot_q16a_median <- function(data){
          title = "Calculate the median of this sample distribution: 5, 17, 0, 14, 14",
          caption = "Question 16a (free response)") +
     scale_fill_manual(values = pal, limits = names(pal)) +
-    meds_theme
+    meds_theme()
   
 }
   
@@ -79,6 +79,6 @@ plot_q16b_mode <- function(data){
          title = "Calculate the mode of this sample distribution: 5, 17, 0, 14, 14",
          caption = "Question 16b (free response)") +
     scale_fill_manual(values = pal, limits = names(pal)) +
-    meds_theme
+    meds_theme()
   
 }

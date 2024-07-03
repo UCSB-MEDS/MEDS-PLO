@@ -73,7 +73,7 @@ plot_q8_workflow_satisfaction <- function(q8_workflow_satisfaction_clean){
     labs(y = "Number of MEDS students", x = "Satisfaction level",
          title = "Please rate your level of satisfaction with your current data\nmanagement and analysis workflow (i.e. how you collect, organize,\nstore, and analyze your data).",
          caption = "Question 8") +
-    meds_theme
+    meds_theme()
   
 }
 

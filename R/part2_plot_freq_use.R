@@ -7,6 +7,6 @@ plot_frequency_use <- function(data, title, caption){
     labs(y = "Number of MEDS students", x = "Frequency of use",
          title = title,
          caption = caption) +
-    meds_theme
+    meds_theme()
   
 }

@@ -1,0 +1,32 @@
+This PLO assessment was administered to the MEDS class of 2024 both *before* beginning the program, on August 4, 2023 **(response rate = `r nrow(meds2024_before_clean)` / 31 students)**, and again *after* completing the program, on June 5, 2024 **(response rate = `r nrow(meds2024_after_clean)` / 31 students)**.
+
+The survey consists of **31 questions (28 multiple choice, 3 short free-response)** and takes ~30 minutes to complete. Questions 1 - 15 ask respondents to rank how often they use certain data science tools or workflows, or familiarity/comfort levels with particular topics (see [Part 1](#part-1-os-and-datadocument-storage) through [Part 4](#part-4-rank-the-following-from-1-strongly-disagree-to-5-strongly-agree), below). Questions 16 - 31 assess respondents' familiarity and application of domain-specific knowledge/tools taught during the MEDS program (see [Part 5](#part-5-stats) onward, below). Many of these question types are multi-part and begin with a question phrased as:
+
+-  "How familiar/comfortable are you with X" (rank 1 (never heard of it) > 5 (very familiar))
+-  "Have often have you done/implemented Y" (rank 1 (never) > 5 (all the time))
+
+If a respondent chooses a level of 2 or greater, they proceed to the remaining part(s) of the question to be tested on their knowledge/understanding of that topic. If a respondent chooses a level 1, they are skipped to the next question (to prevent respondents from guessing at answers). 
+
+```{r}
+#| eval: true
+#| echo: false
+#........................Pre-MEDS scores.........................
+scores_before <- meds2024_before_clean |> 
+  select(sc0) 
+
+mean_score_before <- mean(scores_before$sc0)
+median_score_before <- median(scores_before$sc0)
+
+#........................Post-MEDS scores........................
+scores_after <- meds2024_after_clean |> 
+  select(sc0)
+
+mean_score_after <- mean(scores_after$sc0)
+median_score_after <- median(scores_after$sc0)
+
+#....................Percent change in score.....................
+perc_increase <- round(((median_score_after - median_score_before) / median_score_before)*100, 1)
+```
+
+A perfect score is 14 points. **The median score increased by `r perc_increase`% from the pre- to post-MEDS PLO assessments.** See the distribution of scores, below:
+

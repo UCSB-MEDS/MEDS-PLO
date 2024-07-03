@@ -3,9 +3,9 @@ title: "MEDS Class of 2023"
 subtitle: "Program Learning Outcome (PLO) #1 Assessment - Core Knowledge"
 author: "Sam Csik"
 date: June 9, 2023
-
 format: 
   html:
+    
     toc: true
     toc-location: left
     code-tools: 
@@ -14,7 +14,6 @@ format:
     theme: 
       - styles.scss
     mainfont: Nunito
-    
 execute: 
   eval: true
   echo: false
@@ -78,7 +77,7 @@ ggplot(scores, aes(x = sc0)) +
   labs(x = "Score", y = "Number of MEDS studnets",
        title = "Distribution of scores",
        caption = "Out of 14 available points") +
-  meds_theme
+  meds_theme()
 ```
 
 # **Individual Questions**

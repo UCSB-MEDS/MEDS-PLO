@@ -71,7 +71,7 @@ plot_q18a_familiar_prob_dist <- function(data){
     labs(y = "Number of MEDS students", x = "Familiarity level",
          title = "How familiar are you with the term probability distribution?",
          caption = "Question 18a (choosing '1 (never heard of it)' skips respondent to question 19)") +
-    meds_theme
+    meds_theme()
   
 }
 
@@ -113,7 +113,7 @@ plot_q18b_prob_dist_terms <- function(data){
          title = "Which of the following terms are used to describe probability\ndistributions (select all that apply)?",
          caption = "Question 18b") +
     scale_fill_manual(values = pal, limits = names(pal)) +
-    meds_theme
+    meds_theme()
   
 }
 
@@ -172,6 +172,6 @@ plot_q18b_FULLY_CORRECT <- function(data){
     labs(y = "Number of MEDS students", x = "Did they get the question fully correct?",
          caption = "Question 18b") +
     scale_fill_manual(values = pal, limits = names(pal)) +
-    meds_theme
+    meds_theme()
   
 }

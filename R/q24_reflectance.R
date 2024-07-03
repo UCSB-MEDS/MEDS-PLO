@@ -69,7 +69,7 @@ plot_q24a_familiarity_rs <- function(data){
     labs(y = "Number of MEDS students", x = "Familiarity level",
          title = "How familiar are you with the term reflectance spectra?",
          caption = "Question 24a (choosing '1 (never heard of it)' skips respondent to question 25)") +
-    meds_theme
+    meds_theme()
   
 }
 
@@ -111,7 +111,7 @@ plot_q24b_veg_wave <- function(data){
          title = "Of the following wavelengths, which one does vegetation reflect the\nmost?",
          caption = "Question 24b") +
     scale_fill_manual(values = pal, limits = names(pal)) +
-    meds_theme
+    meds_theme()
   
 }
 

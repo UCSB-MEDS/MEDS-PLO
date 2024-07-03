@@ -70,7 +70,7 @@ plot_q29_create_viz <- function(data){
     labs(y = "Number of MEDS students", x = "Comfort level",
          title = "How comfortable are you with creating a data visualization using a\nprogramming language?",
          caption = "Question 29") +
-    meds_theme
+    meds_theme()
     
 }
 

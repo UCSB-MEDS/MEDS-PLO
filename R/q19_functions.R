@@ -71,7 +71,7 @@ plot_q19a_familiar_functions <- function(data){
     labs(y = "Number of MEDS students", x = "Familiarity level",
          title = "How familiar are you with the term 'function' as it relates to\nprogramming?",
          caption = "Question 19a (choosing '1 (never heard of it)' skips respondent to question 20)") +
-    meds_theme
+    meds_theme()
   
 }
 
@@ -147,7 +147,7 @@ plot_q19b_writing_functions <- function(data){
     labs(y = "Number of MEDS students", x = "Comfort level",
          title = "How comfortable are you creating a function in code?",
          caption = "Question 19b (choosing '1 (not at all)' skips respondent to question 20)") +
-    meds_theme
+    meds_theme()
   
 }
 
@@ -186,7 +186,7 @@ plot_q19c_fxn_output <- function(data){
          title = "What is the value of power_turbine_A?",
          caption = "Question 19c") +
     scale_fill_manual(values = pal, limits = names(pal)) +
-    meds_theme
+    meds_theme()
 
 }
 

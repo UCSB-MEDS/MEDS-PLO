@@ -7,8 +7,20 @@
 $font-family-serif: 'Sanchez', serif;
 $font-family-sans-serif: 'Nunito', sans-serif;
 
+// colors
+$baby-blue: #d2e3f3;
+$teal: #047C90;
+$dark-blue: #003660;
+$white: #FFFFFF;
+$green: #78A540;
+$magenta: #900C3F;
+
+// quarto sass variables
+$link-color: $green;
+
 /*-- scss:rules --*/
 
 h1, h2, h3, h4 {
   font-family: $font-family-serif;
+  color: $dark-blue;
 }

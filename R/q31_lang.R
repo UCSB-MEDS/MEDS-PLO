@@ -67,7 +67,7 @@ plot_q31_lang <- function(data){
          title = "What programming language is the above code written in?",
          caption = "Question 31") +
     scale_fill_manual(values = pal, limits = names(pal)) +
-    meds_theme
+    meds_theme()
   
 }
 
