@@ -43,9 +43,17 @@ meds2024_before <- read_sheet("https://docs.google.com/spreadsheets/d/1cJddylTu-
 meds2024_after <- read_sheet("https://docs.google.com/spreadsheets/d/1qBGprUADckBLDlSFOx2LjlF4ZbH_qvvq18BCGLciFl4/edit?usp=sharing")
   
 #...........................clean data...........................
-meds2024_before_clean <- clean_PLO_data(meds2024_before) |> mutate(timepoint = rep("before"))
-meds2024_after_clean <- clean_PLO_data(meds2024_after) |> mutate(timepoint = rep("after"))
-  
+meds2024_before_clean <- clean_PLO_data(meds2024_before) |> mutate(timepoint = rep("Pre-MEDS"))
+meds2024_after_clean <- clean_PLO_data(meds2024_after) |> mutate(timepoint = rep("Post-MEDS"))
+
+#...............combine pre- and post-MEDS results...............
+both_timepoints_clean <- rbind(meds2024_before_clean, meds2024_after_clean) |> 
+  mutate(timepoint = fct_relevel(timepoint, c("Pre-MEDS", "Post-MEDS")))
+
+#..................number of survey respondents..................=
+pre_meds_num_respondents <- nrow(meds2024_before_clean)
+post_meds_num_respondents <- nrow(meds2024_after_clean)
+
 #......................import Google fonts.......................
 sysfonts::font_add_google(name = "Sanchez", family = "sanchez")
 sysfonts::font_add_google(name = "Nunito", family = "nunito")
@@ -54,8 +62,8 @@ sysfonts::font_add_google(name = "Nunito", family = "nunito")
 showtext::showtext_auto()
 
 #......................create color palette......................
-meds_pal <- c("before" = "#047C91",
-              "after" = "#003660")
+meds_pal <- c("Pre-MEDS" = "#047C91",
+              "Post-MEDS" = "#003660")
 ```
 
 # **Summary**
@@ -72,18 +80,6 @@ scores_before <- meds2024_before_clean |>
 mean_score_before <- mean(scores_before$sc0)
 median_score_before <- median(scores_before$sc0)
 
-# ggplot(scores_before, aes(x = sc0)) +
-#   geom_histogram(binwidth = 1, color = "white", fill = meds_pal["before"]) +
-#   geom_vline(xintercept = median_score_before,  linetype = "dashed", color = "black") +
-#   annotate(geom = "label", x = 9.8, y = 8, label = paste0("Median Score (before) = ", median_score_before), hjust = "right") +
-#   annotate(geom = "segment", x = 7, y = 8, xend = median_score_before, yend = 7.5,
-#            arrow = arrow(length = unit(3, "mm"))) +
-#   scale_x_continuous(breaks = seq(1, 14, 1)) +
-#   labs(x = "Score", y = "Number of MEDS students",
-#        title = "Distribution of scores",
-#        caption = "Out of 14 available points") +
-#   meds_theme()
-
 #........................Post-MEDS scores........................
 scores_after <- meds2024_after_clean |> 
   select(sc0)
@@ -91,25 +87,8 @@ scores_after <- meds2024_after_clean |>
 mean_score_after <- mean(scores_after$sc0)
 median_score_after <- median(scores_after$sc0)
 
-# ggplot(scores_after, aes(x = sc0)) +
-#   geom_histogram(binwidth = 1, color = "white", fill = meds_pal["after"]) +
-#   geom_vline(xintercept = median_score_after,  linetype = "dashed", color = "black") +
-#   annotate(geom = "label", x = 9.8, y = 8, label = paste0("Median Score (before) = ", median_score_after), hjust = "right") +
-#   annotate(geom = "segment", x = 7, y = 8, xend = median_score_after, yend = 7.5,
-#            arrow = arrow(length = unit(3, "mm"))) +
-#   scale_x_continuous(breaks = seq(1, 14, 1)) +
-#   labs(x = "Score", y = "Number of MEDS students",
-#        title = "Distribution of scores",
-#        caption = "Out of 14 available points") +
-#   meds_theme()
-
-#..................combine before & after data...................
-all2024_scores <- rbind(meds2024_before_clean, meds2024_after_clean) |> 
-  mutate(timepoint = fct_relevel(timepoint,
-                                 c("before", "after")))
-
 #..........................combined plot.........................
-ggplot(all2024_scores, aes(x = sc0)) +
+ggplot(both_timepoints_clean, aes(x = sc0)) +
   geom_histogram(aes(fill = timepoint), color = "white", 
                  binwidth = 1, position = "identity", 
                  alpha = 0.8) +
@@ -132,40 +111,13 @@ ggplot(all2024_scores, aes(x = sc0)) +
   
   # make pretty ----
   coord_cartesian(clip = "off") +
-  scale_fill_manual(values = meds_pal,
-                    labels = c("Pre-MEDS", "Post-MEDS")) +
+  scale_fill_manual(values = meds_pal) +
+                    #labels = c("Pre-MEDS", "Post-MEDS")) +
   scale_x_continuous(breaks = seq(1, 14, 1)) +
   labs(x = "Score", y = "Number of MEDS students",
        title = "Distribution of scores",
        caption = "Out of 14 available points") +
   meds_theme()
-  # theme_minimal() + 
-  #   theme(
-  #     axis.title.x = element_text(margin = margin(t = 15, r = 0, b = 0, l = 0), 
-  #                                 family = "sanchez", size = 13),
-  #     axis.title.y = element_text(margin = margin(t = 0, r = 15, b = 0, l = 0), 
-  #                                 family = "sanchez", size = 13), 
-  #     axis.text = element_text(family = "nunito", size = 10),
-  #     plot.title = element_text(margin = margin(t = 5, r = 0, b = 15, l = 0), 
-  #                               size = 15, family = "sanchez"),
-  #     plot.subtitle = element_text(margin = margin(t = 5, r = 0, b = 15, l = 0), 
-  #                                  size = 13, family = "sanchez"),
-  #     plot.caption = element_text(family = "sanchez"),
-  #     plot.title.position = "plot",
-  #     legend.position = "top",
-  #     legend.title = element_blank(),
-  #     legend.text = element_text(family = "nunito"),
-  #     plot.margin = margin(t = 10, r = 25, b = 10, l = 10)
-  #   )
-
-# ggplot() +
-#   geom_histogram(data = scores_before, aes(x = sc0), binwidth = 1, color = "white", fill = meds_pal["before"], alpha = 0.8) +
-#   geom_histogram(data = scores_after, aes(x = sc0), binwidth = 1, color = "white", fill = meds_pal["after"], alpha = 0.8) +
-#   scale_x_continuous(breaks = seq(1, 14, 1)) +
-#   labs(x = "Score", y = "Number of MEDS studnets",
-#        title = "Distribution of scores",
-#        caption = "Out of 14 available points") +
-#   meds_theme()
 ```
 
 # **Individual Questions**
@@ -176,108 +128,106 @@ Questions that have a correct answer are color-coded green.
 
 ## **Part 1: OS and data/document storage**
 
-```{r}
+```{r Q1-what-OS}
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ##  ~ Question 1: What OS?  ----
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-# q1_os_data <- clean_q1_os(meds2024_before_clean)
-# plot_q1_os(q1_os_data)
-q1_os_data <- clean_q1_os_bothPP(all2024_scores)
+q1_os_data <- clean_q1_os_bothPP(both_timepoints_clean)
 plot_q1_os_bothPP(q1_os_data)
 ```
 
-```{r}
+```{r Q2-data-storage}
 #| fig-cap: "NOTE: Percentages will not sum to 100%"
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ##  ~ Question 2: Where do you store data?  ----
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-# combine written-in "server" option ----
-server <- c("Server", "Taylor server", "external server")
+# combine written-in "Other" option responses ----
+server <- c("Server", "Taylor server", "external server", "Taylor")
+external_drive <- c("External SSD", "External drive", "external hard drive")
 
 # wrangle & plot ----
-q2_store_data <- clean_q2_store_data(meds2024_before_clean)
-plot_q2_store_data(q2_store_data) + coord_flip()
+q2_store_data <- clean_q2_store_data_bothPP(both_timepoints_clean)
+plot_q2_store_data_bothPP(q2_store_data)
 ```
 
 ## **Part 2: How often do you currently use the following?**
 
-```{r}
+```{r Q3-GUI}
 ##~~~~~~~~~~~~~~~~~~~~~~~~~
 ##  ~ Question 3: GUI  ----
 ##~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q3_gui_data <- clean_q3_gui(meds2024_before_clean)
+q3_gui_data <- clean_q3_gui_bothPP(both_timepoints_clean)
 
 # plot ----
-plot_frequency_use(data = q3_gui_data,
-                   title = "A specialized software with a point-and-click graphical user\ninterface (e.g., for statistical analysis: SPSS, SAS...;for Geospatial\nanalysis: ArcGIS, QGIS...; for Genomics analysis: Geneious, …)",
-                   caption = "Question 3")
-
+plot_frequency_use_bothPP(data = q3_gui_data,
+                          title = "A specialized software with a point-and-click graphical user\ninterface (e.g., for statistical analysis: SPSS, SAS...;for Geospatial\nanalysis: ArcGIS, QGIS...; for Genomics analysis: Geneious, …)",
+                          caption = "Question 3")
 ```
 
-```{r}
+```{r Q4-prog-lang}
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ##  ~ Question 4: Programming Languages  ----
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q4_prog_lang_data <- clean_q4_prog_lang(meds2024_before_clean)
+q4_prog_lang_data <- clean_q4_prog_lang_bothPP(both_timepoints_clean)
 
 # plot ----
-plot_frequency_use(data = q4_prog_lang_data,
-                   title = "Programming languages (R, Python, etc.)",
-                   caption = "Question 4")
+plot_frequency_use_bothPP(data = q4_prog_lang_data,
+                          title = "Programming languages (R, Python, etc.)",
+                          caption = "Question 4")
 ```
 
-```{r}
+```{r Q5-databases}
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ##  ~ Question 5: Databases  ----
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q5_databases_data <- clean_q5_databases(meds2024_before_clean)
+q5_databases_data <- clean_q5_databases_bothPP(both_timepoints_clean)
 
 # plot ----
-plot_frequency_use(data = q5_databases_data, 
-                   title = "Databases (SQL, Access, etc.)",
-                   caption = "Question 5")
+plot_frequency_use_bothPP(data = q5_databases_data, 
+                          title = "Databases (SQL, Access, etc.)",
+                          caption = "Question 5")
 ```
 
-```{r}
+```{r Q6-version-control}
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ##  ~ Question 6: Version Control  ----
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q6_version_control_data <- clean_q6_version_control(meds2024_before_clean)
+#q6_version_control_data <- clean_q6_version_control(meds2024_before_clean)
+q6_version_control_data <- clean_q6_version_control_bothPP(PLO_data_clean = both_timepoints_clean)
 
 # plot ----
-plot_frequency_use(data = q6_version_control_data,
-                   title = "Version control software (Git, Subversion (SVN), Mercurial, etc.)",
-                   caption = "Question 6")
-
+plot_frequency_use_bothPP(data = q6_version_control_data,
+                          title = "Version control software (Git, Subversion (SVN), Mercurial, etc.)",
+                          caption = "Question 6")
 ```
 
-```{r}
+```{r Q7-command-shell}
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ##  ~ Question 7: Command Shell  ----
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q7_command_shell_data <- clean_q7_command_shell(meds2024_before_clean)
+q7_command_shell_data <- clean_q7_command_shell_bothPP(both_timepoints_clean)
 
 # plot ----
-plot_frequency_use(data = q7_command_shell_data,
+plot_frequency_use_bothPP(data = q7_command_shell_data,
                    title = "A command shell (usually accessed through Terminal on macOS or\nPowerShell on Windows)",
                    caption = "Question 7")
 ```
 
 ## **Part 3: Workflow satisfaction**
 
-```{r}
+```{r Q8-workflow-satisfaction}
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ##  ~ Question 8: Workflow Satisfaction  ----
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -291,7 +241,7 @@ plot_q8_workflow_satisfaction(q8_workflow_satisfaction_data)
 
 ## **Part 4: Rank the following from 1 (strongly disagree) to 5 (strongly agree)**
 
-```{r}
+```{r Q9-raw-data}
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ##  ~ Question 9: Raw Data  ----
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -305,7 +255,7 @@ plot_rank_agreement(data = q9_raw_data_data,
                     caption = "Question 9")
 ```
 
-```{r}
+```{r Q10-write-script}
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ##  ~ Question 10: Small Program  ----
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -319,7 +269,7 @@ plot_rank_agreement(data = q10_small_program_data,
                     caption = "Question 10")
 ```
 
-```{r}
+```{r Q11-find-help}
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ##  ~ Question 11: Find Help Online  ----
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -333,7 +283,7 @@ plot_rank_agreement(data = q11_find_help_online_data ,
                     caption = "Question 11")
 ```
 
-```{r}
+```{r Q12-overcome-problems}
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ##  ~ Question 12: Overcoming Problems  ----
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -347,7 +297,7 @@ plot_rank_agreement(data = q12_overcoming_problems_data,
                     caption = "Question 12")
 ```
 
-```{r}
+```{r Q13-confidence}
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ##  ~ Question 13: Confidence  ----
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -361,7 +311,7 @@ plot_rank_agreement(data = q13_confidence_data,
                     caption = "Question 13")
 ```
 
-```{r}
+```{r Q14-easier-analyses}
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ##  ~ Question 14: Easier Analyses  ----
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -375,7 +325,7 @@ plot_rank_agreement(data = q14_easier_analysis_data,
                     caption = "Question 14")
 ```
 
-```{r}
+```{r Q15-increase-efficiency}
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ##  ~ Question 15: Increase Efficiency  ----
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
