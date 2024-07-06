@@ -122,9 +122,9 @@ ggplot(both_timepoints_clean, aes(x = sc0)) +
 
 # **Individual Questions**
 
-::: {.callout-note}
-Questions that have a correct answer are color-coded green.
-:::
+<!-- ::: {.callout-note} -->
+<!-- Questions that have a correct answer are color-coded green. -->
+<!-- ::: -->
 
 ## **Part 1: OS and data/document storage**
 
@@ -233,10 +233,10 @@ plot_frequency_use_bothPP(data = q7_command_shell_data,
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q8_workflow_satisfaction_data <- clean_q8_workflow_satisfaction(meds2024_before_clean)
+q8_workflow_satisfaction_data <- clean_q8_workflow_satisfaction_bothPP(both_timepoints_clean)
 
 # plot ----
-plot_q8_workflow_satisfaction(q8_workflow_satisfaction_data)
+plot_q8_workflow_satisfaction_bothPP(q8_workflow_satisfaction_data)
 ```
 
 ## **Part 4: Rank the following from 1 (strongly disagree) to 5 (strongly agree)**
@@ -247,10 +247,10 @@ plot_q8_workflow_satisfaction(q8_workflow_satisfaction_data)
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q9_raw_data_data <- clean_q9_raw_data(meds2024_before_clean)
+q9_raw_data_data <- clean_q9_raw_data_bothPP(both_timepoints_clean)
 
 # plot ----
-plot_rank_agreement(data = q9_raw_data_data,
+plot_rank_bothPP(data = q9_raw_data_data,
                     title = "Having access to the original, raw data is important to be able to\nrepeat an analysis",
                     caption = "Question 9")
 ```
@@ -261,10 +261,10 @@ plot_rank_agreement(data = q9_raw_data_data,
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q10_small_program_data <- clean_q10_small_program(meds2024_before_clean)
+q10_small_program_data <- clean_q10_small_program_bothPP(both_timepoints_clean)
 
 # plot ----
-plot_rank_agreement(data = q10_small_program_data,
+plot_rank_bothPP(data = q10_small_program_data,
                     title = "I can write a small program, script, or macro to address a problem\nin my own work",
                     caption = "Question 10")
 ```
@@ -275,10 +275,10 @@ plot_rank_agreement(data = q10_small_program_data,
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q11_find_help_online_data <- clean_q11_find_help_online(meds2024_before_clean)
+q11_find_help_online_data <- clean_q11_find_help_online_bothPP(both_timepoints_clean)
 
 # plot ----
-plot_rank_agreement(data = q11_find_help_online_data ,
+plot_rank_bothPP(data = q11_find_help_online_data ,
                     title = "I know how to search for answers to my technical questions online",
                     caption = "Question 11")
 ```
@@ -289,10 +289,10 @@ plot_rank_agreement(data = q11_find_help_online_data ,
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q12_overcoming_problems_data <- clean_q12_overcoming_problems(meds2024_before_clean)
+q12_overcoming_problems_data <- clean_q12_overcoming_problems_bothPP(both_timepoints_clean)
 
 # plot ----
-plot_rank_agreement(data = q12_overcoming_problems_data,
+plot_rank_bothPP(data = q12_overcoming_problems_data,
                     title = "While working on a programming project, if I get stuck, I can find\nways of overcoming the problem",
                     caption = "Question 12")
 ```
@@ -303,10 +303,10 @@ plot_rank_agreement(data = q12_overcoming_problems_data,
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q13_confidence_data <- clean_q13_confidence(meds2024_before_clean)
+q13_confidence_data <- clean_q13_confidence_bothPP(both_timepoints_clean)
 
 # plot ----
-plot_rank_agreement(data = q13_confidence_data,
+plot_rank_bothPP(data = q13_confidence_data,
                     title = "I am confident in my ability to make use of programming software\nto work with data",
                     caption = "Question 13")
 ```
@@ -317,10 +317,10 @@ plot_rank_agreement(data = q13_confidence_data,
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q14_easier_analysis_data <- clean_q14_easier_analysis(meds2024_before_clean)
+q14_easier_analysis_data <- clean_q14_easier_analysis_bothPP(both_timepoints_clean)
 
 # plot ----
-plot_rank_agreement(data = q14_easier_analysis_data,
+plot_rank_bothPP(data = q14_easier_analysis_data,
                      title = "Using a programming language (like R or Python) can make my\nanalyses easier to reproduce",
                     caption = "Question 14")
 ```
@@ -331,30 +331,38 @@ plot_rank_agreement(data = q14_easier_analysis_data,
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q15_increase_efficiency_data <- clean_q15_increase_efficiency(meds2024_before_clean)
+q15_increase_efficiency_data <- clean_q15_increase_efficiency_bothPP(both_timepoints_clean)
 
 # plot ----
-plot_rank_agreement(data = q15_increase_efficiency_data,
+plot_rank_bothPP(data = q15_increase_efficiency_data,
                     title = "Using a programming language (like R or Python) can make me\nmore efficient at working with data",
                     caption = "Question 15")
 ```
 
-## **Part 5: Stats**
+::: {.callout-note}
+## Unusual respondent
 
-<!-- NOTE TO MAINTAINERS: plotting functions expect palette to be called `pal` -->
+One respondent in the *Post-MEDS* PLO assessment answered **1 (strongly disagree)** to all questions 10 - 15.
 
 ```{r}
+#| include: false
+one_respondent <- meds2024_after_clean |> 
+  filter(response_id == "R_3izmKpw8QkR0dwg")
+```
+:::
 
+## **Part 5: Stats**
+
+```{r}
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ##  ~ Question 16a: Median  ----
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q16a_median_data <- clean_q16a_median(meds2024_before_clean)
+q16a_median_data <- clean_q16a_median_bothPP(both_timepoints_clean)
 
 # plot ----
-pal <- c("14" = "#7ECD7A", "0" = "#047C91", "10" = "#047C91", "5" = "#047C91", "10.1" = "#047C91")
-plot_q16a_median(q16a_median_data)
+plot_q16a_median_bothPP(q16a_median_data)
 ```
 
 ```{r}
@@ -363,11 +371,10 @@ plot_q16a_median(q16a_median_data)
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q16b_mode_data <- clean_q16b_mode(meds2024_before_clean)
+q16b_mode_data <- clean_q16b_mode_bothPP(both_timepoints_clean)
 
 # plot ----
-pal <- c("14" = "#7ECD7A", "2" = "#047C91", "9.5" = "#047C91", "10" = "#047C91", "17" = "#047C91")
-plot_q16b_mode(q16b_mode_data)
+plot_q16b_mode_bothPP(q16b_mode_data)
 ```
 
 ```{r}
@@ -376,10 +383,12 @@ plot_q16b_mode(q16b_mode_data)
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q17a_familiarity_lr_data <- clean_q17a_familiar_lr(meds2024_before_clean)
+q17a_familiarity_lr_data <- clean_q17a_familiar_lr_bothPP(both_timepoints_clean)
 
 # plot ----
-plot_q17a_familiar_lr(q17a_familiarity_lr_data)
+plot_rank_bothPP(data = q17a_familiarity_lr_data,
+                           title = "How familiar are you with the term linear regression?",
+                           caption = "Question 17a (choosing '1 - never heard of it' skips respondent to question 18)")
 ```
 
 {{< include /sections/class2024/q17-callout-inline-code.qmd >}}
@@ -962,3 +971,17 @@ q31_lang_data <- clean_q31_lang(meds2024_before_clean)
 pal <- c("Python" = "#7ECD7A", "R" = "#047C91", "SQL" = "#047C91", "I'm not sure" = "#047C91")
 plot_q31_lang(q31_lang_data)
 ```
+
+<br>
+
+::: {.center-text}
+***End MEDS Class of 2024 PLO Assessment Report***
+:::
+
+<br>
+
+::: {.center-text}
+*Return to [main page](index.html)*
+:::
+
+

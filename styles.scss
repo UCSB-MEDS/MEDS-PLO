@@ -24,3 +24,20 @@ h1, h2, h3, h4 {
   font-family: $font-family-serif;
   color: $dark-blue;
 }
+
+// L body text
+.body-text-l {
+  font-size: 25px;
+	line-height: 1.7em;
+	margin-bottom: 1em;
+}
+
+// dark blue text
+.dark-blue-text {
+  color: $dark-blue;
+}
+
+// center text (horizontally)
+.center-text{
+  text-align: center;
+}

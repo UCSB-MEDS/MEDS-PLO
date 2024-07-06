@@ -11,36 +11,41 @@ clean_q2_store_data <- function(PLO_data_clean){
   
   PLO_data_clean |> 
     
-  # select necessary cols ----
+    # select necessary cols ----
   select(where_store_data, where_store_data_6_text) |> 
     
-  # split strings by `,` delim ----
+    # split strings by `,` delim ----
   separate_longer_delim(where_store_data, delim = ",") |> 
     
-  # if "Other", replace with written-in response ----
+    # if "Other", replace with written-in response ----
   mutate(store_data_new = case_when(
     where_store_data == "Other" ~ where_store_data_6_text,
     TRUE ~ where_store_data
   )) |>
     
-  # remove unnecessary cols ----
+    # remove unnecessary cols ----
   select(where_store_data = store_data_new) |> 
     
-  # combine similar "other" choices ----
+    # combine similar "other" choices ----
   mutate(where_store_data = case_when(
     where_store_data %in% server ~ "Server",
     TRUE ~ where_store_data
   )) |> 
     
-  # change "Locally on my computer" to "Locally" ----
-  mutate(across('where_store_data', str_replace, 'Locally on my computer', 'Locally')) |> 
+    # make consistent responses ----
+  mutate(where_store_data = str_replace(string = where_store_data,
+                                        pattern = "Locally on my computer", 
+                                        replacement = "Locally"),
+         where_store_data = str_replace(string = where_store_data, 
+                                        pattern = "Github", 
+                                        replacement = "GitHub")) |>
     
-  # count ----
+    # count ----
   group_by(where_store_data) |> 
     count() |> 
     ungroup() |> 
     
-  # add col for percentages ----
+    # add col for percentages ----
   mutate(percentage = round((n/(sum(n)))*100, 1),
          perc_label = paste0(percentage, "%"))
   
@@ -55,36 +60,40 @@ clean_q2_store_data_bothPP <- function(PLO_data_clean){
   #........................initial wrangling.......................
   df <- PLO_data_clean |> 
     
-  # select necessary cols ----
+    # select necessary cols ----
   select(where_store_data, where_store_data_6_text, timepoint) |> 
     
-  # split strings by `,` delim ----
+    # split strings by `,` delim ----
   separate_longer_delim(where_store_data, delim = ",") |> 
     
-  # if "Other", replace with written-in response ----
+    # if "Other", replace with written-in response ----
   mutate(store_data_new = case_when(
     where_store_data == "Other" ~ where_store_data_6_text,
     TRUE ~ where_store_data
   )) |>
     
-  # remove unnecessary cols ----
+    # remove unnecessary cols ----
   select(where_store_data = store_data_new, timepoint) |> 
-  
-  # split strings by `;` delim (someone had written in 'Other' and separated responses with ;) ----    
+    
+    # split strings by `;` delim (someone had written in 'Other' and separated responses with ;) ----    
   separate_longer_delim(where_store_data, delim = "; ") |> 
     
-  # combine similar "other" choices ----
+    # combine similar "other" choices ----
   mutate(where_store_data = case_when(
     where_store_data %in% server ~ "Server",
     where_store_data %in% external_drive ~ "External Hard Drive",
     TRUE ~ where_store_data
   )) |> 
     
-  # change "Locally on my computer" to "Locally" ----
-  mutate(across('where_store_data', str_replace, 'Locally on my computer', 'Locally'),
-         across('where_store_data', str_replace, 'Github', 'GitHub')) |> 
+    # make consistent responses ----
+  mutate(where_store_data = str_replace(string = where_store_data,
+                                        pattern = "Locally on my computer", 
+                                        replacement = "Locally"),
+         where_store_data = str_replace(string = where_store_data, 
+                                        pattern = "Github", 
+                                        replacement = "GitHub")) |>
     
-  # count ----
+    # count ----
   group_by(timepoint, where_store_data) |> 
     count() |> 
     ungroup() #|> 
@@ -153,7 +162,7 @@ plot_q2_store_data <- function(q2_store_data_clean, survey){
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 plot_q2_store_data_bothPP <- function(q2_store_data_clean){
-
+  
   ggplot(na.omit(q2_store_data_clean), aes(x = fct_reorder(where_store_data, n), y = n)) + 
     geom_col(aes(fill = timepoint), position = position_dodge(preserve = "total")) +
     coord_flip() + 
@@ -172,6 +181,6 @@ plot_q2_store_data_bothPP <- function(q2_store_data_clean){
     theme(
       legend.position = "blank",
       axis.title.y = element_blank()
-      )
+    )
   
 }
