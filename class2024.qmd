@@ -34,6 +34,7 @@ library(ggtext)
 library(DT)
 library(tidytext)
 library(wordcloud)
+library(scales)
 
 #........................import functions........................
 source("functions.R")
@@ -411,27 +412,23 @@ knitr::include_graphics("images/17-microplastics-lm.png")
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q17b_microplastics_data <- clean_q17b_microplastics(meds2024_before_clean)
+q17b_microplastics_data <- clean_q17b_microplastics_bothPP(both_timepoints_clean)
 
 # plot ----
-pal <- c("77445" = "#047C91", "2430" = "#047C91",
-         "956" = "#047C91", "911" = "#047C91", "900" = "#047C91",
-         "76" = "#047C91",
-         "60" = "#047C91",
-         "59" = "#047C91", "53" = "#047C91",
-         "48" = "#047C91", "47" = "#7ECD7A", "46" = "#047C91", "43" = "#047C91", "41" = "#047C91", 
-         "28" = "#047C91", "27" = "#047C91", "26" = "#047C91", "20" = "#047C91", 
-         "17" = "#047C91", "7" = "#047C91", "4" = "#047C91", "2" = "#047C91", "1" = "#047C91",
-         "I don't know" = "#047C91")
-plot_q17b_microplastics(q17b_microplastics_data) +
-  coord_flip()
+plot_q17b_microplastics_bothPP(q17b_microplastics_data) 
 ```
 
-::: {.callout-note}
+::: {.callout-note collapse=true}
 ## Question 17b raw responses
-Some respondents recorded their answers in sentence form, while others did not round their answers to the nearest integer. Cleaned responses are shown in the plot, above. Responses as they were recorded are included in the table, below:
+Respondents submitted a wide variety of answers -- responses as they were recorded are included in the tables, below:
+<!-- Some respondents recorded their answers in sentence form, while others did not round their answers to the nearest integer. Cleaned responses are shown in the plot, above. Responses as they were recorded are included in the table, below: -->
 
 ```{r}
+
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##                                  Pre-MEDS                                ----
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 #~..........................wrangle.............................
 q17_microplastics_dt <- meds2024_before_clean |> 
   
@@ -440,6 +437,8 @@ q17_microplastics_dt <- meds2024_before_clean |>
 
 DT::datatable(q17_microplastics_dt, colnames = c("Free Response Answer to Q17b"),
               
+              caption = htmltools::tags$caption( style = 'caption-side: top; text-align: center; color:black;  font-size:200% ;','Pre-MEDS:'),
+              
                options = list(autoWidth = TRUE, 
                               pageLength = 5,
                               lengthMenu = c(5, 10, 20, 30),
@@ -447,6 +446,31 @@ DT::datatable(q17_microplastics_dt, colnames = c("Free Response Answer to Q17b")
               
               )
 ```
+
+```{r}
+
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##                                  Post-MEDS                               ----
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+#~..........................wrangle.............................
+q17_microplastics_dt <- meds2024_after_clean |> 
+  
+  # select necessary cols ----
+  select(microplastics_lr)
+
+DT::datatable(q17_microplastics_dt, colnames = c("Free Response Answer to Q17b"),
+              
+              caption = htmltools::tags$caption( style = 'caption-side: top; text-align: center; color:black;  font-size:200% ;','Post-MEDS:'),
+              
+               options = list(autoWidth = TRUE, 
+                              pageLength = 5,
+                              lengthMenu = c(5, 10, 20, 30),
+                              dom = 'ltp')
+              
+              )
+```
+
 :::
 
 ```{r}
@@ -455,11 +479,17 @@ DT::datatable(q17_microplastics_dt, colnames = c("Free Response Answer to Q17b")
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q18a_familiar_prob_dist_data <- clean_q18a_familiar_prob_dist(meds2024_before_clean)
+q18a_familiar_prob_dist_data <- clean_q18a_familiar_prob_dist_bothPP(both_timepoints_clean)
 
 # plot ----
-plot_q18a_familiar_prob_dist(q18a_familiar_prob_dist_data)
+plot_rank_bothPP(data = q18a_familiar_prob_dist_data,
+                           title = "How familiar are you with the term probability distribution?",
+                           caption = "Question 18a (choosing '1 (never heard of it)' skips respondent to question 19)")
 ```
+
+::: {.callout-important}
+## TODO COME BACK TO QUESTION 18
+:::
 
 {{< include /sections/class2024/q18-callout-inline-code.qmd >}}
 
@@ -495,22 +525,22 @@ plot_q18b_prob_dist_terms(q18b_prob_dist_terms_data)
 
 ## **Part 6: Programming 1**
 
+::: {.callout-important}
+## TODO: check to see if answering 1 skips to question 20
+:::
+
 ```{r}
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ##  ~ Question 19a: Familiarity with Functions  ----
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-# for calculating percentages in wrangling step below ----
-q19_num_answers <- meds2024_before_clean |> 
-  select(term_function) |> 
-  count() |> 
-  pull()
-
 # wrangle ----
-q19a_familiar_functions_data <- clean_q19a_familiar_functions(meds2024_before_clean)
+q19a_familiar_functions_data <- clean_q19a_familiar_functions_bothPP(both_timepoints_clean)
 
 # plot ----
-plot_q19a_familiar_functions(q19a_familiar_functions_data)
+plot_rank_bothPP(data = q19a_familiar_functions_data,
+                           title = "How familiar are you with the term 'function' as it relates to\nprogramming?",
+                           caption = "Question 19a (choosing '1 (never heard of it)' skips respondent to question 20)") 
 ```
 
 {{< include /sections/class2024/q19b-callout-inline-code.qmd >}}
@@ -521,10 +551,12 @@ plot_q19a_familiar_functions(q19a_familiar_functions_data)
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q19b_writing_functions_data <- clean_q19b_writing_functions(meds2024_before_clean)
+q19b_writing_functions_data <- clean_q19b_writing_functions_bothPP(both_timepoints_clean)
 
 # plot ----
-plot_q19b_writing_functions(q19b_writing_functions_data)
+plot_rank_bothPP(data = q19b_writing_functions_data,
+                           title = "How comfortable are you creating a function in code?",
+                           caption = "Question 19b (choosing '1 (not at all)' skips respondent to question 20)")
 ```
 
 {{< include /sections/class2024/q19c-callout-inline-code.qmd >}}
@@ -537,11 +569,10 @@ plot_q19b_writing_functions(q19b_writing_functions_data)
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q19c_fxn_output_data <- clean_q19c_fxn_output(meds2024_before_clean)
+q19c_fxn_output_data <- clean_q19c_fxn_output_bothPP(both_timepoints_clean)
 
 # plot ----
-pal <- c("10" = "#7ECD7A", "2" = "#047C91", "5" = "#047C91", "I'm not sure" = "#047C91", "NULL" = "#047C91")
-plot_q19c_fxn_output(q19c_fxn_output_data)
+plot_q19c_fxn_output_bothPP(q19c_fxn_output_data)
 ```
 
 ## **Part 7: Environmental Modeling**
@@ -552,11 +583,15 @@ plot_q19c_fxn_output(q19c_fxn_output_data)
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q20a_run_env_mod_data <- clean_q20a_run_env_mod(meds2024_before_clean)
+q20a_run_env_mod_data <- clean_q20a_run_env_mod_bothPP(both_timepoints_clean)
 
 # plot ----
-plot_q20a_run_env_mod(q20a_run_env_mod_data)
+plot_q20a_run_env_mod_bothPP(q20a_run_env_mod_data)
 ```
+
+::: {.callout-important}
+## TODO: decide what to do with this next callout
+:::
 
 {{< include /sections/class2024/q20a-callout.qmd >}}
 
@@ -593,17 +628,13 @@ plot_q20c_param_int(q20c_param_int_data)
 ##  ~ Question 21a: Comfort with Spatial Data  ----
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-# for calculating percentages in wrangling step below ----
-q21a_num_answers <- meds2024_before_clean |> 
-  select(spatial_data) |> 
-  count() |> 
-  pull()
-
 # wrangle ----
-q21a_comfort_spatial_data <- clean_q21a_comfort_spatial(meds2024_before_clean)
+q21a_comfort_spatial_data <- clean_q21a_comfort_spatial_bothPP(both_timepoints_clean)
 
 # plot ----
-plot_q21a_comfort_spatial(q21a_comfort_spatial_data)
+plot_rank_bothPP(data = q21a_comfort_spatial_data,
+                           title = "How comfortable are you working with spatial data?",
+                           caption = "Question 21a (choosing '1 (never worked with it before)' skips respondent to question 22)") 
 ```
 
 {{< include /sections/class2024/q21-callout-inline-code.qmd >}}
@@ -664,10 +695,12 @@ knitr::include_graphics("images/21c-vector.png")
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q22a_comfort_rs_data <- clean_q22a_comfort_rs(meds2024_before_clean)
+q22a_comfort_rs_data <- clean_q22a_comfort_rs_bothPP(both_timepoints_clean)
 
 # plot ----
-plot_q22a_comfort_rs(q22a_comfort_rs_data)
+plot_rank_bothPP(data = q22a_comfort_rs_data,
+                           title = "How comfortable are you working with remotely sensed data?",
+                           caption = "Question 22a (choosing '1 (never worked with it before)' skips respondent to question 23)") 
 ```
 
 {{< include /sections/class2024/q22-callout-inline-code.qmd >}}
@@ -690,17 +723,19 @@ plot_q22b_rs_sun(q22b_rs_sun_data)
 ##  ~ Question 23a: Map Projections  ----
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-# for calculating percentages in wrangling step below ----
-q23a_num_answers <- meds2024_before_clean |> 
-  select(map_proj_comfort) |> 
-  count() |> 
-  pull()
+# # for calculating percentages in wrangling step below ----
+# q23a_num_answers <- meds2024_before_clean |> 
+#   select(map_proj_comfort) |> 
+#   count() |> 
+#   pull()
 
 # wrangle ----
-q23a_comfort_map_proj_data <- clean_q23a_comfort_map_proj(meds2024_before_clean)
+q23a_comfort_map_proj_data <- clean_q23a_comfort_map_proj_bothPP(both_timepoints_clean)
 
 # plot ----
-plot_q23a_comfort_map_proj(q23a_comfort_map_proj_data)
+plot_rank_bothPP(data = q23a_comfort_map_proj_data,
+                           title = "How comfortable are you working with map projections?",
+                           caption = "Question 23a (choosing '1 (never worked with it before)' skips respondent to question 24)") 
 ```
 
 {{< include /sections/class2024/q23-callout-inline-code.qmd >}}

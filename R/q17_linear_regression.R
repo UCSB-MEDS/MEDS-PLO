@@ -13,10 +13,10 @@ clean_q17a_familiar_lr <- function(PLO_data_clean){
   
   df1 <- PLO_data_clean |> 
     
-  # select necessary cols ----
+    # select necessary cols ----
   select(linear_regression) |> 
     
-  # sum ----
+    # sum ----
   group_by(linear_regression) |>
     count() |>
     ungroup() 
@@ -43,7 +43,7 @@ clean_q17a_familiar_lr <- function(PLO_data_clean){
     message("----------------------")
     
   } 
-    
+  
   # # ADDING BC NO ONE SELECTED THE FOLLOWING OPTIONS ----
   # add_row(linear_regression = "2", n = 0) |>
   # add_row(linear_regression = "1 - never heard of it", n = 0) |>
@@ -51,12 +51,12 @@ clean_q17a_familiar_lr <- function(PLO_data_clean){
   # finish wrangling ----
   df2 <- df1 |> 
     
-  # reorder factors ----
+    # reorder factors ----
   mutate(linear_regression = fct_relevel(linear_regression, 
                                          c("1 - never heard of it", "2", 
                                            "3 - vague sense of what it means", "4", "5 - very familiar"))) |>
     
-  # add col for percentages ----
+    # add col for percentages ----
   mutate(percentage = round((n/(sum(n)))*100, 1),
          perc_label = paste0(percentage, "%"))
   
@@ -166,9 +166,9 @@ clean_q17a_familiar_lr_bothPP <- function(PLO_data_clean){
   
   all_q17a_linear_regression <- rbind(pre_meds, post_meds) |> 
     mutate(linear_regression = fct_relevel(linear_regression,
-                                              c("1 - never heard of it", "2", 
-                                                "3 - vague sense of what it means", "4", 
-                                                "5 - very familiar"))) 
+                                           c("1 - never heard of it", "2", 
+                                             "3 - vague sense of what it means", "4", 
+                                             "5 - very familiar"))) 
   
   return(all_q17a_linear_regression)
   
@@ -205,44 +205,102 @@ plot_q17a_familiar_lr <- function(data){
 ##                            clean Question 17b data                         ----
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##  ~ for just one PLO assessment (pre or post)  ----
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 clean_q17b_microplastics <- function(PLO_data_clean){
   
   PLO_data_clean |> 
     
-  # select necessary cols ----
+    # select necessary cols ----
   select(microplastics_lr) |> 
     
-  # round values and remove sentences for plotting purposes ----
+    # round values and remove sentences for plotting purposes ----
   mutate_if(is.character, str_replace_all, 
             pattern = "For 45 days of rain per year, we expect 27 pieces of microplastic, ceteris paribus.", replacement = "27") |> 
-  
-  # class 2023 after ----
-  mutate_if(is.character, str_replace_all, pattern = "26.52", replacement = "27") |> 
-  mutate_if(is.character, str_replace_all, pattern = "46.76823", replacement = "47") |> 
-  mutate_if(is.character, str_replace_all, pattern = "46.77", replacement = "47") |> 
-  mutate_if(is.character, str_replace_all, pattern = "900.28", replacement = "900") |> 
-  mutate_if(is.character, str_replace_all, pattern = "47 mg", replacement = "47") |> 
-  mutate_if(is.character, str_replace_all, pattern = "27 pieces", replacement = "27") |> 
-  # class 2024 before ----
-  mutate_if(is.character, str_replace_all, pattern = "Unsure", replacement = "I don't know") |> 
-  mutate_if(is.character, str_replace_all, pattern = "i dont know", replacement = "I don't know") |> 
-  mutate_if(is.character, str_replace_all, pattern = "no idea", replacement = "I don't know") |> 
-  mutate_if(is.character, str_replace_all, pattern = "26.5", replacement = "27") |> 
-  mutate_if(is.character, str_replace_all, pattern = "42.7", replacement = "43") |> 
-  mutate_if(is.character, str_replace_all, pattern = "1.1511", replacement = "1") |> 
-  mutate_if(is.character, str_replace_all, pattern = "0.58942", replacement = "1") |> 
     
-  # convert to factor ----
+    # class 2023 after ----
+  mutate_if(is.character, str_replace_all, pattern = "26.52", replacement = "27") |> 
+    mutate_if(is.character, str_replace_all, pattern = "46.76823", replacement = "47") |> 
+    mutate_if(is.character, str_replace_all, pattern = "46.77", replacement = "47") |> 
+    mutate_if(is.character, str_replace_all, pattern = "900.28", replacement = "900") |> 
+    mutate_if(is.character, str_replace_all, pattern = "47 mg", replacement = "47") |> 
+    mutate_if(is.character, str_replace_all, pattern = "27 pieces", replacement = "27") |> 
+    # class 2024 before ----
+  mutate_if(is.character, str_replace_all, pattern = "Unsure", replacement = "I don't know") |> 
+    mutate_if(is.character, str_replace_all, pattern = "i dont know", replacement = "I don't know") |> 
+    mutate_if(is.character, str_replace_all, pattern = "no idea", replacement = "I don't know") |> 
+    mutate_if(is.character, str_replace_all, pattern = "26.5", replacement = "27") |> 
+    mutate_if(is.character, str_replace_all, pattern = "42.7", replacement = "43") |> 
+    mutate_if(is.character, str_replace_all, pattern = "1.1511", replacement = "1") |> 
+    mutate_if(is.character, str_replace_all, pattern = "0.58942", replacement = "1") |> 
+    
+    # convert to factor ----
   mutate(microplastics_lr = as_factor(microplastics_lr)) |> 
     
-  # sum ----
+    # sum ----
   group_by(microplastics_lr) |>
     count() |>
     ungroup() |>
     
-  # add col for percentages ----
+    # add col for percentages ----
   mutate(percentage = round((n/(sum(n)))*100, 1),
          perc_label = paste0(percentage, "%"))
+  
+}
+
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##  ~ for both pre & post assessments  ----
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+clean_q17b_microplastics_bothPP <- function(PLO_data_clean){
+  
+  #........................initial wrangling.......................
+  df <- PLO_data_clean |> 
+    
+    # select necessary cols ----
+  select(microplastics_lr, timepoint) |>
+  
+  # sum ----
+  group_by(timepoint, microplastics_lr) |>
+    count() |>
+    ungroup() 
+  
+  ##~~~~~~~~~~~~~~~~~~
+  ##  ~ pre-MEDS  ----
+  ##~~~~~~~~~~~~~~~~~~
+  
+  #.........separate pre-MEDS (to add 0s for missing cats).........
+  pre_meds <- df |> 
+    filter(timepoint == "Pre-MEDS") |> 
+    mutate(total_respondents = sum(n),
+           percentage = round((n/total_respondents)*100, 1),
+           perc_label = paste0(percentage, "%")) |>
+    mutate(xvar = microplastics_lr)
+  
+  ##~~~~~~~~~~~~~~~~~~~
+  ##  ~ post-MEDS  ----
+  ##~~~~~~~~~~~~~~~~~~~
+  
+  #........separate post-MEDS (to add 0s for missing cats).........
+  post_meds <- df |> 
+    filter(timepoint == "Post-MEDS") |> 
+    mutate(total_respondents = sum(n),
+           percentage = round((n/total_respondents)*100, 1),
+           perc_label = paste0(percentage, "%")) |>
+    mutate(xvar = microplastics_lr)
+  
+  ##~~~~~~~~~~~~~~~~~~~~~~~
+  ##  ~ recombine dfs  ----
+  ##~~~~~~~~~~~~~~~~~~~~~~~
+  
+  all_q17b_data <- rbind(pre_meds, post_meds) |> 
+    
+    # filter only for correct answer ----
+  filter(microplastics_lr == 47) 
+  
+  return(all_q17b_data)
   
 }
 
@@ -271,5 +329,27 @@ plot_q17b_microplastics <- function(data){
 ##  ~ for both pre & post assessments  ----
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+plot_q17b_microplastics_bothPP <- function(data){
+  
+  ggplot(data, aes(x = timepoint, y = percentage)) +
+    geom_col(aes(fill = timepoint)) +
+    geom_text(aes(label = perc_label), 
+              position = position_stack(vjust = 0.5), 
+              size = 3, color = "white", family = "nunito") +
+    labs(y = "% of respondents who\nanswered correctly",
+         title = "How many pieces of microplastic do we predict will be present\nin a location with 45 days of rain per year (round your answer up\nto the nearest integer)?",
+         subtitle = "Correct answer: 47",
+         caption = "Question 17b (free response)") +
+    scale_fill_manual(values = meds_pal) +
+    scale_y_continuous(labels = scales::label_percent(scale = 1),
+                       limits = c(0, 100)) +
+    meds_theme() +
+    theme(
+      legend.position = "none",
+      axis.title.x = element_blank(),
+      plot.subtitle = element_text(face = "bold")
+    )
+  
+}
 
 

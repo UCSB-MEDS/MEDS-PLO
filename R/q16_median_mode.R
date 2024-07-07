@@ -121,7 +121,7 @@ plot_q16a_median_bothPP <- function(data){
     geom_text(aes(label = perc_label), 
               position = position_stack(vjust = 0.5), 
               size = 3, color = "white", family = "nunito") +
-    labs(y = "% of respondents who answered correctly",
+    labs(y = "% of respondents who\nanswered correctly",
          title = "Calculate the median of this sample distribution: 5, 17, 0, 14, 14",
          subtitle = "Correct answer: 14",
          caption = "Question 16a (free response)") +

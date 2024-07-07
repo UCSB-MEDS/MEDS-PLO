@@ -1,5 +1,5 @@
 ::: {.callout-note}
-## Students who responded **No** to Question 20a skip directly to Question 20. 
+## Students who responded **No** to Question 20a skip directly to Question 21. 
 
 Those respondents are recorded as `NA` or `No response` in Questions 20b & 20c.
 :::

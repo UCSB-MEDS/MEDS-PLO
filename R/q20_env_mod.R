@@ -2,6 +2,10 @@
 ##                            clean Question 20a data                         ----
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##  ~ for just one PLO assessment (pre or post)  ----
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 clean_q20a_run_env_mod <- function(PLO_data_clean){
   
   # to iterate over ----
@@ -54,9 +58,67 @@ clean_q20a_run_env_mod <- function(PLO_data_clean){
   
 }
 
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##  ~ for both pre & post assessments  ----
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+clean_q20a_run_env_mod_bothPP <- function(PLO_data_clean){
+  
+  #........................initial wrangling.......................
+  df <- PLO_data_clean |> 
+    
+    # select necessary cols ----
+  select(run_environ_model, timepoint) |>
+    
+    # sum ----
+  group_by(timepoint, run_environ_model) |>
+    count() |>
+    ungroup() 
+  
+  ##~~~~~~~~~~~~~~~~~~
+  ##  ~ pre-MEDS  ----
+  ##~~~~~~~~~~~~~~~~~~
+  
+  #.........separate pre-MEDS (to add 0s for missing cats).........
+  pre_meds <- df |> 
+    filter(timepoint == "Pre-MEDS") |> 
+    mutate(total_respondents = sum(n),
+           percentage = round((n/total_respondents)*100, 1),
+           perc_label = paste0(percentage, "%")) |>
+    mutate(xvar = run_environ_model)
+  
+  ##~~~~~~~~~~~~~~~~~~~
+  ##  ~ post-MEDS  ----
+  ##~~~~~~~~~~~~~~~~~~~
+  
+  #........separate post-MEDS (to add 0s for missing cats).........
+  post_meds <- df |> 
+    filter(timepoint == "Post-MEDS") |> 
+    mutate(total_respondents = sum(n),
+           percentage = round((n/total_respondents)*100, 1),
+           perc_label = paste0(percentage, "%")) |>
+    mutate(xvar = run_environ_model)
+  
+  ##~~~~~~~~~~~~~~~~~~~~~~~
+  ##  ~ recombine dfs  ----
+  ##~~~~~~~~~~~~~~~~~~~~~~~
+  
+  all_q20a_data <- rbind(pre_meds, post_meds) |> 
+    
+    # filter only for correct answer ----
+  filter(run_environ_model == "Yes") 
+  
+  return(all_q20a_data)
+  
+}
+
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ##                           plot Question 20a data                         ----
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##  ~ for just one PLO assessment (pre or post)  ----
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 plot_q20a_run_env_mod <- function(data){
   
@@ -70,9 +132,39 @@ plot_q20a_run_env_mod <- function(data){
   
 }
 
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##  ~ for both pre & post assessments  ----
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+plot_q20a_run_env_mod_bothPP <- function(data){
+  
+  ggplot(data, aes(x = timepoint, y = percentage)) +
+    geom_col(aes(fill = timepoint)) +
+    geom_text(aes(label = perc_label), 
+              position = position_stack(vjust = 0.5), 
+              size = 3, color = "white", family = "nunito") +
+    labs(y = "% of respondents who\nanswered 'Yes'",
+         title = "Have you run a model to learn something about (or predict\nsomething about) the environment?",
+         caption = "Question 20a") +
+    scale_fill_manual(values = meds_pal) +
+    scale_y_continuous(labels = scales::label_percent(scale = 1),
+                       limits = c(0, 100)) +
+    meds_theme() +
+    theme(
+      legend.position = "none",
+      axis.title.x = element_blank(),
+      plot.subtitle = element_text(face = "bold")
+    )
+  
+}
+
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ##                            clean Question 20b data                         ----
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##  ~ for just one PLO assessment (pre or post)  ----
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 clean_q20b_sa <- function(PLO_data_clean){
   
@@ -128,6 +220,10 @@ clean_q20b_sa <- function(PLO_data_clean){
 ##                           plot Question 20b data                         ----
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##  ~ for just one PLO assessment (pre or post)  ----
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 plot_q20b_sa <- function(data){
   
   ggplot(data, aes(x = fct_reorder(sensitivity_analysis, desc(n)), y = n, label = perc_label)) +
@@ -143,6 +239,10 @@ plot_q20b_sa <- function(data){
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ##                            clean Question 20b data                         ----
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##  ~ for just one PLO assessment (pre or post)  ----
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 clean_q20c_param_int <- function(PLO_data_clean){
   
@@ -171,6 +271,10 @@ clean_q20c_param_int <- function(PLO_data_clean){
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ##                           plot Question 20c data                         ----
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##  ~ for just one PLO assessment (pre or post)  ----
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 plot_q20c_param_int <- function(data){
   
