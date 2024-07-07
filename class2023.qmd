@@ -908,3 +908,15 @@ q31_lang_data <- clean_q31_lang(medsJune2023_clean)
 pal <- c("Python" = "#7ECD7A", "R" = "#047C91", "SQL" = "#047C91")
 plot_q31_lang(q31_lang_data)
 ```
+
+<br>
+
+::: {.center-text}
+***End MEDS Class of 2023 PLO Assessment Report***
+:::
+
+<br>
+
+::: {.center-text}
+*Return to [main page](index.html)*
+:::

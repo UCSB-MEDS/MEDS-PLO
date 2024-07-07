@@ -760,10 +760,12 @@ plot_q23b_reproj(q23b_reproj_data)
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q24a_familiarity_rs_data <- clean_q24a_familiarity_rs(meds2024_before_clean)
+q24a_familiarity_rs_data <- clean_q24a_familiarity_rs_bothPP(both_timepoints_clean)
 
 # plot ----
-plot_q24a_familiarity_rs(q24a_familiarity_rs_data)
+plot_rank_bothPP(data = q24a_familiarity_rs_data,
+                           title = "How familiar are you with the term reflectance spectra?",
+                           caption = "Question 24a (choosing '1 (never heard of it)' skips respondent to question 25)") 
 ```
 
 {{< include /sections/class2024/q24-callout-inline-code.qmd >}}
@@ -790,11 +792,13 @@ plot_q24b_veg_wave(q24b_veg_wave_data)
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q25a_familiar_ml_data <- clean_q25a_familiar_ml(meds2024_before_clean) |> 
-  filter(n != 0) # THIS IS JUST A BANDAID AND NEEDS FIXING
+q25a_familiar_ml_data <- clean_q25a_familiar_ml_bothPP(both_timepoints_clean) 
 
 # plot ----
-plot_q25a_familiar_ml(q25a_familiar_ml_data)
+plot_rank_bothPP(data = q25a_familiar_ml_data,
+                           title = "How familiar are you with the difference between supervised and\nunsupervised learning?",
+                           caption = "Question 25a (choosing '1 (never heard of it)' skips respondent to question 26)") +
+  scale_x_discrete(labels = function(x) str_wrap(x, width = 15)) 
 ```
 
 {{< include /sections/class2024/q25a-callout-inline-code.qmd >}}
@@ -837,10 +841,12 @@ plot_q25c_kmeans(q25c_kmeans_data)
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q26a_div_data <- clean_q26a_div_data(meds2024_before_clean)
+q26a_div_data <- clean_q26a_div_data_bothPP(both_timepoints_clean)
 
 # plot ----
-plot_q26a_div_data(q26a_div_data)
+plot_rank_bothPP(data = q26a_div_data,
+                           title = "How familiar are you with the procedure that divides your data into\nseparate “training”, “validation”, and “testing” sets?",
+                           caption = "Question 26a (choosing '1 (never heard of it)' skips respondent to question 27)")
 ```
 
 {{< include /sections/class2024/q26a-callout-inline-code.qmd >}}
@@ -901,10 +907,12 @@ plot_q26c_mod_perf(q26c_mod_perf_data)
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q27_data_justice_data <- clean_q27_data_justice(meds2024_before_clean)
+q27_data_justice_data <- clean_q27_data_justice_bothPP(both_timepoints_clean)
 
 # plot ----
-plot_q27_data_justice(q27_data_justice_data)
+plot_rank_bothPP(data = q27_data_justice_data,
+                 title = "How familiar are you with the term Data Justice?",
+                 caption = "Question 27")
 ```
 
 ```{r}
@@ -913,10 +921,12 @@ plot_q27_data_justice(q27_data_justice_data)
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q28_bias_data <- clean_q28_bias(meds2024_before_clean)
+q28_bias_data <- clean_q28_bias_bothPP(both_timepoints_clean)
 
 # plot ----
-plot_q28_bias(q28_bias_data)
+plot_rank_bothPP(data = q28_bias_data,
+                 title = "I can identify areas of bias in approaches to data analysis.",
+                 caption = "Question 28")
 ```
 
 ## **Part 11: Data Viz & Communication**
@@ -927,49 +937,89 @@ plot_q28_bias(q28_bias_data)
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q29_create_viz_data <- clean_q29_create_viz(meds2024_before_clean)
+q29_create_viz_data <- clean_q29_create_viz_bothPP(both_timepoints_clean)
 
 # plot ----
-plot_q29_create_viz(q29_create_viz_data)
+plot_rank_bothPP(data = q28_bias_data,
+                 title = "How comfortable are you with creating a data visualization using a\nprogramming language?",
+                 caption = "Question 29")
 ```
 
-#### Identify 4 areas for improvement in the following data visualization that shows information about Michigan counties with highest college attendance.
+#### Identify 4 areas for improvement in the following data visualization that shows information about Michigan counties with highest college attendance (Question 30).
 
 ```{r}
 #| fig-align: center
 knitr::include_graphics("images/30-plot.png")
 ```
 
-```{r}
-#| fig-width: 3
-#| fig-align: center
-#| fig-cap: "Wordcloud of most frequently occurring words used to describe suggested improvements to the above data visualization (Question 30)" 
-#| fig-cap-location: top
+::: {.center-text .body-text-m}
+*Wordcloud of most frequently occurring words used to describe suggested improvements to the above data visualization (Question 30)*
+:::
 
-##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-##  ~ Question 30: Improve Data Viz  ----
-##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+:::: {.columns}
+
+::: {.column width="50%"}
+::: {.center-text}
+**Pre-MEDS**
+:::
+
+```{r}
+#| eval: true
+#| echo: false
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##                  Question 30: Improve Data Viz (Pre-MEDS)                ----
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q30_improve_dv <- clean_q30_improve_dv(meds2024_before_clean)
+q30_improve_dv_pre <- clean_q30_improve_dv(meds2024_before_clean)
 
 # plot ----
-plot_q30_improve_dv(q30_improve_dv)
+plot_q30_improve_dv(q30_improve_dv_pre)
 ```
+:::
 
-::: {.callout-note}
-## Question 30 raw responses
-Free responses as they were recorded are included in the table, below:
+::: {.column width="50%"}
+::: {.center-text}
+**Post-MEDS**
+:::
 
 ```{r}
+#| eval: true
+#| echo: false
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##                  Question 30: Improve Data Viz (Post-MEDS)               ----
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 # wrangle ----
-q30_improve_dv <- meds2024_before_clean |> 
+q30_improve_dv_post <- clean_q30_improve_dv(meds2024_after_clean)
+
+# plot ----
+plot_q30_improve_dv(q30_improve_dv_post)
+```
+:::
+
+::::
+
+
+::: {.callout-note collapse=true}
+## Question 30 raw responses
+Responses as they were recorded are included in the tables, below:
+
+```{r}
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##                                  Pre-MEDS                                ----
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+#~..........................wrangle.............................
+q30_improve_dv_pre <- meds2024_before_clean |> 
   
   # select necessary cols ----
   select(improve_data_viz)
 
-# create table ----
-DT::datatable(q30_improve_dv, colnames = c("Free Response Answer to Q30"),
+#........................create DT table.........................
+DT::datatable(q30_improve_dv_pre, colnames = c("Free Response Answer to Q30"),
+              
+              caption = htmltools::tags$caption( style = 'caption-side: top; text-align: center; color:black;  font-size:200% ;','Pre-MEDS:'),
               
                options = list(autoWidth = TRUE, 
                               pageLength = 5,
@@ -978,6 +1028,31 @@ DT::datatable(q30_improve_dv, colnames = c("Free Response Answer to Q30"),
               
               )
 ```
+
+```{r}
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##                                  Post-MEDS                               ----
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+#~..........................wrangle.............................
+q30_improve_dv_post <- meds2024_after_clean |> 
+  
+  # select necessary cols ----
+  select(improve_data_viz)
+
+#........................create DT table.........................
+DT::datatable(q30_improve_dv_post, colnames = c("Free Response Answer to Q30"),
+              
+              caption = htmltools::tags$caption( style = 'caption-side: top; text-align: center; color:black;  font-size:200% ;','Prost-MEDS:'),
+              
+               options = list(autoWidth = TRUE, 
+                              pageLength = 5,
+                              lengthMenu = c(5, 10, 20, 30),
+                              dom = 'ltp')
+              
+              )
+```
+
 :::
 
 ## **Part 12: Programming 2**
@@ -1000,11 +1075,10 @@ convert_F_to_C(32)
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q31_lang_data <- clean_q31_lang(meds2024_before_clean)
+q31_lang_data <- clean_q31_lang_bothPP(both_timepoints_clean)
 
 # plot ----
-pal <- c("Python" = "#7ECD7A", "R" = "#047C91", "SQL" = "#047C91", "I'm not sure" = "#047C91")
-plot_q31_lang(q31_lang_data)
+plot_q31_lang_bothPP(q31_lang_data)
 ```
 
 <br>

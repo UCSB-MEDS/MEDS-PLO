@@ -32,6 +32,18 @@ h1, h2, h3, h4 {
 	margin-bottom: 1em;
 }
 
+// M body text
+.body-text-m {
+  font-size: 20px;
+	line-height: 1.7em;
+	margin-bottom: 1em;
+}
+
+// teal text
+.teal-text {
+  color: $teal;
+}
+
 // dark blue text
 .dark-blue-text {
   color: $dark-blue;

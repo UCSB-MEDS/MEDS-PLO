@@ -64,7 +64,7 @@ clean_q23a_comfort_map_proj <- function(PLO_data_clean){
 clean_q23a_comfort_map_proj_bothPP <- function(PLO_data_clean){
   
   # ........................to iterate over.........................
-  options <- c("1 (never worked with it before)", "2", "3", "4", "5 (work with it all the time)")
+  options <- c("1 (never worked with it before)", "2", "3", "4", "5 (work it with all the time)")
   
   #........................initial wrangling.......................
   df <- PLO_data_clean |> 
@@ -160,10 +160,14 @@ clean_q23a_comfort_map_proj_bothPP <- function(PLO_data_clean){
   ##~~~~~~~~~~~~~~~~~~~~~~~
   
   all_q23a_map_proj_comfort <- rbind(pre_meds, post_meds) |> 
+    # str_replace(map_proj_comfort, 
+    #             pattern = "5 (work it with all the time)", 
+    #             replacement = "5 (work with it all the time)") |> 
     mutate(map_proj_comfort = fct_relevel(map_proj_comfort,
                                               c("1 (never worked with it before)", 
                                                 "2", "3", "4", 
-                                                "5 (work with it all the time)"))) 
+                                                "5 (work it with all the time)")))
+    
   
   return(all_q23a_map_proj_comfort)
   
