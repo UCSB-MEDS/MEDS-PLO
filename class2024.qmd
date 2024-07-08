@@ -487,47 +487,36 @@ plot_rank_bothPP(data = q18a_familiar_prob_dist_data,
                            caption = "Question 18a (choosing '1 (never heard of it)' skips respondent to question 19)")
 ```
 
-::: {.callout-important}
-## TODO COME BACK TO QUESTION 18
-:::
-
 {{< include /sections/class2024/q18-callout-inline-code.qmd >}}
 
 ```{r}
-#| column: margin
-#| fig-cap: "9.7% of respondents correctly answered question 18b (i.e. chose exactly the following options: normal, uniform, bimodal, symmedtric)"
-##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-##  ~ Question 18b: Probabilty Distribution Terms  ----
-##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##                Question 18b: Probability Distribution Terms              ----
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-# for calculating percentages in wrangling step below ----
-q18b_num_answers <- meds2024_before_clean |>
-  select(prob_dist_terms) |>
-  count() |>
-  pull()
-
-# wrangle (FULLY CORRECT; margin plot) ----
-q18b_prob_dist_FULLY_CORRECT_data <- clean_q18b_FULLY_CORRECT(meds2024_before_clean)
-
-# plot (FULLY CORRECT; margin plot) ----
-pal <- c("yes" = "#7ECD7A", "no" = "#047C91", "NA" = "#047C91")
-plot_q18b_FULLY_CORRECT(q18b_prob_dist_FULLY_CORRECT_data)
-```
-
-```{r}
 # wrangle (INDIV RESPONSES) ----
-q18b_prob_dist_terms_data <- clean_q18b_prob_dist_terms(meds2024_before_clean)
+q18b_prob_dist_terms_data <- clean_q18b_prob_dist_terms_bothPP(both_timepoints_clean)
 
 # plot (INDIV RESPONSES) ----
-pal <- c("normal" = "#7ECD7A", "uniform" = "#7ECD7A", "bimodal" = "#7ECD7A", "symmetric" = "#7ECD7A", "variable" = "#047C91", "unequal" = "#047C91", "NA" = "#047C91") # NA not colored
-plot_q18b_prob_dist_terms(q18b_prob_dist_terms_data)
+# pal <- c("normal" = "#7ECD7A", "uniform" = "#7ECD7A", "bimodal" = "#7ECD7A", "symmetric" = "#7ECD7A", "variable" = "#047C91", "unequal" = "#047C91", "NA" = "#047C91") # NA not colored
+plot_q18b_prob_dist_terms_bothPP(q18b_prob_dist_terms_data)
 ```
 
-## **Part 6: Programming 1**
+::: {.callout-note}
+## The percentage of respondents who provided a *fully correct* answer to Queston 18b increased from Pre- to Post-MEDS PLO assessments
 
-::: {.callout-important}
-## TODO: check to see if answering 1 skips to question 20
+Only students who chose 2 or greater in Question 18a were directed to answer Question 18b. A fully correct answer means choosing exactly the following options: **normal, uniform, bimodal, symmetrical**.  
+
+```{r}
+# wrangle (FULLY CORRECT) ----
+q18b_prob_dist_FULLY_CORRECT_data <- clean_q18b_FULLY_CORRECT_bothPP(both_timepoints_clean)
+
+# plot (FULLY CORRECT) ----
+plot_q18b_FULLY_CORRECT_bothPP(q18b_prob_dist_FULLY_CORRECT_data)
+```
 :::
+
+## **Part 6: Programming 1**
 
 ```{r}
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

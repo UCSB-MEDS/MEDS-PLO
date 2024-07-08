@@ -56,7 +56,9 @@ q18a_1_post <- meds2024_after_clean |>
 ```
 
 ::: {.callout-note}
-## All respondents advanced to Question 18b post-MEDS, as compared to `r q18a_not1_pre`/`r q18a_num_answers_pre` respondents pre-MEDS
+## All `r q18a_not1_post` Post-MEDS respondents were directed to answer Question 18b, as compared to `r q18a_not1_pre`/`r q18a_num_answers_pre` respondents in the Pre-MEDS PLO Assessment.
 
-**`r q18a_not1_pre`/ `r q18a_num_answers_pre` student respondents (`r round((q18a_not1_pre/q18a_num_answers_pre)*100, 1)`%)** chose a familiarity level of 2 or greater – these respondents were directed to answer Question 18b. `r q18a_1_pre` respondents selected **1 (never heard of it)** in response to Question 18a and were jumped directly to Question 19 -- they are recorded as `NA` in question 18b, below.
+- **Pre-MEDS: `r q18a_not1_pre`/`r q18a_num_answers_pre` student respondents (`r round((q18a_not1_pre/q18a_num_answers_pre)*100, 1)`%)** chose a familiarity level of 2 or greater, and therefore were directed to answer Question 18b. Those who selected a familiarity level of 1 (`r q18a_1_pre` students) were jumped directly to Question 19. 
+
+- **Post-MEDS: `r q18a_not1_post`/`r q18a_num_answers_post` student respondents (`r round((q18a_not1_post/q18a_num_answers_post)*100, 1)`%)** chose a familiarity level of 2 or greater, and therefore were directed to answer Question 18b. 
 :::

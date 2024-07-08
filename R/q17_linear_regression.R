@@ -277,7 +277,8 @@ clean_q17b_microplastics_bothPP <- function(PLO_data_clean){
     mutate(total_respondents = sum(n),
            percentage = round((n/total_respondents)*100, 1),
            perc_label = paste0(percentage, "%")) |>
-    mutate(xvar = microplastics_lr)
+    mutate(xvar = microplastics_lr) |> 
+    mutate(perc_label_long = paste0(perc_label, " (", n, "/", total_respondents, " respondents)"))
   
   ##~~~~~~~~~~~~~~~~~~~
   ##  ~ post-MEDS  ----
@@ -289,16 +290,15 @@ clean_q17b_microplastics_bothPP <- function(PLO_data_clean){
     mutate(total_respondents = sum(n),
            percentage = round((n/total_respondents)*100, 1),
            perc_label = paste0(percentage, "%")) |>
-    mutate(xvar = microplastics_lr)
+    mutate(xvar = microplastics_lr) |> 
+    mutate(perc_label_long = paste0(perc_label, "\n(", n, "/", total_respondents, " respondents)"))
   
   ##~~~~~~~~~~~~~~~~~~~~~~~
   ##  ~ recombine dfs  ----
   ##~~~~~~~~~~~~~~~~~~~~~~~
   
   all_q17b_data <- rbind(pre_meds, post_meds) |> 
-    
-    # filter only for correct answer ----
-  filter(microplastics_lr == 47) 
+    filter(microplastics_lr == 47)
   
   return(all_q17b_data)
   
@@ -333,7 +333,7 @@ plot_q17b_microplastics_bothPP <- function(data){
   
   ggplot(data, aes(x = timepoint, y = percentage)) +
     geom_col(aes(fill = timepoint)) +
-    geom_text(aes(label = perc_label), 
+    geom_text(aes(label = perc_label_long), 
               position = position_stack(vjust = 0.5), 
               size = 3, color = "white", family = "nunito") +
     labs(y = "% of respondents who\nanswered correctly",

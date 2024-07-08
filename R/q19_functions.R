@@ -450,7 +450,8 @@ clean_q19c_fxn_output_bothPP <- function(PLO_data_clean){
     mutate(total_respondents = sum(n),
            percentage = round((n/total_respondents)*100, 1),
            perc_label = paste0(percentage, "%")) |>
-    mutate(xvar = fxn_output)
+    mutate(xvar = fxn_output) |> 
+    mutate(perc_label_long = paste0(perc_label, "\n(", n, "/", total_respondents, " respondents)"))
   
   ##~~~~~~~~~~~~~~~~~~~
   ##  ~ post-MEDS  ----
@@ -462,7 +463,8 @@ clean_q19c_fxn_output_bothPP <- function(PLO_data_clean){
     mutate(total_respondents = sum(n),
            percentage = round((n/total_respondents)*100, 1),
            perc_label = paste0(percentage, "%")) |>
-    mutate(xvar = fxn_output)
+    mutate(xvar = fxn_output) |> 
+    mutate(perc_label_long = paste0(perc_label, "\n(", n, "/", total_respondents, " respondents)"))
   
   ##~~~~~~~~~~~~~~~~~~~~~~~
   ##  ~ recombine dfs  ----
@@ -506,7 +508,7 @@ plot_q19c_fxn_output_bothPP <- function(data){
   
   ggplot(data, aes(x = timepoint, y = percentage)) +
     geom_col(aes(fill = timepoint)) +
-    geom_text(aes(label = perc_label), 
+    geom_text(aes(label = perc_label_long), 
               position = position_stack(vjust = 0.5), 
               size = 3, color = "white", family = "nunito") +
     labs(y = "% of respondents who\nanswered correctly",
