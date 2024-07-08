@@ -1,6 +1,13 @@
-##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-##                            clean Question 22a data                         ----
-##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##                                                                            --
+##-------------------------- CLEAN QUESTON 22A DATA-----------------------------
+##                                                                            --
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##  ~ for just one PLO assessment (pre or post)  ----
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 clean_q22a_comfort_rs <- function(PLO_data_clean){
   
@@ -169,8 +176,14 @@ clean_q22a_comfort_rs_bothPP <- function(PLO_data_clean){
 }
 
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-##                           plot Question 22a data                         ----
+##                                                                            --
+##-------------------------- PLOT QUESTION 22A DATA-----------------------------
+##                                                                            --
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##  ~ for just one PLO assessment (pre or post)  ----
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 plot_q22a_comfort_rs <- function(data){
   
@@ -185,9 +198,21 @@ plot_q22a_comfort_rs <- function(data){
   
 }
 
-##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-##                            clean Question 22b data                         ----
-##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##  ~ for both pre & post assessments  ----
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# see `plot_rank.qmd`
+
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##                                                                            --
+##-------------------------- CLEAN QUESTON 22B DATA-----------------------------
+##                                                                            --
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##  ~ for just one PLO assessment (pre or post)  ----
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 clean_q22b_rs_sun <- function(PLO_data_clean){
   
@@ -213,9 +238,71 @@ clean_q22b_rs_sun <- function(PLO_data_clean){
   
 }
 
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##  ~ for both pre & post assessments  ----
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+clean_q22b_rs_sun_bothPP <- function(PLO_data_clean){
+  
+  #........................initial wrangling.......................
+  df <- PLO_data_clean |> 
+    
+    # select necessary cols ----
+  select(remote_sensing_sun, timepoint) |>
+    
+    # sum ----
+  group_by(timepoint, remote_sensing_sun) |>
+    count() |>
+    ungroup() 
+  
+  ##~~~~~~~~~~~~~~~~~~
+  ##  ~ pre-MEDS  ----
+  ##~~~~~~~~~~~~~~~~~~
+  
+  #.........separate pre-MEDS (to add 0s for missing cats).........
+  pre_meds <- df |> 
+    filter(timepoint == "Pre-MEDS") |> 
+    drop_na() |> 
+    mutate(total_respondents = sum(n),
+           percentage = round((n/total_respondents)*100, 1),
+           perc_label = paste0(percentage, "%")) |>
+    mutate(xvar = remote_sensing_sun) |> 
+    mutate(perc_label_long = paste0(perc_label, "\n(", n, "/", total_respondents, " respondents)"))
+  
+  ##~~~~~~~~~~~~~~~~~~~
+  ##  ~ post-MEDS  ----
+  ##~~~~~~~~~~~~~~~~~~~
+  
+  #........separate post-MEDS (to add 0s for missing cats).........
+  post_meds <- df |> 
+    filter(timepoint == "Post-MEDS") |> 
+    drop_na() |> 
+    mutate(total_respondents = sum(n),
+           percentage = round((n/total_respondents)*100, 1),
+           perc_label = paste0(percentage, "%")) |>
+    mutate(xvar = remote_sensing_sun) |> 
+    mutate(perc_label_long = paste0(perc_label, "\n(", n, "/", total_respondents, " respondents)"))
+  
+  #~~~~~~~~~~~~~~~~~~~~~~~
+  ##  ~ recombine dfs  ----
+  ##~~~~~~~~~~~~~~~~~~~~~~~
+  
+  all_q22b_data <- rbind(pre_meds, post_meds) |> 
+    filter(remote_sensing_sun == "passive") 
+  
+  return(all_q22b_data)
+  
+}
+
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-##                           plot Question 22b data                         ----
+##                                                                            --
+##-------------------------- PLOT QUESTION 22B DATA-----------------------------
+##                                                                            --
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##  ~ for just one PLO assessment (pre or post)  ----
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 plot_q22b_rs_sun <- function(data){
   
@@ -227,6 +314,33 @@ plot_q22b_rs_sun <- function(data){
          caption = "Question 22b") +
     scale_fill_manual(values = pal, limits = names(pal)) +
     meds_theme() 
+  
+}
+
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##  ~ for both pre & post assessments  ----
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+plot_q22b_rs_sun_bothPP <- function(data){
+  
+  ggplot(data, aes(x = timepoint, y = percentage)) +
+    geom_col(aes(fill = timepoint)) +
+    geom_text(aes(label = perc_label_long), 
+              position = position_stack(vjust = 0.5), 
+              size = 3, color = "white", family = "nunito") +
+    labs(y = "% of respondents who\nanswered correctly",
+         title = "The type of remote sensing that relies on reflected radiation\ngenerated by the sun is called ___? (fill in the blank)",
+         subtitle = "Correct answer: passive",
+         caption = "Question 22b") +
+    scale_fill_manual(values = meds_pal) +
+    scale_y_continuous(labels = scales::label_percent(scale = 1),
+                       limits = c(0, 100)) +
+    meds_theme() +
+    theme(
+      legend.position = "none",
+      axis.title.x = element_blank(),
+      plot.subtitle = element_text(face = "bold")
+    )
   
 }
 
