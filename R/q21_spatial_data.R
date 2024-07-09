@@ -660,10 +660,10 @@ clean_q21c_vec_ras_bothPP <- function(PLO_data_clean){
   ##  ~ recombine dfs  ----
   ##~~~~~~~~~~~~~~~~~~~~~~~
   
-  all_q20c_data <- rbind(pre_meds, post_meds) |> 
+  all_q21c_data <- rbind(pre_meds, post_meds) |> 
     filter(vec_or_ras == "vector") 
   
-  return(all_q20c_data)
+  return(all_q21c_data)
   
 }
 

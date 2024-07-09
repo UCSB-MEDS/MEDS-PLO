@@ -1,6 +1,13 @@
-##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-##                            clean Question 23a data                         ----
-##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##                                                                            --
+##------------------------- CLEAN QUESTION 23A DATA-----------------------------
+##                                                                            --
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##  ~ for just one PLO assessment (pre or post)  ----
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 clean_q23a_comfort_map_proj <- function(PLO_data_clean){
   
@@ -172,10 +179,16 @@ clean_q23a_comfort_map_proj_bothPP <- function(PLO_data_clean){
   return(all_q23a_map_proj_comfort)
   
 }
-  
+
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-##                           plot Question 23a data                         ----
+##                                                                            --
+##-------------------------- PLOT QUESTION 23A DATA-----------------------------
+##                                                                            --
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##  ~ for just one PLO assessment (pre or post)  ----
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 plot_q23a_comfort_map_proj <- function(data){
   
@@ -190,9 +203,21 @@ plot_q23a_comfort_map_proj <- function(data){
   
 }
 
-##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-##                            clean Question 23b data                         ----
-##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##  ~ for both pre & post assessments  ----
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# see `plot_rank.R`
+
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##                                                                            --
+##------------------------- CLEAN QUESTION 23B DATA-----------------------------
+##                                                                            --
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##  ~ for just one PLO assessment (pre or post)  ----
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 clean_q23b_reproj <- function(PLO_data_clean){
   
@@ -218,9 +243,71 @@ clean_q23b_reproj <- function(PLO_data_clean){
   
 }
 
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##  ~ for both pre & post assessments  ----
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+clean_q23b_reproj_bothPP <- function(PLO_data_clean){
+  
+  #........................initial wrangling.......................
+  df <- PLO_data_clean |> 
+    
+    # select necessary cols ----
+  select(convert_geo_to_coord, timepoint) |>
+    
+    # sum ----
+  group_by(timepoint, convert_geo_to_coord) |>
+    count() |>
+    ungroup() 
+  
+  ##~~~~~~~~~~~~~~~~~~
+  ##  ~ pre-MEDS  ----
+  ##~~~~~~~~~~~~~~~~~~
+  
+  #.........separate pre-MEDS (to add 0s for missing cats).........
+  pre_meds <- df |> 
+    filter(timepoint == "Pre-MEDS") |> 
+    drop_na() |> 
+    mutate(total_respondents = sum(n),
+           percentage = round((n/total_respondents)*100, 1),
+           perc_label = paste0(percentage, "%")) |>
+    mutate(xvar = convert_geo_to_coord) |> 
+    mutate(perc_label_long = paste0(perc_label, "\n(", n, "/", total_respondents, " respondents)"))
+  
+  ##~~~~~~~~~~~~~~~~~~~
+  ##  ~ post-MEDS  ----
+  ##~~~~~~~~~~~~~~~~~~~
+  
+  #........separate post-MEDS (to add 0s for missing cats).........
+  post_meds <- df |> 
+    filter(timepoint == "Post-MEDS") |> 
+    drop_na() |> 
+    mutate(total_respondents = sum(n),
+           percentage = round((n/total_respondents)*100, 1),
+           perc_label = paste0(percentage, "%")) |>
+    mutate(xvar = convert_geo_to_coord) |> 
+    mutate(perc_label_long = paste0(perc_label, "\n(", n, "/", total_respondents, " respondents)"))
+  
+  #~~~~~~~~~~~~~~~~~~~~~~~
+  ##  ~ recombine dfs  ----
+  ##~~~~~~~~~~~~~~~~~~~~~~~
+  
+  all_q23b_data <- rbind(pre_meds, post_meds) |> 
+    filter(convert_geo_to_coord == "3D to 2D") 
+  
+  return(all_q23b_data)
+  
+}
+
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-##                           plot Question 23b data                         ----
+##                                                                            --
+##-------------------------- PLOT QUESTION 23B DATA-----------------------------
+##                                                                            --
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##  ~ for just one PLO assessment (pre or post)  ----
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 plot_q23b_reproj <- function(data){
   
@@ -236,4 +323,29 @@ plot_q23b_reproj <- function(data){
   
 }
 
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##  ~ for both pre & post assessments  ----
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+plot_q23b_reproj_bothPP <- function(data){
+  
+  ggplot(data, aes(x = timepoint, y = percentage)) +
+    geom_col(aes(fill = timepoint)) +
+    geom_text(aes(label = perc_label_long), 
+              position = position_stack(vjust = 0.5), 
+              size = 3, color = "white", family = "nunito") +
+    labs(y = "% of respondents who\nanswered correctly",
+         title = "Converting from a geographic to projected coordinate system\n reprojects data from ___ (fill in the blank)",
+         subtitle = "Correct answer: 3D to 2D",
+         caption = "Question 23b") +
+    scale_fill_manual(values = meds_pal) +
+    scale_y_continuous(labels = scales::label_percent(scale = 1),
+                       limits = c(0, 100)) +
+    meds_theme() +
+    theme(
+      legend.position = "none",
+      axis.title.x = element_blank(),
+      plot.subtitle = element_text(face = "bold")
+    )
+  
+}

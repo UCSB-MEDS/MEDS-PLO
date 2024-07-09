@@ -711,12 +711,10 @@ plot_rank_bothPP(data = q23a_comfort_map_proj_data,
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q23b_reproj_data <- clean_q23b_reproj(meds2024_before_clean)
+q23b_reproj_data <- clean_q23b_reproj_bothPP(both_timepoints_clean)
 
 # plot ----
-pal <- c("3D to 2D" = "#7ECD7A", "Imprecise locations to precise locations" = "#047C91", 
-         "Meters to latitude/longitude" = "#047C91", "I'm not sure" = "#047C91", "No response" = "#047C91")
-plot_q23b_reproj(q23b_reproj_data)
+plot_q23b_reproj_bothPP(q23b_reproj_data)
 ```
 
 ```{r}
@@ -741,12 +739,10 @@ plot_rank_bothPP(data = q24a_familiarity_rs_data,
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q24b_veg_wave_data <- clean_q24b_veg_wave(meds2024_before_clean)
+q24b_veg_wave_data <- clean_q24b_veg_wave_bothPP(both_timepoints_clean)
 
 # plot ----
-pal <- c("green" = "#7ECD7A", "red" = "#047C91", "blue" = "#047C91", "blue and thermal" = "#047C91",
-         "I'm not sure" = "#047C91", "No response" = "#047C91")
-plot_q24b_veg_wave(q24b_veg_wave_data)
+plot_q24b_veg_wave_bothPP(q24b_veg_wave_data)
 ```
 
 ## **Part 9: Machine Learning**

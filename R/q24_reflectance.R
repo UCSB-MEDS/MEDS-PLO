@@ -1,6 +1,9 @@
-##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-##                            clean Question 24a data                         ----
-##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##                                                                            --
+##------------------------- CLEAN QUESTION 24A DATA-----------------------------
+##                                                                            --
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ##  ~ for just one PLO assessment (pre or post)  ----
@@ -174,7 +177,9 @@ clean_q24a_familiarity_rs_bothPP <- function(PLO_data_clean){
 }
 
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-##                           plot Question 24a data                         ----
+##                                                                            --
+##-------------------------- PLOT QUESTION 24A DATA-----------------------------
+##                                                                            --
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -200,9 +205,15 @@ plot_q24a_familiarity_rs <- function(data){
 
 # see `part4_plot_rank.R`
 
-##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-##                            clean Question 24b data                         ----
-##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##                                                                            --
+##------------------------- CLEAN QUESTION 24B DATA-----------------------------
+##                                                                            --
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##  ~ for just one PLO assessment (pre or post)  ----
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 clean_q24b_veg_wave <- function(PLO_data_clean){
   
@@ -225,9 +236,71 @@ clean_q24b_veg_wave <- function(PLO_data_clean){
   
 }
 
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##  ~ for both pre & post assessments  ----
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+clean_q24b_veg_wave_bothPP <- function(PLO_data_clean){
+  
+  #........................initial wrangling.......................
+  df <- PLO_data_clean |> 
+    
+    # select necessary cols ----
+  select(veg_wavelength, timepoint) |>
+    
+    # sum ----
+  group_by(timepoint, veg_wavelength) |>
+    count() |>
+    ungroup() 
+  
+  ##~~~~~~~~~~~~~~~~~~
+  ##  ~ pre-MEDS  ----
+  ##~~~~~~~~~~~~~~~~~~
+  
+  #.........separate pre-MEDS (to add 0s for missing cats).........
+  pre_meds <- df |> 
+    filter(timepoint == "Pre-MEDS") |> 
+    drop_na() |> 
+    mutate(total_respondents = sum(n),
+           percentage = round((n/total_respondents)*100, 1),
+           perc_label = paste0(percentage, "%")) |>
+    mutate(xvar = veg_wavelength) |> 
+    mutate(perc_label_long = paste0(perc_label, "\n(", n, "/", total_respondents, " respondents)"))
+  
+  ##~~~~~~~~~~~~~~~~~~~
+  ##  ~ post-MEDS  ----
+  ##~~~~~~~~~~~~~~~~~~~
+  
+  #........separate post-MEDS (to add 0s for missing cats).........
+  post_meds <- df |> 
+    filter(timepoint == "Post-MEDS") |> 
+    drop_na() |> 
+    mutate(total_respondents = sum(n),
+           percentage = round((n/total_respondents)*100, 1),
+           perc_label = paste0(percentage, "%")) |>
+    mutate(xvar = veg_wavelength) |> 
+    mutate(perc_label_long = paste0(perc_label, "\n(", n, "/", total_respondents, " respondents)"))
+  
+  #~~~~~~~~~~~~~~~~~~~~~~~
+  ##  ~ recombine dfs  ----
+  ##~~~~~~~~~~~~~~~~~~~~~~~
+  
+  all_q24b_data <- rbind(pre_meds, post_meds) |> 
+    filter(veg_wavelength == "green") 
+  
+  return(all_q24b_data)
+  
+}
+
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-##                           plot Question 24b data                         ----
+##                                                                            --
+##-------------------------- PLOT QUESTION 24B DATA-----------------------------
+##                                                                            --
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##  ~ for just one PLO assessment (pre or post)  ----
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 plot_q24b_veg_wave <- function(data){
   
@@ -242,3 +315,29 @@ plot_q24b_veg_wave <- function(data){
   
 }
 
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##  ~ for both pre & post assessments  ----
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+plot_q24b_veg_wave_bothPP <- function(data){
+  
+  ggplot(data, aes(x = timepoint, y = percentage)) +
+    geom_col(aes(fill = timepoint)) +
+    geom_text(aes(label = perc_label_long), 
+              position = position_stack(vjust = 0.5), 
+              size = 3, color = "white", family = "nunito") +
+    labs(y = "% of respondents who\nanswered correctly",
+         title = "Of the following wavelengths, which one does vegetation reflect the\nmost?",
+         subtitle = "Correct answer: green",
+         caption = "Question 24b") +
+    scale_fill_manual(values = meds_pal) +
+    scale_y_continuous(labels = scales::label_percent(scale = 1),
+                       limits = c(0, 100)) +
+    meds_theme() +
+    theme(
+      legend.position = "none",
+      axis.title.x = element_blank(),
+      plot.subtitle = element_text(face = "bold")
+    )
+  
+}
