@@ -248,7 +248,7 @@ clean_q20b_sa_bothPP <- function(PLO_data_clean){
   #.........separate pre-MEDS (to add 0s for missing cats).........
   pre_meds <- df |> 
     filter(timepoint == "Pre-MEDS") |> 
-    drop_na() |> 
+    # drop_na() |> # include this if you want % calculation to be out of only students who advanced to this question
     mutate(total_respondents = sum(n),
            percentage = round((n/total_respondents)*100, 1),
            perc_label = paste0(percentage, "%")) |>
@@ -262,7 +262,7 @@ clean_q20b_sa_bothPP <- function(PLO_data_clean){
   #........separate post-MEDS (to add 0s for missing cats).........
   post_meds <- df |> 
     filter(timepoint == "Post-MEDS") |> 
-    drop_na() |> 
+    # drop_na() |> # include this if you want % calculation to be out of only students who advanced to this question
     mutate(total_respondents = sum(n),
            percentage = round((n/total_respondents)*100, 1),
            perc_label = paste0(percentage, "%")) |>
@@ -372,10 +372,10 @@ clean_q20c_param_int_bothPP <- function(PLO_data_clean){
   df <- PLO_data_clean |> 
     
     # select necessary cols ----
-  select(param_interactions, timepoint) |>
+    select(param_interactions, timepoint) |>
     
     # sum ----
-  group_by(timepoint, param_interactions) |>
+    group_by(timepoint, param_interactions) |>
     count() |>
     ungroup() 
   
@@ -386,12 +386,12 @@ clean_q20c_param_int_bothPP <- function(PLO_data_clean){
   #.........separate pre-MEDS (to add 0s for missing cats).........
   pre_meds <- df |> 
     filter(timepoint == "Pre-MEDS") |> 
-    drop_na() |> 
+    # drop_na() |> # include this if you want % calculation to be out of only students who advanced to this question
     mutate(total_respondents = sum(n),
            percentage = round((n/total_respondents)*100, 1),
            perc_label = paste0(percentage, "%")) |>
     mutate(xvar = param_interactions) |> 
-    mutate(perc_label_long = paste0(perc_label, "\n(", n, "/", total_respondents, " respondents)"))
+    mutate(perc_label_long = paste0(perc_label, " (", n, "/", total_respondents, " respondents)"))
   
   ##~~~~~~~~~~~~~~~~~~~
   ##  ~ post-MEDS  ----
@@ -400,7 +400,7 @@ clean_q20c_param_int_bothPP <- function(PLO_data_clean){
   #........separate post-MEDS (to add 0s for missing cats).........
   post_meds <- df |> 
     filter(timepoint == "Post-MEDS") |> 
-    drop_na() |> 
+    # drop_na() |> # include this if you want % calculation to be out of only students who advanced to this question
     mutate(total_respondents = sum(n),
            percentage = round((n/total_respondents)*100, 1),
            perc_label = paste0(percentage, "%")) |>

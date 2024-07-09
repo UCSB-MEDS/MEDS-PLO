@@ -295,18 +295,18 @@ clean_q21b_rep_spatial_bothPP <- function(PLO_data_clean){
   } 
   
   #....total respondents that continued onto answer question 18b...
-  total_pre_resp <- meds2024_before_clean |> 
-    select(rep_spatial_data) |>
-    group_by(rep_spatial_data) |>
-    filter(rep_spatial_data != "1 (never heard of it)") |>
-    count() |>
-    ungroup() |>
-    summarize(n = sum(n)) |>
-    pull()
+  # total_pre_resp <- meds2024_before_clean |> 
+  #   select(rep_spatial_data) |>
+  #   group_by(rep_spatial_data) |>
+  #   filter(rep_spatial_data != "1 (never heard of it)") |>
+  #   count() |>
+  #   ungroup() |>
+  #   summarize(n = sum(n)) |>
+  #   pull()
   
   #.................calculate pre-MEDS percentages.................
   pre_meds <- pre_meds |> 
-    mutate(total_respondents = total_pre_resp,
+    mutate(total_respondents = pre_meds_num_respondents, # variable from index.qmd
            percentage = round((n/total_respondents)*100, 1),
            perc_label = paste0(percentage, "%")) |>
     mutate(xvar = rep_spatial_data)
@@ -343,19 +343,19 @@ clean_q21b_rep_spatial_bothPP <- function(PLO_data_clean){
     
   } 
   
-  #....total respondents that continued onto answer question 18b...
-  total_post_resp <- meds2024_after_clean |>
-    select(rep_spatial_data) |>
-    group_by(rep_spatial_data) |>
-    filter(rep_spatial_data != "1 (never heard of it)") |>
-    count() |>
-    ungroup() |>
-    summarize(n = sum(n)) |>
-    pull()
+  # #....total respondents that continued onto answer question 18b...
+  # total_post_resp <- meds2024_after_clean |>
+  #   select(rep_spatial_data) |>
+  #   group_by(rep_spatial_data) |>
+  #   filter(rep_spatial_data != "1 (never heard of it)") |>
+  #   count() |>
+  #   ungroup() |>
+  #   summarize(n = sum(n)) |>
+  #   pull()
   
   #................calculate post-MEDS percentages.................
   post_meds <- post_meds |> 
-    mutate(total_respondents = total_post_resp,
+    mutate(total_respondents = post_meds_num_respondents, # variable from `index.qmd`
            percentage = round((n/total_respondents)*100, 1),
            perc_label = paste0(percentage, "%")) |>
     mutate(xvar = rep_spatial_data)
@@ -499,8 +499,9 @@ clean_q21b_FULLY_CORRECT_bothPP <- function(PLO_data_clean){
     filter(timepoint == "Pre-MEDS") |> 
     group_by(correctness) |> 
     count() |> 
+    ungroup() |> 
     mutate(timepoint = rep("Pre-MEDS")) |> 
-    mutate(total_respondents = total_pre_resp,
+    mutate(total_respondents = sum(n), #total_pre_resp,
            percentage = round((n/total_respondents)*100, 1),
            perc_label = paste0(percentage, "%"))
   
@@ -522,8 +523,9 @@ clean_q21b_FULLY_CORRECT_bothPP <- function(PLO_data_clean){
     filter(timepoint == "Post-MEDS") |> 
     group_by(correctness) |> 
     count() |> 
+    ungroup() |> 
     mutate(timepoint = rep("Post-MEDS")) |> 
-    mutate(total_respondents = total_post_resp,
+    mutate(total_respondents = sum(n), #total_post_resp,
            percentage = round((n/total_respondents)*100, 1),
            perc_label = paste0(percentage, "%"))
   
@@ -635,7 +637,7 @@ clean_q21c_vec_ras_bothPP <- function(PLO_data_clean){
   #.........separate pre-MEDS (to add 0s for missing cats).........
   pre_meds <- df |> 
     filter(timepoint == "Pre-MEDS") |> 
-    drop_na() |> 
+    # drop_na() |> # include this if you want % calculation to be out of only students who advanced to this question
     mutate(total_respondents = sum(n),
            percentage = round((n/total_respondents)*100, 1),
            perc_label = paste0(percentage, "%")) |>
@@ -649,7 +651,7 @@ clean_q21c_vec_ras_bothPP <- function(PLO_data_clean){
   #........separate post-MEDS (to add 0s for missing cats).........
   post_meds <- df |> 
     filter(timepoint == "Post-MEDS") |> 
-    drop_na() |> 
+    # drop_na() |> # include this if you want % calculation to be out of only students who advanced to this question
     mutate(total_respondents = sum(n),
            percentage = round((n/total_respondents)*100, 1),
            perc_label = paste0(percentage, "%")) |>

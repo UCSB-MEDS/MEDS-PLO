@@ -287,19 +287,19 @@ clean_q18b_prob_dist_terms_bothPP <- function(PLO_data_clean){
     
   } 
   
-  #....total respondents that continued onto answer question 18b...
-  total_pre_resp <- meds2024_before_clean |> 
-    select(prob_dist) |>
-    group_by(prob_dist) |>
-    filter(prob_dist != "1 (never heard of it)") |>
-    count() |>
-    ungroup() |>
-    summarize(n = sum(n)) |>
-    pull()
+  # #....total respondents that continued onto answer question 18b...
+  # total_pre_resp <- meds2024_before_clean |> 
+  #   select(prob_dist) |>
+  #   group_by(prob_dist) |>
+  #   # filter(prob_dist != "1 (never heard of it)") |> # include this if you want % calculation to be out of only students who advanced to this question
+  #   count() |>
+  #   ungroup() |>
+  #   summarize(n = sum(n)) |>
+  #   pull()
   
   #.................calculate pre-MEDS percentages.................
   pre_meds <- pre_meds |> 
-    mutate(total_respondents = total_pre_resp,
+    mutate(total_respondents = pre_meds_num_respondents,
            percentage = round((n/total_respondents)*100, 1),
            perc_label = paste0(percentage, "%")) |>
     mutate(xvar = prob_dist_terms)
@@ -336,19 +336,19 @@ clean_q18b_prob_dist_terms_bothPP <- function(PLO_data_clean){
     
   } 
   
-  #....total respondents that continued onto answer question 18b...
-  total_post_resp <- meds2024_after_clean |>
-    select(prob_dist) |>
-    group_by(prob_dist) |>
-    filter(prob_dist != "1 (never heard of it)") |>
-    count() |>
-    ungroup() |>
-    summarize(n = sum(n)) |>
-    pull()
+  # #....total respondents that continued onto answer question 18b...
+  # total_post_resp <- meds2024_after_clean |>
+  #   select(prob_dist) |>
+  #   group_by(prob_dist) |>
+  #   # filter(prob_dist != "1 (never heard of it)") |> # include this if you want % calculation to be out of only students who advanced to this question
+  #   count() |>
+  #   ungroup() |>
+  #   summarize(n = sum(n)) |>
+  #   pull()
   
   #................calculate post-MEDS percentages.................
   post_meds <- post_meds |> 
-    mutate(total_respondents = total_post_resp,
+    mutate(total_respondents = post_meds_num_respondents,
            percentage = round((n/total_respondents)*100, 1),
            perc_label = paste0(percentage, "%")) |>
     mutate(xvar = prob_dist_terms)
@@ -471,10 +471,10 @@ clean_q18b_FULLY_CORRECT_bothPP <- function(PLO_data_clean){
   df <- PLO_data_clean |> 
     
     # select necessary cols ----
-  select(prob_dist_terms, timepoint) |> 
+    select(prob_dist_terms, timepoint) |> 
     
     # sum ----
-  group_by(timepoint, prob_dist_terms) |>
+    group_by(timepoint, prob_dist_terms) |>
     
     mutate(correctness = ifelse(prob_dist_terms == "normal,uniform,bimodal,symmetric", 
                                 yes = "yes",
@@ -488,7 +488,7 @@ clean_q18b_FULLY_CORRECT_bothPP <- function(PLO_data_clean){
   total_pre_resp <- meds2024_before_clean |> 
     select(prob_dist) |>
     group_by(prob_dist) |>
-    filter(prob_dist != "1 (never heard of it)") |>
+    # filter(prob_dist != "1 (never heard of it)") |> # include this if you want % calculation to be out of only students who advanced to this question
     count() |>
     ungroup() |>
     summarize(n = sum(n)) |>
@@ -503,7 +503,8 @@ clean_q18b_FULLY_CORRECT_bothPP <- function(PLO_data_clean){
     mutate(timepoint = rep("Pre-MEDS")) |> 
     mutate(total_respondents = total_pre_resp,
            percentage = round((n/total_respondents)*100, 1),
-           perc_label = paste0(percentage, "%"))
+           perc_label = paste0(percentage, "%")) |> 
+    mutate(perc_label_long = paste0(perc_label, " (", n, "/", total_respondents, " respondents)"))
     
   ##~~~~~~~~~~~~~~~~~~~
   ##  ~ post-MEDS  ----
@@ -513,7 +514,7 @@ clean_q18b_FULLY_CORRECT_bothPP <- function(PLO_data_clean){
   total_post_resp <- meds2024_after_clean |> 
     select(prob_dist) |>
     group_by(prob_dist) |>
-    filter(prob_dist != "1 (never heard of it)") |>
+    # filter(prob_dist != "1 (never heard of it)") |> # include this if you want % calculation to be out of only students who advanced to this question
     count() |>
     ungroup() |>
     summarize(n = sum(n)) |>
@@ -528,7 +529,8 @@ clean_q18b_FULLY_CORRECT_bothPP <- function(PLO_data_clean){
     mutate(timepoint = rep("Post-MEDS")) |> 
     mutate(total_respondents = total_post_resp,
            percentage = round((n/total_respondents)*100, 1),
-           perc_label = paste0(percentage, "%"))
+           perc_label = paste0(percentage, "%")) |> 
+    mutate(perc_label_long = paste0(perc_label, "\n(", n, "/", total_respondents, " respondents)"))
   
   ##~~~~~~~~~~~~~~~~~~~~~~~
   ##  ~ recombine dfs  ----
@@ -536,8 +538,7 @@ clean_q18b_FULLY_CORRECT_bothPP <- function(PLO_data_clean){
   
   all_q18b_fully_correct <- rbind(pre_meds, post_meds) |> 
     filter(correctness == "yes") |> 
-    mutate(timepoint = fct_relevel(timepoint, c("Pre-MEDS", "Post-MEDS"))) |> 
-    mutate(perc_label_long = paste0(perc_label, "\n(", n, "/", total_respondents, " respondents)"))
+    mutate(timepoint = fct_relevel(timepoint, c("Pre-MEDS", "Post-MEDS"))) 
   
   return(all_q18b_fully_correct)
   

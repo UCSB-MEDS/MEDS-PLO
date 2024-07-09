@@ -262,7 +262,7 @@ clean_q22b_rs_sun_bothPP <- function(PLO_data_clean){
   #.........separate pre-MEDS (to add 0s for missing cats).........
   pre_meds <- df |> 
     filter(timepoint == "Pre-MEDS") |> 
-    drop_na() |> 
+    # drop_na() |> # include this if you want % calculation to be out of only students who advanced to this question
     mutate(total_respondents = sum(n),
            percentage = round((n/total_respondents)*100, 1),
            perc_label = paste0(percentage, "%")) |>
@@ -276,7 +276,7 @@ clean_q22b_rs_sun_bothPP <- function(PLO_data_clean){
   #........separate post-MEDS (to add 0s for missing cats).........
   post_meds <- df |> 
     filter(timepoint == "Post-MEDS") |> 
-    drop_na() |> 
+    # drop_na() |> # include this if you want % calculation to be out of only students who advanced to this question
     mutate(total_respondents = sum(n),
            percentage = round((n/total_respondents)*100, 1),
            perc_label = paste0(percentage, "%")) |>
