@@ -1,19 +1,9 @@
-# get_num_respondents <- function(df, var){
-#  
-#    num_respondents <- df |> 
-#       select(var) |>
-#       count() |>
-#       pull()
-#    
-#    return(num_respondents)
-#   
-# }
 
 source("R/clean_PLO_data.R")
 source("R/meds_theme.R")
 source("R/q1_os.R")
 source("R/q2_store_data.R")
-source("R/part2_plot_freq_use.R")
+source("R/plot_freq_use.R")
 source("R/q3_gui.R")
 source("R/q4_prog_lang.R")
 source("R/q5_databases.R")
@@ -43,3 +33,4 @@ source("R/q27_data_justice.R")
 source("R/q28_bias.R")
 source("R/q29_30_data_viz.R")
 source("R/q31_lang.R")
+source("R/plot_correct_answer_comparison.R")

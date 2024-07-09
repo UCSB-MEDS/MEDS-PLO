@@ -24,10 +24,10 @@ clean_how_often <- function(PLO_data_clean, var){
   df <- PLO_data_clean |> 
     
     # select necessary cols ----
-  select({{var}}, timepoint) |> 
+  select({{ var }}, timepoint) |> 
     
     # sum ----
-  group_by(timepoint, {{var}}) |> 
+  group_by(timepoint, {{ var }}) |> 
     count() |> 
     ungroup() 
   
@@ -38,6 +38,8 @@ clean_how_often <- function(PLO_data_clean, var){
   #.........separate pre-MEDS (to add 0s for missing cats).........
   pre_meds <- df |> 
     filter(timepoint == "Pre-MEDS") 
+  
+  message("----- filtered pre_meds from original df -----")
   
   #................add 0s where missing (pre-MEDS).................
   for (i in 1:length(options)){
@@ -54,7 +56,7 @@ clean_how_often <- function(PLO_data_clean, var){
     } else {
       
       message(cat_name, " does not exist. Adding now.")
-      new_row <- data.frame(timepoint = "Pre-MEDS", {{var}} := cat_name, n = 0)
+      new_row <- data.frame(timepoint = "Pre-MEDS", {{ var }} := cat_name, n = 0)
       pre_meds <- rbind(pre_meds, new_row)
       
     }
@@ -65,67 +67,70 @@ clean_how_often <- function(PLO_data_clean, var){
   
   #.................calculate pre-MEDS percentages.................
   pre_meds <- pre_meds |> 
-    mutate({{var}} := fct_relevel({{var}},
-                                             c("Never", 
-                                               "Less than once per year", 
-                                               "Several times per year",
-                                               "Monthly", "Weekly", "Daily"))) |>
     mutate(total_respondents = sum(n),
            percentage = round((n/total_respondents)*100, 1),
            perc_label = paste0(percentage, "%")) |>
-    mutate(xvar = {{var}})
+    mutate(xvar = {{ var }})
+  
+  message("----- added pre_meds percentages -----")
   
   ##~~~~~~~~~~~~~~~~~~~
   ##  ~ post-MEDS  ----
   ##~~~~~~~~~~~~~~~~~~~
   
   #........separate post-MEDS (to add 0s for missing cats).........
-  post_meds <- df |> 
-    filter(timepoint == "Post-MEDS") 
+  post_meds <- df |>
+    filter(timepoint == "Post-MEDS")
   
+  message(" ----- filtered post_meds from original data -----")
+
   #................add 0s where missing (post-MEDS)................
   for (i in 1:length(options)){
-    
+
     cat_name <- options[i]
-    
+    message("----- on category: ", cat_name, " -----")
+
     # if category already exists in df, skip to next one ----
     if (cat_name %in% pull(post_meds[,2])) {
-      
+
       message(cat_name, " already exists. Moving to next option.")
       post_meds <- post_meds
-      
+
       # if category doesn't already exist, add it with n = 0 so that it still shows up on plot ----
     } else {
-      
+
       message(cat_name, " does not exist. Adding now.")
-      new_row <- data.frame(timepoint = "Post-MEDS", {{var}} := cat_name, n = 0)
+      new_row <- data.frame(timepoint = "Post-MEDS", {{ var }} := cat_name, n = 0)
       post_meds <- rbind(post_meds, new_row)
-      
+
     }
-    
+
     message("----------------------")
-    
-  } 
-  
+
+  }
+
   #................calculate post-MEDS percentages.................
-  post_meds <- post_meds |> 
-    mutate({{var}} := fct_relevel({{var}},
-                                             c("Never", 
-                                               "Less than once per year", 
-                                               "Several times per year",
-                                               "Monthly", "Weekly", "Daily"))) |>
+  post_meds <- post_meds |>
     mutate(total_respondents = sum(n),
            percentage = round((n/total_respondents)*100, 1),
            perc_label = paste0(percentage, "%")) |>
-    mutate(xvar = {{var}})
-  
+    mutate(xvar = {{ var }})
+
   ##~~~~~~~~~~~~~~~~~~~~~~~
   ##  ~ recombine dfs  ----
   ##~~~~~~~~~~~~~~~~~~~~~~~
-  
-  all_data <- rbind(pre_meds, post_meds)
-  
+
+  message("----- begin combine dfs -----")
+  all_data <- rbind(pre_meds, post_meds) |>
+    mutate({{ var }} := fct_relevel({{ var }},
+                                    c("Never",
+                                      "Less than once per year",
+                                      "Several times per year",
+                                      "Monthly", "Weekly", "Daily")))
+
+  message("----- return df -----")
   return(all_data)
+  # return(pre_meds)
   
 }  
 

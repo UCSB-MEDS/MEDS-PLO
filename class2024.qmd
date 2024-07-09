@@ -359,7 +359,10 @@ one_respondent <- meds2024_after_clean |>
 q16a_median_data <- clean_q16a_median_bothPP(both_timepoints_clean)
 
 # plot ----
-plot_q16a_median_bothPP(q16a_median_data)
+plot_correct_answer_comparison(data = q16a_median_data,
+                               title = "Calculate the median of this sample distribution: 5, 17, 0, 14, 14",
+                               subtitle = "Correct answer: 14",
+                               caption = "Question 16a (free response)")
 ```
 
 ```{r}
@@ -371,7 +374,10 @@ plot_q16a_median_bothPP(q16a_median_data)
 q16b_mode_data <- clean_q16b_mode_bothPP(both_timepoints_clean)
 
 # plot ----
-plot_q16b_mode_bothPP(q16b_mode_data)
+plot_correct_answer_comparison(data = q16b_mode_data,
+                               title = "Calculate the mode of this sample distribution: 5, 17, 0, 14, 14",
+                               subtitle = "Correct answer: 14",
+                               caption = "Question 16b (free response)")
 ```
 
 ```{r}
@@ -392,13 +398,6 @@ plot_rank_bothPP(data = q17a_familiarity_lr_data,
 
 {{< include /sections/all_classes/q17b-screenshot.qmd >}}
 
-Below is a chunk of code showing a simple linear regression relating the number of pieces of microplastics to the number of days per year with rainfall.
-
-```{r}
-#| fig-align: center
-knitr::include_graphics("images/17-microplastics-lm.png")
-```
-
 ```{r}
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ##  ~ Question 17b: Microplastics  ----
@@ -408,7 +407,10 @@ knitr::include_graphics("images/17-microplastics-lm.png")
 q17b_microplastics_data <- clean_q17b_microplastics_bothPP(both_timepoints_clean)
 
 # plot ----
-plot_q17b_microplastics_bothPP(q17b_microplastics_data) 
+plot_correct_answer_comparison(data = q17b_microplastics_data,
+                               title = "How many pieces of microplastic do we predict will be present\nin a location with 45 days of rain per year (round your answer up\nto the nearest integer)?",
+                               subtitle = "Correct answer: 47",
+                               caption = "Question 17b (free response)")
 ```
 
 ::: {.callout-note collapse=true}
@@ -496,7 +498,6 @@ plot_q18b_prob_dist_terms_bothPP(q18b_prob_dist_terms_data)
 ## The percentage of respondents who provided a *fully correct* answer to Queston 18b increased from Pre- to Post-MEDS PLO assessments
 
 Only students who chose 2 or greater in Question 18a were directed to answer Question 18b. A fully correct answer means choosing exactly the following options: **normal, uniform, bimodal, symmetrical**.  
-
 ```{r}
 # wrangle (FULLY CORRECT) ----
 q18b_prob_dist_FULLY_CORRECT_data <- clean_q18b_FULLY_CORRECT_bothPP(both_timepoints_clean)
@@ -551,7 +552,11 @@ plot_rank_bothPP(data = q19b_writing_functions_data,
 q19c_fxn_output_data <- clean_q19c_fxn_output_bothPP(both_timepoints_clean)
 
 # plot ----
-plot_q19c_fxn_output_bothPP(q19c_fxn_output_data)
+# plot_q19c_fxn_output_bothPP(q19c_fxn_output_data)
+plot_correct_answer_comparison(data = q19c_fxn_output_data,
+                               title = "What is the value of power_turbine_A?",
+                               subtitle = "Correct answer: 10",
+                               caption = "Question 19c")
 ```
 
 ## **Part 7: Environmental Modeling**

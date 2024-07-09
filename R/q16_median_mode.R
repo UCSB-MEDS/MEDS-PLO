@@ -56,7 +56,8 @@ clean_q16a_median_bothPP <- function(PLO_data_clean){
     filter(timepoint == "Pre-MEDS") |> 
     mutate(total_respondents = sum(n),
            percentage = round((n/total_respondents)*100, 1),
-           perc_label = paste0(percentage, "%")) |>
+           perc_label = paste0(percentage, "%"),
+           perc_label_long = paste0(perc_label, "\n(", n, "/", total_respondents, " respondents)")) |>
     mutate(xvar = median)
   
   ##~~~~~~~~~~~~~~~~~~~
@@ -68,7 +69,8 @@ clean_q16a_median_bothPP <- function(PLO_data_clean){
     filter(timepoint == "Post-MEDS") |> 
     mutate(total_respondents = sum(n),
            percentage = round((n/total_respondents)*100, 1),
-           perc_label = paste0(percentage, "%")) |>
+           perc_label = paste0(percentage, "%"),
+           perc_label_long = paste0(perc_label, "\n(", n, "/", total_respondents, " respondents)")) |>
     mutate(xvar = median)
   
   ##~~~~~~~~~~~~~~~~~~~~~~~
@@ -114,27 +116,29 @@ plot_q16a_median <- function(data){
 ##  ~ for both pre & post assessments  ----
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-plot_q16a_median_bothPP <- function(data){
-  
-  ggplot(data, aes(x = timepoint, y = percentage)) +
-    geom_col(aes(fill = timepoint)) +
-    geom_text(aes(label = perc_label), 
-              position = position_stack(vjust = 0.5), 
-              size = 3, color = "white", family = "nunito") +
-    labs(y = "% of respondents who\nanswered correctly",
-         title = "Calculate the median of this sample distribution: 5, 17, 0, 14, 14",
-         subtitle = "Correct answer: 14",
-         caption = "Question 16a (free response)") +
-    scale_fill_manual(values = meds_pal) +
-    scale_y_continuous(labels = scales::label_percent(scale = 1)) +
-    meds_theme() +
-    theme(
-      legend.position = "none",
-      axis.title.x = element_blank(),
-      plot.subtitle = element_text(face = "bold")
-    )
-  
-}
+# NOW USE `plot_correct_answer_comparison()`
+
+# plot_q16a_median_bothPP <- function(data){
+#   
+#   ggplot(data, aes(x = timepoint, y = percentage)) +
+#     geom_col(aes(fill = timepoint)) +
+#     geom_text(aes(label = perc_label), 
+#               position = position_stack(vjust = 0.5), 
+#               size = 3, color = "white", family = "nunito") +
+#     labs(y = "% of respondents who\nanswered correctly",
+#          title = "Calculate the median of this sample distribution: 5, 17, 0, 14, 14",
+#          subtitle = "Correct answer: 14",
+#          caption = "Question 16a (free response)") +
+#     scale_fill_manual(values = meds_pal) +
+#     scale_y_continuous(labels = scales::label_percent(scale = 1)) +
+#     meds_theme() +
+#     theme(
+#       legend.position = "none",
+#       axis.title.x = element_blank(),
+#       plot.subtitle = element_text(face = "bold")
+#     )
+#   
+# }
   
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ##                            clean Question 16b data                         ----
@@ -194,7 +198,8 @@ clean_q16b_mode_bothPP <- function(PLO_data_clean){
     filter(timepoint == "Pre-MEDS") |> 
     mutate(total_respondents = sum(n),
            percentage = round((n/total_respondents)*100, 1),
-           perc_label = paste0(percentage, "%")) |>
+           perc_label = paste0(percentage, "%"),
+           perc_label_long = paste0(perc_label, "\n(", n, "/", total_respondents, " respondents)")) |>
     mutate(xvar = mode)
   
   ##~~~~~~~~~~~~~~~~~~~
@@ -206,7 +211,8 @@ clean_q16b_mode_bothPP <- function(PLO_data_clean){
     filter(timepoint == "Post-MEDS") |> 
     mutate(total_respondents = sum(n),
            percentage = round((n/total_respondents)*100, 1),
-           perc_label = paste0(percentage, "%")) |>
+           perc_label = paste0(percentage, "%"),
+           perc_label_long = paste0(perc_label, "\n(", n, "/", total_respondents, " respondents)")) |>
     mutate(xvar = mode)
   
   ##~~~~~~~~~~~~~~~~~~~~~~~
@@ -250,25 +256,25 @@ plot_q16b_mode <- function(data){
 ##  ~ for both pre & post assessments  ----
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-plot_q16b_mode_bothPP <- function(data){
-  
-  ggplot(data, aes(x = timepoint, y = percentage)) +
-    geom_col(aes(fill = timepoint)) +
-    geom_text(aes(label = perc_label), 
-              position = position_stack(vjust = 0.5), 
-              size = 3, color = "white", family = "nunito") +
-    labs(y = "% of respondents who answered correctly",
-         title = "Calculate the mode of this sample distribution: 5, 17, 0, 14, 14",
-         subtitle = "Correct answer: 14",
-         caption = "Question 16b (free response)") +
-    scale_fill_manual(values = meds_pal) +
-    scale_y_continuous(labels = scales::label_percent(scale = 1)) +
-    meds_theme() +
-    theme(
-      legend.position = "none",
-      axis.title.x = element_blank(),
-      plot.subtitle = element_text(face = "bold")
-    )
-  
-}
+# plot_q16b_mode_bothPP <- function(data){
+#   
+#   ggplot(data, aes(x = timepoint, y = percentage)) +
+#     geom_col(aes(fill = timepoint)) +
+#     geom_text(aes(label = perc_label), 
+#               position = position_stack(vjust = 0.5), 
+#               size = 3, color = "white", family = "nunito") +
+#     labs(y = "% of respondents who answered correctly",
+#          title = "Calculate the mode of this sample distribution: 5, 17, 0, 14, 14",
+#          subtitle = "Correct answer: 14",
+#          caption = "Question 16b (free response)") +
+#     scale_fill_manual(values = meds_pal) +
+#     scale_y_continuous(labels = scales::label_percent(scale = 1)) +
+#     meds_theme() +
+#     theme(
+#       legend.position = "none",
+#       axis.title.x = element_blank(),
+#       plot.subtitle = element_text(face = "bold")
+#     )
+#   
+# }
 
