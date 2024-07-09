@@ -468,7 +468,6 @@ clean_q18b_FULLY_CORRECT <- function(PLO_data_clean){
 
 clean_q18b_FULLY_CORRECT_bothPP <- function(PLO_data_clean){
   
-  
   df <- PLO_data_clean |> 
     
     # select necessary cols ----

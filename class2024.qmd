@@ -403,9 +403,6 @@ Below is a chunk of code showing a simple linear regression relating the number 
 knitr::include_graphics("images/17-microplastics-lm.png")
 ```
 
-
-<!-- NOTE TO MAINTAINERS: see `q17_linear_regression.R` for free response cleaning; will need to be modified for each new set of survey data -->
-
 ```{r}
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ##  ~ Question 17b: Microplastics  ----
@@ -421,7 +418,6 @@ plot_q17b_microplastics_bothPP(q17b_microplastics_data)
 ::: {.callout-note collapse=true}
 ## Question 17b raw responses
 Respondents submitted a wide variety of answers -- responses as they were recorded are included in the tables, below:
-<!-- Some respondents recorded their answers in sentence form, while others did not round their answers to the nearest integer. Cleaned responses are shown in the plot, above. Responses as they were recorded are included in the table, below: -->
 
 ```{r}
 
@@ -448,7 +444,6 @@ DT::datatable(q17_microplastics_dt, colnames = c("Free Response Answer to Q17b")
 ```
 
 ```{r}
-
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ##                                  Post-MEDS                               ----
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -498,7 +493,6 @@ plot_rank_bothPP(data = q18a_familiar_prob_dist_data,
 q18b_prob_dist_terms_data <- clean_q18b_prob_dist_terms_bothPP(both_timepoints_clean)
 
 # plot (INDIV RESPONSES) ----
-# pal <- c("normal" = "#7ECD7A", "uniform" = "#7ECD7A", "bimodal" = "#7ECD7A", "symmetric" = "#7ECD7A", "variable" = "#047C91", "unequal" = "#047C91", "NA" = "#047C91") # NA not colored
 plot_q18b_prob_dist_terms_bothPP(q18b_prob_dist_terms_data)
 ```
 
@@ -578,11 +572,7 @@ q20a_run_env_mod_data <- clean_q20a_run_env_mod_bothPP(both_timepoints_clean)
 plot_q20a_run_env_mod_bothPP(q20a_run_env_mod_data)
 ```
 
-::: {.callout-important}
-## TODO: decide what to do with this next callout
-:::
-
-{{< include /sections/class2024/q20a-callout.qmd >}}
+{{< include /sections/class2024/q20a-callout-inline-code.qmd >}}
 
 ```{r}
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -590,11 +580,13 @@ plot_q20a_run_env_mod_bothPP(q20a_run_env_mod_data)
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q20b_sa_data <- clean_q20b_sa(meds2024_before_clean)
+q20b_sa_data <- clean_q20b_sa_bothPP(both_timepoints_clean)
 
 # plot ----
-plot_q20b_sa(q20b_sa_data)
+plot_q20b_sa_bothPP(q20b_sa_data)
 ```
+
+{{< include /sections/class2024/q20b-callout-inline-code.qmd >}}
 
 ```{r}
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -602,12 +594,10 @@ plot_q20b_sa(q20b_sa_data)
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q20c_param_int_data <- clean_q20c_param_int(meds2024_before_clean)
+q20c_param_int_data <- clean_q20c_param_int_bothPP(both_timepoints_clean)
 
 # plot ----
-pal <- c("a global sensitivity analysis" = "#7ECD7A", "a local sensitivity analysis" = "#047C91", 
-         "a first order approximation" = "#047C91", "I'm not sure" = "#047C91", "No response" = "#047C91")
-plot_q20c_param_int(q20c_param_int_data)
+plot_q20c_param_int_bothPP(q20c_param_int_data)
 ```
 
 ## **Part 8: Geospatial Analysis & Remote Sensing**
@@ -629,36 +619,24 @@ plot_rank_bothPP(data = q21a_comfort_spatial_data,
 {{< include /sections/class2024/q21-callout-inline-code.qmd >}}
 
 ```{r}
-#| column: margin
-#| fig-cap: "67.7% of respondents correctly answered question 21b (i.e. chose exactly the following options: raster, vector)"
-
-##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-##  ~ Question 21b: Representing Spatial Data  ----
-##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-# for calculating percentages in wrangling step below ----
-q21b_num_answers <- meds2024_before_clean |> 
-  select(rep_spatial_data) |> 
-  count() |> 
-  pull()
-
-# wrangle (FULLY CORRECT; margin) ----
-q21b_FULLY_CORRECT_data <- clean_q21b_FULLY_CORRECT(meds2024_before_clean)
-
-# plot (FULLY CORRECT; margin) ----
-pal <- c("yes" = "#7ECD7A", "no" = "#047C91", "NA" = "#047C91")
-plot_q21b_FULLY_CORRECT(q21b_FULLY_CORRECT_data)
-
-```
-
-```{r}
 # wrangle (INDIV RESPONSES) ----
-q21b_rep_spatial_data <- clean_q21b_rep_spatial(meds2024_before_clean)
+q21b_rep_spatial_data <- clean_q21b_rep_spatial_bothPP(both_timepoints_clean)
 
 # plot (INDIV RESPONSES) ----
-pal <- c("vector" = "#7ECD7A", "raster" = "#7ECD7A", "tabular" = "#047C91", "relational" = "#047C91", "I'm not sure" = "#047C91", "NA" = "#047C91")
-plot_q21b_rep_spatial(q21b_rep_spatial_data)
+plot_q21b_rep_spatial_bothPP(q21b_rep_spatial_data)
 ```
+
+::: {.callout-note}
+## The percentage of respondents who provided a *fully correct* answer to Question 21b increased from Pre- to Post-MEDS PLO assessments.
+
+```{r}
+# wrangle (FULLY CORRECT) ----
+q21b_FULLY_CORRECT_data <- clean_q21b_FULLY_CORRECT_bothPP(both_timepoints_clean)
+
+# plot (FULLY CORRECT) ----
+plot_q21b_FULLY_CORRECT_bothPP(q21b_FULLY_CORRECT_data)
+```
+:::
 
 ```{r}
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -666,11 +644,10 @@ plot_q21b_rep_spatial(q21b_rep_spatial_data)
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q21c_vec_ras_data <- clean_q21c_vec_ras(meds2024_before_clean)
+q21c_vec_ras_data <- clean_q21c_vec_ras_bothPP(both_timepoints_clean)
 
 # plot ----
-pal <- c("vector" = "#7ECD7A", "raster" = "#047C91", "I'm not sure" = "#047C91")
-plot_q21c_vec_ras(q21c_vec_ras_data)
+plot_q21c_vec_ras_bothPP(q21c_vec_ras_data)
 ```
 
 ```{r}
@@ -700,11 +677,10 @@ plot_rank_bothPP(data = q22a_comfort_rs_data,
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q22b_rs_sun_data <- clean_q22b_rs_sun(meds2024_before_clean)
+q22b_rs_sun_data <- clean_q22b_rs_sun_bothPP(both_timepoints_clean)
 
 # plot ----
-pal <- c("passive" = "#7ECD7A", "active" = "#047C91", "I'm not sure" = "#047C91", "NA" = "#047C91")
-plot_q22b_rs_sun(q22b_rs_sun_data)
+plot_q22b_rs_sun_bothPP(q22b_rs_sun_data)
 ```
 
 ```{r}
