@@ -123,10 +123,6 @@ ggplot(both_timepoints_clean, aes(x = sc0)) +
 
 # **Individual Questions**
 
-<!-- ::: {.callout-note} -->
-<!-- Questions that have a correct answer are color-coded green. -->
-<!-- ::: -->
-
 ## **Part 1: OS and data/document storage**
 
 ```{r Q1-what-OS}
@@ -815,47 +811,37 @@ plot_rank_bothPP(data = q26a_div_data,
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q26b_tvs_data <- clean_q26b_tvs(meds2024_before_clean)
+q26b_tvs_data <- clean_q26b_tvs_bothPP(both_timepoints_clean)
 
 # plot ----
-plot_q26b_tvs(q26b_tvs_data)
+plot_rank_bothPP(data = q26b_tvs_data,
+                           title = "How often have you implemented a train, validation, test split?",
+                           caption = "Question 26b (choosing '1 (never)' skips respondent to question 27)")
 ```
 
 {{< include /sections/class2024/q26b-callout-inline-code.qmd >}}
 
 ```{r}
-#| column: margin
-#| fig-cap: "12.9% of respondents correctly answered question 26c (i.e. chose exactly the following options: My model is likely to perform very well when applied to new data, My test set has data entry errors in it)"
-
-##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-##  ~ Question 26c: Model Performance  ----
-##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-# for calculating percentages in wrangling step below ----
-q26c_num_answers <- meds2024_before_clean |>
-  select(learning_from_model) |>
-  count() |>
-  pull()
-
-# wrangle (FULLY CORRECT) ----
-q26c_FULLY_CORRECT_data <- clean_q26c_FULLY_CORRECT(meds2024_before_clean)
-
-# plot (FULLY CORRECT) ----
-pal <- c("yes" = "#7ECD7A", "no" = "#047C91")
-plot_q26c_FULLY_CORRECT(q26c_FULLY_CORRECT_data)
-```
-
-```{r}
 # wrangle (INDIV RESPONSES) ----
-q26c_mod_perf_data <- clean_q26c_mod_perf(meds2024_before_clean)
+q26c_mod_perf_data <- clean_q26c_mod_perf_bothPP(both_timepoints_clean)
 
 # plot (INDIV RESPONSES) ----
-pal <- c("My model is unlikely to perform well when applied to new data" = "#7ECD7A", 
-         "My model is overfitting the training set" = "#7ECD7A", 
-         "My model is likely to perform very well when applied to new data" = "#047C91",
-         "My test set has data entry errors in it" = "#047C91")
-plot_q26c_mod_perf(q26c_mod_perf_data)
+plot_q26c_mod_perf_bothPP(q26c_mod_perf_data)
 ```
+
+::: {.callout-note}
+## The percentage of respondents who provided a *fully correct* answer to Queston 26c increased from Pre- to Post-MEDS PLO assessments
+
+Only students who chose 2 or greater in Question 26b were directed to answer Question 26c. A fully correct answer means choosing exactly the following options: **My model is overfitting the training set, My model is unlikely to perform well when applied to new data**.  
+
+```{r}
+# wrangle (FULLY CORRECT) ----
+q26c_FULLY_CORRECT_data <- clean_q26c_FULLY_CORRECT_bothPP(both_timepoints_clean)
+
+# plot (FULLY CORRECT) ----
+plot_q26c_FULLY_CORRECT_bothPP(q26c_FULLY_CORRECT_data)
+```
+:::
 
 ## **Part 10: Environmental Justice**
 

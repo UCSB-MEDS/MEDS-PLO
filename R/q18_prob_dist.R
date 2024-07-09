@@ -357,11 +357,11 @@ clean_q18b_prob_dist_terms_bothPP <- function(PLO_data_clean){
   ##  ~ recombine dfs  ----
   ##~~~~~~~~~~~~~~~~~~~~~~~
   
-  all_q18b_prob_dist_terms <- rbind(pre_meds, post_meds) |> 
+  all_q18b_data <- rbind(pre_meds, post_meds) |> 
     mutate(xvar = fct_relevel(xvar,
                               c("unequal", "variable", "symmetric", "uniform", "bimodal", "normal"))) 
   
-  return(all_q18b_prob_dist_terms)
+  return(all_q18b_data)
   
 }
 
