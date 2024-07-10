@@ -325,31 +325,10 @@ plot_q17b_microplastics <- function(data){
   
 }
 
-##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-##  ~ for both pre & post assessments  ----
-##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##  ~ compare pre & post assessments  ----
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-plot_q17b_microplastics_bothPP <- function(data){
-  
-  ggplot(data, aes(x = timepoint, y = percentage)) +
-    geom_col(aes(fill = timepoint)) +
-    geom_text(aes(label = perc_label_long), 
-              position = position_stack(vjust = 0.5), 
-              size = 3, color = "white", family = "nunito") +
-    labs(y = "% of respondents who\nanswered correctly",
-         title = "How many pieces of microplastic do we predict will be present\nin a location with 45 days of rain per year (round your answer up\nto the nearest integer)?",
-         subtitle = "Correct answer: 47",
-         caption = "Question 17b (free response)") +
-    scale_fill_manual(values = meds_pal) +
-    scale_y_continuous(labels = scales::label_percent(scale = 1),
-                       limits = c(0, 100)) +
-    meds_theme() +
-    theme(
-      legend.position = "none",
-      axis.title.x = element_blank(),
-      plot.subtitle = element_text(face = "bold")
-    )
-  
-}
+# see `plot_correct_answer_comparison.R`
 
 

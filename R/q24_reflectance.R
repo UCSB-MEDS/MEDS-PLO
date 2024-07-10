@@ -315,29 +315,8 @@ plot_q24b_veg_wave <- function(data){
   
 }
 
-##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-##  ~ for both pre & post assessments  ----
-##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##  ~ compare pre & post assessments  ----
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-plot_q24b_veg_wave_bothPP <- function(data){
-  
-  ggplot(data, aes(x = timepoint, y = percentage)) +
-    geom_col(aes(fill = timepoint)) +
-    geom_text(aes(label = perc_label_long), 
-              position = position_stack(vjust = 0.5), 
-              size = 3, color = "white", family = "nunito") +
-    labs(y = "% of respondents who\nanswered correctly",
-         title = "Of the following wavelengths, which one does vegetation reflect the\nmost?",
-         subtitle = "Correct answer: green",
-         caption = "Question 24b") +
-    scale_fill_manual(values = meds_pal) +
-    scale_y_continuous(labels = scales::label_percent(scale = 1),
-                       limits = c(0, 100)) +
-    meds_theme() +
-    theme(
-      legend.position = "none",
-      axis.title.x = element_blank(),
-      plot.subtitle = element_text(face = "bold")
-    )
-  
-}
+# see `plot_correct_answer_comparison.R`

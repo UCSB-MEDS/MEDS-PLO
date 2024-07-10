@@ -500,31 +500,10 @@ plot_q19c_fxn_output <- function(data){
 
 }
 
-##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-##  ~ for both pre & post assessments  ----
-##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##  ~ compare pre & post assessments  ----
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-plot_q19c_fxn_output_bothPP <- function(data){
-  
-  ggplot(data, aes(x = timepoint, y = percentage)) +
-    geom_col(aes(fill = timepoint)) +
-    geom_text(aes(label = perc_label_long), 
-              position = position_stack(vjust = 0.5), 
-              size = 3, color = "white", family = "nunito") +
-    labs(y = "% of respondents who\nanswered correctly",
-         title = "What is the value of power_turbine_A?",
-         subtitle = "Correct answer: 10",
-         caption = "Question 19c") +
-    scale_fill_manual(values = meds_pal) +
-    scale_y_continuous(labels = scales::label_percent(scale = 1),
-                       limits = c(0, 100)) +
-    meds_theme() +
-    theme(
-      legend.position = "none",
-      axis.title.x = element_blank(),
-      plot.subtitle = element_text(face = "bold")
-    )
-  
-}
+# see `plot_correct_answer_comparison.R`
 
 

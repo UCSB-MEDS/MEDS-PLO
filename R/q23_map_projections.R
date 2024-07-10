@@ -323,29 +323,8 @@ plot_q23b_reproj <- function(data){
   
 }
 
-##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-##  ~ for both pre & post assessments  ----
-##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##  ~ compare pre & post assessments  ----
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-plot_q23b_reproj_bothPP <- function(data){
-  
-  ggplot(data, aes(x = timepoint, y = percentage)) +
-    geom_col(aes(fill = timepoint)) +
-    geom_text(aes(label = perc_label_long), 
-              position = position_stack(vjust = 0.5), 
-              size = 3, color = "white", family = "nunito") +
-    labs(y = "% of respondents who\nanswered correctly",
-         title = "Converting from a geographic to projected coordinate system\n reprojects data from ___ (fill in the blank)",
-         subtitle = "Correct answer: 3D to 2D",
-         caption = "Question 23b") +
-    scale_fill_manual(values = meds_pal) +
-    scale_y_continuous(labels = scales::label_percent(scale = 1),
-                       limits = c(0, 100)) +
-    meds_theme() +
-    theme(
-      legend.position = "none",
-      axis.title.x = element_blank(),
-      plot.subtitle = element_text(face = "bold")
-    )
-  
-}
+# see `plot_correct_answer_comparison.R`

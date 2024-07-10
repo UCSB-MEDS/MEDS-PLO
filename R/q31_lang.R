@@ -114,7 +114,8 @@ clean_q31_lang_bothPP <- function(PLO_data_clean){
   pre_meds <- pre_meds |> 
     mutate(total_respondents = sum(n),
            percentage = round((n/total_respondents)*100, 1),
-           perc_label = paste0(percentage, "%")) |>
+           perc_label = paste0(percentage, "%"),
+           perc_label_long = paste0(perc_label, "\n(", n, "/", total_respondents, " respondents)")) |>
     mutate(xvar = what_lang_is_this) 
   
   
@@ -154,7 +155,8 @@ clean_q31_lang_bothPP <- function(PLO_data_clean){
   post_meds <- post_meds |> 
     mutate(total_respondents = sum(n),
            percentage = round((n/total_respondents)*100, 1),
-           perc_label = paste0(percentage, "%")) |>
+           perc_label = paste0(percentage, "%"),
+           perc_label_long = paste0(perc_label, "\n(", n, "/", total_respondents, " respondents)")) |>
     mutate(xvar = what_lang_is_this)
   
   ##~~~~~~~~~~~~~~~~~~~~~~~
@@ -192,29 +194,10 @@ plot_q31_lang <- function(data){
   
 }
 
-##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-##  ~ for both pre & post assessments  ----
-##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##  ~ compare pre & post assessments  ----
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-plot_q31_lang_bothPP <- function(data){
-  
-  ggplot(data, aes(x = timepoint, y = percentage)) +
-    geom_col(aes(fill = timepoint)) +
-    geom_text(aes(label = perc_label), 
-              position = position_stack(vjust = 0.5), 
-              size = 3, color = "white", family = "nunito") +
-    labs(y = "% of respondents who\nanswered correctly",
-         title = "What programming language is the above code written in?",
-         subtitle = "Correct answer: Python",
-         caption = "Question 31") +
-    scale_fill_manual(values = meds_pal) +
-    scale_y_continuous(labels = scales::label_percent(scale = 1),
-                       limits = c(0, 100)) +
-    meds_theme() +
-    theme(
-      legend.position = "none",
-      axis.title.x = element_blank(),
-      plot.subtitle = element_text(face = "bold")
-    )
-  
-}
+# see `plot_correct_answer_comparison.R`
+
+

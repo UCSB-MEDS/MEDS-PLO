@@ -247,7 +247,7 @@ plot_q8_workflow_satisfaction_bothPP(q8_workflow_satisfaction_data)
 q9_raw_data_data <- clean_q9_raw_data_bothPP(both_timepoints_clean)
 
 # plot ----
-plot_rank_bothPP(data = q9_raw_data_data,
+plot_rank(data = q9_raw_data_data,
                     title = "Having access to the original, raw data is important to be able to\nrepeat an analysis",
                     caption = "Question 9")
 ```
@@ -261,7 +261,7 @@ plot_rank_bothPP(data = q9_raw_data_data,
 q10_small_program_data <- clean_q10_small_program_bothPP(both_timepoints_clean)
 
 # plot ----
-plot_rank_bothPP(data = q10_small_program_data,
+plot_rank(data = q10_small_program_data,
                     title = "I can write a small program, script, or macro to address a problem\nin my own work",
                     caption = "Question 10")
 ```
@@ -275,7 +275,7 @@ plot_rank_bothPP(data = q10_small_program_data,
 q11_find_help_online_data <- clean_q11_find_help_online_bothPP(both_timepoints_clean)
 
 # plot ----
-plot_rank_bothPP(data = q11_find_help_online_data ,
+plot_rank(data = q11_find_help_online_data ,
                     title = "I know how to search for answers to my technical questions online",
                     caption = "Question 11")
 ```
@@ -289,7 +289,7 @@ plot_rank_bothPP(data = q11_find_help_online_data ,
 q12_overcoming_problems_data <- clean_q12_overcoming_problems_bothPP(both_timepoints_clean)
 
 # plot ----
-plot_rank_bothPP(data = q12_overcoming_problems_data,
+plot_rank(data = q12_overcoming_problems_data,
                     title = "While working on a programming project, if I get stuck, I can find\nways of overcoming the problem",
                     caption = "Question 12")
 ```
@@ -303,7 +303,7 @@ plot_rank_bothPP(data = q12_overcoming_problems_data,
 q13_confidence_data <- clean_q13_confidence_bothPP(both_timepoints_clean)
 
 # plot ----
-plot_rank_bothPP(data = q13_confidence_data,
+plot_rank(data = q13_confidence_data,
                     title = "I am confident in my ability to make use of programming software\nto work with data",
                     caption = "Question 13")
 ```
@@ -317,7 +317,7 @@ plot_rank_bothPP(data = q13_confidence_data,
 q14_easier_analysis_data <- clean_q14_easier_analysis_bothPP(both_timepoints_clean)
 
 # plot ----
-plot_rank_bothPP(data = q14_easier_analysis_data,
+plot_rank(data = q14_easier_analysis_data,
                      title = "Using a programming language (like R or Python) can make my\nanalyses easier to reproduce",
                     caption = "Question 14")
 ```
@@ -331,7 +331,7 @@ plot_rank_bothPP(data = q14_easier_analysis_data,
 q15_increase_efficiency_data <- clean_q15_increase_efficiency_bothPP(both_timepoints_clean)
 
 # plot ----
-plot_rank_bothPP(data = q15_increase_efficiency_data,
+plot_rank(data = q15_increase_efficiency_data,
                     title = "Using a programming language (like R or Python) can make me\nmore efficient at working with data",
                     caption = "Question 15")
 ```
@@ -389,7 +389,7 @@ plot_correct_answer_comparison(data = q16b_mode_data,
 q17a_familiarity_lr_data <- clean_q17a_familiar_lr_bothPP(both_timepoints_clean)
 
 # plot ----
-plot_rank_bothPP(data = q17a_familiarity_lr_data,
+plot_rank(data = q17a_familiarity_lr_data,
                            title = "How familiar are you with the term linear regression?",
                            caption = "Question 17a (choosing '1 - never heard of it' skips respondent to question 18)")
 ```
@@ -475,7 +475,7 @@ DT::datatable(q17_microplastics_dt, colnames = c("Free Response Answer to Q17b")
 q18a_familiar_prob_dist_data <- clean_q18a_familiar_prob_dist_bothPP(both_timepoints_clean)
 
 # plot ----
-plot_rank_bothPP(data = q18a_familiar_prob_dist_data,
+plot_rank(data = q18a_familiar_prob_dist_data,
                            title = "How familiar are you with the term probability distribution?",
                            caption = "Question 18a (choosing '1 (never heard of it)' skips respondent to question 19)")
 ```
@@ -518,7 +518,7 @@ plot_q18b_FULLY_CORRECT_bothPP(q18b_prob_dist_FULLY_CORRECT_data)
 q19a_familiar_functions_data <- clean_q19a_familiar_functions_bothPP(both_timepoints_clean)
 
 # plot ----
-plot_rank_bothPP(data = q19a_familiar_functions_data,
+plot_rank(data = q19a_familiar_functions_data,
                            title = "How familiar are you with the term 'function' as it relates to\nprogramming?",
                            caption = "Question 19a (choosing '1 (never heard of it)' skips respondent to question 20)")
 ```
@@ -534,7 +534,7 @@ plot_rank_bothPP(data = q19a_familiar_functions_data,
 q19b_writing_functions_data <- clean_q19b_writing_functions_bothPP(both_timepoints_clean)
 
 # plot ----
-plot_rank_bothPP(data = q19b_writing_functions_data,
+plot_rank(data = q19b_writing_functions_data,
                            title = "How comfortable are you creating a function in code?",
                            caption = "Question 19b (choosing '1 (not at all)' skips respondent to question 20)")
 ```
@@ -552,7 +552,6 @@ plot_rank_bothPP(data = q19b_writing_functions_data,
 q19c_fxn_output_data <- clean_q19c_fxn_output_bothPP(both_timepoints_clean)
 
 # plot ----
-# plot_q19c_fxn_output_bothPP(q19c_fxn_output_data)
 plot_correct_answer_comparison(data = q19c_fxn_output_data,
                                title = "What is the value of power_turbine_A?",
                                subtitle = "Correct answer: 10",
@@ -598,7 +597,10 @@ plot_q20b_sa_bothPP(q20b_sa_data)
 q20c_param_int_data <- clean_q20c_param_int_bothPP(both_timepoints_clean)
 
 # plot ----
-plot_q20c_param_int_bothPP(q20c_param_int_data)
+plot_correct_answer_comparison(data = q20c_param_int_data,
+                               title = "If you want to explore how parameter interactions impact model\nresults, you would do...",
+                               subtitle = "Correct answer: a global sensitivity analysis",
+                               caption = "Question 20c")
 ```
 
 ## **Part 8: Geospatial Analysis & Remote Sensing**
@@ -612,7 +614,7 @@ plot_q20c_param_int_bothPP(q20c_param_int_data)
 q21a_comfort_spatial_data <- clean_q21a_comfort_spatial_bothPP(both_timepoints_clean)
 
 # plot ----
-plot_rank_bothPP(data = q21a_comfort_spatial_data,
+plot_rank(data = q21a_comfort_spatial_data,
                            title = "How comfortable are you working with spatial data?",
                            caption = "Question 21a (choosing '1 (never worked with it before)' skips respondent to question 22)")
 ```
@@ -648,7 +650,10 @@ plot_q21b_FULLY_CORRECT_bothPP(q21b_FULLY_CORRECT_data)
 q21c_vec_ras_data <- clean_q21c_vec_ras_bothPP(both_timepoints_clean)
 
 # plot ----
-plot_q21c_vec_ras_bothPP(q21c_vec_ras_data)
+plot_correct_answer_comparison(data = q21c_vec_ras_data,
+                               title = "Is the following a vector or raster?",
+                               subtitle = "Correct answer: vector",
+                               caption = "Question 21c")
 ```
 
 ```{r}
@@ -665,7 +670,7 @@ knitr::include_graphics("images/21c-vector.png")
 q22a_comfort_rs_data <- clean_q22a_comfort_rs_bothPP(both_timepoints_clean)
 
 # plot ----
-plot_rank_bothPP(data = q22a_comfort_rs_data,
+plot_rank(data = q22a_comfort_rs_data,
                            title = "How comfortable are you working with remotely sensed data?",
                            caption = "Question 22a (choosing '1 (never worked with it before)' skips respondent to question 23)")
 ```
@@ -681,7 +686,10 @@ plot_rank_bothPP(data = q22a_comfort_rs_data,
 q22b_rs_sun_data <- clean_q22b_rs_sun_bothPP(both_timepoints_clean)
 
 # plot ----
-plot_q22b_rs_sun_bothPP(q22b_rs_sun_data)
+plot_correct_answer_comparison(data = q22b_rs_sun_data,
+                               title = "The type of remote sensing that relies on reflected radiation\ngenerated by the sun is called ___? (fill in the blank)",
+                               subtitle = "Correct answer: passive",
+                               caption = "Question 22b")
 ```
 
 ```{r}
@@ -689,17 +697,11 @@ plot_q22b_rs_sun_bothPP(q22b_rs_sun_data)
 ##  ~ Question 23a: Map Projections  ----
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-# # for calculating percentages in wrangling step below ----
-# q23a_num_answers <- meds2024_before_clean |>
-#   select(map_proj_comfort) |>
-#   count() |>
-#   pull()
-
 # wrangle ----
 q23a_comfort_map_proj_data <- clean_q23a_comfort_map_proj_bothPP(both_timepoints_clean)
 
 # plot ----
-plot_rank_bothPP(data = q23a_comfort_map_proj_data,
+plot_rank(data = q23a_comfort_map_proj_data,
                            title = "How comfortable are you working with map projections?",
                            caption = "Question 23a (choosing '1 (never worked with it before)' skips respondent to question 24)")
 ```
@@ -715,7 +717,10 @@ plot_rank_bothPP(data = q23a_comfort_map_proj_data,
 q23b_reproj_data <- clean_q23b_reproj_bothPP(both_timepoints_clean)
 
 # plot ----
-plot_q23b_reproj_bothPP(q23b_reproj_data)
+plot_correct_answer_comparison(data = q23b_reproj_data,
+                               title = "Converting from a geographic to projected coordinate system\n reprojects data from ___ (fill in the blank)",
+                               subtitle = "Correct answer: 3D to 2D",
+                               caption = "Question 23b")
 ```
 
 ```{r}
@@ -727,7 +732,7 @@ plot_q23b_reproj_bothPP(q23b_reproj_data)
 q24a_familiarity_rs_data <- clean_q24a_familiarity_rs_bothPP(both_timepoints_clean)
 
 # plot ----
-plot_rank_bothPP(data = q24a_familiarity_rs_data,
+plot_rank(data = q24a_familiarity_rs_data,
                            title = "How familiar are you with the term reflectance spectra?",
                            caption = "Question 24a (choosing '1 (never heard of it)' skips respondent to question 25)")
 ```
@@ -743,7 +748,10 @@ plot_rank_bothPP(data = q24a_familiarity_rs_data,
 q24b_veg_wave_data <- clean_q24b_veg_wave_bothPP(both_timepoints_clean)
 
 # plot ----
-plot_q24b_veg_wave_bothPP(q24b_veg_wave_data)
+plot_correct_answer_comparison(data = q24b_veg_wave_data,
+                               title = "Of the following wavelengths, which one does vegetation reflect the\nmost?",
+                               subtitle = "Correct answer: green",
+                               caption = "Question 24b")
 ```
 
 ## **Part 9: Machine Learning**
@@ -757,7 +765,7 @@ plot_q24b_veg_wave_bothPP(q24b_veg_wave_data)
 q25a_familiar_ml_data <- clean_q25a_familiar_ml_bothPP(both_timepoints_clean)
 
 # plot ----
-plot_rank_bothPP(data = q25a_familiar_ml_data,
+plot_rank(data = q25a_familiar_ml_data,
                            title = "How familiar are you with the difference between supervised and\nunsupervised learning?",
                            caption = "Question 25a (choosing '1 (never heard of it)' skips respondent to question 26)") +
   scale_x_discrete(labels = function(x) str_wrap(x, width = 15))
@@ -774,7 +782,7 @@ plot_rank_bothPP(data = q25a_familiar_ml_data,
 q25b_unsup_alg_data <- clean_q25b_unsup_alg_bothPP(both_timepoints_clean)
 
 # plot ----
-plot_rank_bothPP(data = q25b_unsup_alg_data,
+plot_rank(data = q25b_unsup_alg_data,
                            title = "Have you ever implemented an unsupervised learning algorithm?",
                            caption = "Question 25b (choosing '1 (definitely not)' skips respondent to question 26)") +
   scale_x_discrete(labels = function(x) str_wrap(x, width = 15))
@@ -791,7 +799,10 @@ plot_rank_bothPP(data = q25b_unsup_alg_data,
 q25c_kmeans_data <- clean_q25c_kmeans_bothPP(both_timepoints_clean)
 
 # plot ----
-plot_q25c_kmeans_bothPP(q25c_kmeans_data)
+plot_correct_answer_comparison(data = q25c_kmeans_data,
+                               title = "K-means clustering is an example of a(n) ___ learning approach\nbecause it ___ (fill in the blanks).",
+                               subtitle = "Correct answer: unsupervised, does not require expert labeling of data",
+                               caption = "Question 25c")
 ```
 
 ```{r}
@@ -803,7 +814,7 @@ plot_q25c_kmeans_bothPP(q25c_kmeans_data)
 q26a_div_data <- clean_q26a_div_data_bothPP(both_timepoints_clean)
 
 # plot ----
-plot_rank_bothPP(data = q26a_div_data,
+plot_rank(data = q26a_div_data,
                            title = "How familiar are you with the procedure that divides your data into\nseparate “training”, “validation”, and “testing” sets?",
                            caption = "Question 26a (choosing '1 (never heard of it)' skips respondent to question 27)")
 ```
@@ -819,7 +830,7 @@ plot_rank_bothPP(data = q26a_div_data,
 q26b_tvs_data <- clean_q26b_tvs_bothPP(both_timepoints_clean)
 
 # plot ----
-plot_rank_bothPP(data = q26b_tvs_data,
+plot_rank(data = q26b_tvs_data,
                            title = "How often have you implemented a train, validation, test split?",
                            caption = "Question 26b (choosing '1 (never)' skips respondent to question 27)")
 ```
@@ -859,7 +870,7 @@ plot_q26c_FULLY_CORRECT_bothPP(q26c_FULLY_CORRECT_data)
 q27_data_justice_data <- clean_q27_data_justice_bothPP(both_timepoints_clean)
 
 # plot ----
-plot_rank_bothPP(data = q27_data_justice_data,
+plot_rank(data = q27_data_justice_data,
                  title = "How familiar are you with the term Data Justice?",
                  caption = "Question 27")
 ```
@@ -873,7 +884,7 @@ plot_rank_bothPP(data = q27_data_justice_data,
 q28_bias_data <- clean_q28_bias_bothPP(both_timepoints_clean)
 
 # plot ----
-plot_rank_bothPP(data = q28_bias_data,
+plot_rank(data = q28_bias_data,
                  title = "I can identify areas of bias in approaches to data analysis.",
                  caption = "Question 28")
 ```
@@ -889,7 +900,7 @@ plot_rank_bothPP(data = q28_bias_data,
 q29_create_viz_data <- clean_q29_create_viz_bothPP(both_timepoints_clean)
 
 # plot ----
-plot_rank_bothPP(data = q28_bias_data,
+plot_rank(data = q28_bias_data,
                  title = "How comfortable are you with creating a data visualization using a\nprogramming language?",
                  caption = "Question 29")
 ```
@@ -1027,7 +1038,10 @@ convert_F_to_C(32)
 q31_lang_data <- clean_q31_lang_bothPP(both_timepoints_clean)
 
 # plot ----
-plot_q31_lang_bothPP(q31_lang_data)
+plot_correct_answer_comparison(data = q31_lang_data,
+                               title = "What programming language is the above code written in?",
+                               subtitle = "Correct answer: Python",
+                               caption = "Question 31")
 ```
 
 <br>

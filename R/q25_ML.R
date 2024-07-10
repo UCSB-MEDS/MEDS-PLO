@@ -452,9 +452,9 @@ clean_q25c_kmeans_bothPP <- function(PLO_data_clean){
     #drop_na() |> # include this if you want % calculation to be out of only students who advanced to this question
     mutate(total_respondents = sum(n),
            percentage = round((n/total_respondents)*100, 1),
-           perc_label = paste0(percentage, "%")) |>
-    mutate(xvar = kmeans) |> 
-    mutate(perc_label_long = paste0(perc_label, " (", n, "/", total_respondents, " respondents)"))
+           perc_label = paste0(percentage, "%"),
+           perc_label_long = paste0(perc_label, " (", n, "/", total_respondents, " respondents)")) |>
+    mutate(xvar = kmeans)
   
   ##~~~~~~~~~~~~~~~~~~~
   ##  ~ post-MEDS  ----
@@ -466,9 +466,9 @@ clean_q25c_kmeans_bothPP <- function(PLO_data_clean){
     # drop_na() |> # include this if you want % calculation to be out of only students who advanced to this question
     mutate(total_respondents = sum(n),
            percentage = round((n/total_respondents)*100, 1),
-           perc_label = paste0(percentage, "%")) |>
-    mutate(xvar = kmeans) |> 
-    mutate(perc_label_long = paste0(perc_label, "\n(", n, "/", total_respondents, " respondents)"))
+           perc_label = paste0(percentage, "%"),
+           perc_label_long = paste0(perc_label, "\n(", n, "/", total_respondents, " respondents)")) |>
+    mutate(xvar = kmeans)
   
   #~~~~~~~~~~~~~~~~~~~~~~~
   ##  ~ recombine dfs  ----
@@ -505,29 +505,8 @@ plot_q25c_kmeans <- function(data){
   
 }
 
-##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-##  ~ for both pre & post assessments  ----
-##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##  ~ compare pre & post assessments  ----
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-plot_q25c_kmeans_bothPP <- function(data){
-  
-  ggplot(data, aes(x = timepoint, y = percentage)) +
-    geom_col(aes(fill = timepoint)) +
-    geom_text(aes(label = perc_label_long), 
-              position = position_stack(vjust = 0.5), 
-              size = 3, color = "white", family = "nunito") +
-    labs(y = "% of respondents who\nanswered correctly",
-         title = "K-means clustering is an example of a(n) ___ learning approach\nbecause it ___ (fill in the blanks).",
-         subtitle = "Correct answer: unsupervised, does not require expert labeling of data",
-         caption = "Question 25c") +
-    scale_fill_manual(values = meds_pal) +
-    scale_y_continuous(labels = scales::label_percent(scale = 1),
-                       limits = c(0, 100)) +
-    meds_theme() +
-    theme(
-      legend.position = "none",
-      axis.title.x = element_blank(),
-      plot.subtitle = element_text(face = "bold")
-    )
-  
-}
+# see `plot_correct_answer_comparison.R`

@@ -86,11 +86,11 @@ plot_rank_agreement <- function(data, title, caption){
   
 }
 
-##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-##  ~ for both pre & post assessments  ----
-##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##  ~ compare pre & post assessments  ----
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-plot_rank_bothPP <- function(data, title, caption){
+plot_rank <- function(data, title, caption){
   
   ggplot(data, aes(x = xvar, y = n, label = perc_label)) +
     geom_col(aes(fill = timepoint), position = position_dodge(preserve = "total")) +
