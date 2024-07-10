@@ -32,5 +32,5 @@ median_score_after <- median(scores_after$sc0)
 perc_increase <- round(((median_score_after - median_score_before) / median_score_before)*100, 1)
 ```
 
-A perfect score is 14 points. **The median score increased by `r perc_increase`% from the pre- to post-MEDS PLO assessments.** See the distribution of scores, below:
+A perfect score is 14 points. **The median score increased by `r perc_increase`% from the pre- to post-MEDS PLO assessments.** 
 
