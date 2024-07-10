@@ -7,8 +7,49 @@
 $font-family-serif: 'Sanchez', serif;
 $font-family-sans-serif: 'Nunito', sans-serif;
 
+// colors
+$baby-blue: #d2e3f3;
+$teal: #047C90;
+$dark-blue: #003660;
+$white: #FFFFFF;
+$green: #78A540;
+$magenta: #900C3F;
+
+// quarto sass variables
+$link-color: $green;
+
 /*-- scss:rules --*/
 
 h1, h2, h3, h4 {
   font-family: $font-family-serif;
+  color: $dark-blue;
+}
+
+// L body text
+.body-text-l {
+  font-size: 25px;
+	line-height: 1.7em;
+	margin-bottom: 1em;
+}
+
+// M body text
+.body-text-m {
+  font-size: 20px;
+	line-height: 1.7em;
+	margin-bottom: 1em;
+}
+
+// teal text
+.teal-text {
+  color: $teal;
+}
+
+// dark blue text
+.dark-blue-text {
+  color: $dark-blue;
+}
+
+// center text (horizontally)
+.center-text{
+  text-align: center;
 }

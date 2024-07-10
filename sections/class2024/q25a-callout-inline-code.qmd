@@ -1,0 +1,59 @@
+
+```{r in-line code q25a}
+# total respondents ----
+q25a_num_answers_pre <- meds2024_before_clean |>
+  select(sup_vs_unsup_learn) |>
+  count() |>
+  pull()
+
+q25a_num_answers_post <- meds2024_after_clean |>
+  select(sup_vs_unsup_learn) |>
+  count() |>
+  pull()
+
+# total not answer 1 ----
+q25a_not1_pre <- meds2024_before_clean |>
+  select(sup_vs_unsup_learn) |>
+  group_by(sup_vs_unsup_learn) |>
+  count() |>
+  ungroup() |>
+  filter(sup_vs_unsup_learn != "1 (never heard of either of those terms)") |> 
+  summarize(n = sum(n)) |>
+  pull()
+
+q25a_not1_post <- meds2024_after_clean |>
+  select(sup_vs_unsup_learn) |>
+  group_by(sup_vs_unsup_learn) |>
+  count() |>
+  ungroup() |>
+  filter(sup_vs_unsup_learn != "1 (never heard of either of those terms)") |> 
+  summarize(n = sum(n)) |>
+  pull()
+
+# answered 1 ----
+q25a_1_pre <- meds2024_before_clean |>
+  select(sup_vs_unsup_learn) |>
+  group_by(sup_vs_unsup_learn) |>
+  count() |>
+  ungroup() |>
+  filter(sup_vs_unsup_learn == "1 (never heard of either of those terms)") |> 
+  summarize(n = sum(n)) |>
+  pull()
+
+q25a_1_post <- meds2024_after_clean |>
+  select(sup_vs_unsup_learn) |>
+  group_by(sup_vs_unsup_learn) |>
+  count() |>
+  ungroup() |>
+  filter(sup_vs_unsup_learn == "1 (never heard of either of those terms)") |> 
+  summarize(n = sum(n)) |>
+  pull()
+```
+
+::: {.callout-note}
+## All `r q25a_not1_post`/`r q25a_num_answers_post` Post-MEDS respondents were directed to answer Question 25b, as compared to the `r q25a_not1_pre`/`r q25a_num_answers_pre` respondents in the Pre-MEDS PLO assessment.
+
+- **Pre-MEDS: `r q25a_not1_pre`/`r q25a_num_answers_pre` student respondents (`r round((q25a_not1_pre/q25a_num_answers_pre)*100, 1)`%)** chose a familiarity level of 2 or greater, and therefore were directed to answer Question 25b. Those who answered "1" (`r q25a_1_pre` students) were jumped directly to Question 26 -- these non-responses are missing from the Question 25b plot, below, which is why percentages for the Pre-MEDS assessment do not add up to 100%.
+
+- **Post-MEDS: `r q25a_not1_post`/`r q25a_num_answers_post` student respondents (`r round((q25a_not1_post/q25a_num_answers_post)*100, 1)`%)** chose a familiarity level of 2 or greater, and therefore were directed to answer Question 25b.
+:::

@@ -1,0 +1,58 @@
+```{r in-line code q26a}
+# total respondents ----
+q26a_num_answers_pre <- meds2024_before_clean |>
+  select(ml_div_data) |>
+  count() |>
+  pull()
+
+q26a_num_answers_post <- meds2024_after_clean |>
+  select(ml_div_data) |>
+  count() |>
+  pull()
+
+# total not answer 1 ----
+q26a_not1_pre <- meds2024_before_clean |>
+  select(ml_div_data) |>
+  group_by(ml_div_data) |>
+  count() |>
+  ungroup() |>
+  filter(ml_div_data != "1 (never heard of it)") |>
+  summarize(n = sum(n)) |>
+  pull()
+
+q26a_not1_post <- meds2024_after_clean |>
+  select(ml_div_data) |>
+  group_by(ml_div_data) |>
+  count() |>
+  ungroup() |>
+  filter(ml_div_data != "1 (never heard of it)") |>
+  summarize(n = sum(n)) |>
+  pull()
+
+# answered 1 ----
+q26a_1_pre <- meds2024_before_clean |>
+  select(ml_div_data) |>
+  group_by(ml_div_data) |>
+  count() |>
+  ungroup() |>
+  filter(ml_div_data == "1 (never heard of it)") |>
+  summarize(n = sum(n)) |>
+  pull()
+
+q26a_1_post <- meds2024_after_clean |>
+  select(ml_div_data) |>
+  group_by(ml_div_data) |>
+  count() |>
+  ungroup() |>
+  filter(ml_div_data == "1 (never heard of it)") |>
+  summarize(n = sum(n)) |>
+  pull()
+```
+
+::: {.callout-note}
+## All `r q26a_not1_post`/`r q26a_num_answers_post` Post-MEDS respondents were directed to answer Question 26b, as compared to the `r q26a_not1_pre`/`r q26a_num_answers_pre` respondents in the Pre-MEDS PLO assessment.
+
+- **Pre-MEDS: `r q26a_not1_pre`/`r q26a_num_answers_pre` student respondents (`r round((q26a_not1_pre/q26a_num_answers_pre)*100, 1)`%)** chose a familiarity level of 2 or greater, and therefore were directed to answer Question 26b. Those who answered "1" (`r q26a_1_pre` students) were jumped directly to Question 27 – these non-responses are missing from the Question 26b plot, below, which is why percentages for the Pre-MEDS assessment do not add up to 100%.
+
+- **Post-MEDS: `r q26a_not1_post`/`r q26a_num_answers_post` student respondents (`r round((q26a_not1_post/q26a_num_answers_post)*100, 1)`%)** chose a familiarity level of 2 or greater, and therefore were directed to answer Question 26b.
+:::

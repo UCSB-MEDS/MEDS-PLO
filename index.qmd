@@ -3,9 +3,9 @@ title: "Master of Environmental Data Science (MEDS)"
 subtitle: "Program Learning Outcome (PLO) #1 Assessment - Core Knowledge"
 author: "Sam Csik"
 date: June 9, 2023
+date-modified: last-modified
 format: 
   html:
-    
     toc: true
     toc-location: left
     code-tools: 

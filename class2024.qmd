@@ -3,8 +3,10 @@ title: "MEDS Class of 2024"
 subtitle: "Program Learning Outcome (PLO) #1 Assessment - Core Knowledge"
 author: "Sam Csik"
 date: August 4, 2023
+date-modified: last-modified
 format: 
   html:
+    
     toc: true
     toc-location: left
     code-tools: 
@@ -13,7 +15,6 @@ format:
     theme: 
       - styles.scss
     mainfont: Nunito
-    
 execute: 
   eval: true
   echo: false
@@ -33,284 +34,335 @@ library(ggtext)
 library(DT)
 library(tidytext)
 library(wordcloud)
+library(scales)
 
 #........................import functions........................
 source("functions.R")
 
 #..........................import data...........................
 meds2024_before <- read_sheet("https://docs.google.com/spreadsheets/d/1cJddylTu-eyb2fjbnVuvv-tvy6Knq1HfHjz_5zlW0fc/edit?usp=sharing")
-
-#...........................clean data...........................
-meds2024_before_clean <- clean_PLO_data(meds2024_before)
+meds2024_after <- read_sheet("https://docs.google.com/spreadsheets/d/1qBGprUADckBLDlSFOx2LjlF4ZbH_qvvq18BCGLciFl4/edit?usp=sharing")
   
+#...........................clean data...........................
+meds2024_before_clean <- clean_PLO_data(meds2024_before) |> mutate(timepoint = rep("Pre-MEDS"))
+meds2024_after_clean <- clean_PLO_data(meds2024_after) |> mutate(timepoint = rep("Post-MEDS"))
+
+#...............combine pre- and post-MEDS results...............
+both_timepoints_clean <- rbind(meds2024_before_clean, meds2024_after_clean) |> 
+  mutate(timepoint = fct_relevel(timepoint, c("Pre-MEDS", "Post-MEDS")))
+
+#..................number of survey respondents..................=
+pre_meds_num_respondents <- nrow(meds2024_before_clean)
+post_meds_num_respondents <- nrow(meds2024_after_clean)
+
 #......................import Google fonts.......................
 sysfonts::font_add_google(name = "Sanchez", family = "sanchez")
 sysfonts::font_add_google(name = "Nunito", family = "nunito")
 
 # automatically use showtext to render text for future devices ----
 showtext::showtext_auto()
+
+#......................create color palette......................
+meds_pal <- c("Pre-MEDS" = "#047C91",
+              "Post-MEDS" = "#003660")
 ```
 
 # **Summary**
 
-{{< include /sections/class2024_before/summary.qmd >}}
+{{< include /sections/class2024/summary.qmd >}}
 
-```{r}
+```{r overall-scores}
 #| fig-align: center
-scores <- meds2024_before_clean |> 
+
+#........................Pre-MEDS scores.........................
+scores_before <- meds2024_before_clean |> 
+  select(sc0) 
+
+mean_score_before <- mean(scores_before$sc0)
+median_score_before <- median(scores_before$sc0)
+
+#........................Post-MEDS scores........................
+scores_after <- meds2024_after_clean |> 
   select(sc0)
 
-mean_score <- mean(scores$sc0)
-median_score <- median(scores$sc0)
+mean_score_after <- mean(scores_after$sc0)
+median_score_after <- median(scores_after$sc0)
 
-ggplot(scores, aes(x = sc0)) +
-  geom_histogram(binwidth = 1, color = "white", fill = "#047C91") +
-  geom_vline(xintercept = median_score,  linetype = "dashed", color = "black") +
-  annotate(geom = "label", x = 9.8, y = 8, label = paste0("Median Score = ", median_score), hjust = "right") +
-  annotate(geom = "segment", x = 7, y = 8, xend = median_score, yend = 7.5,
-           arrow = arrow(length = unit(3, "mm"))) +
+#..........................combined plot.........................
+ggplot(both_timepoints_clean, aes(x = sc0)) +
+  geom_histogram(aes(fill = timepoint), color = "white", 
+                 binwidth = 1, position = "identity", 
+                 alpha = 0.8) +
+  
+  # add "Pre-MEDS" median score ----
+  geom_vline(xintercept = median_score_before,  linetype = "dashed", color = "#047C91") +
+  annotate(geom = "segment", x = 7, y = 8, xend = median_score_before, yend = 7.5,
+           arrow = arrow(length = unit(3, "mm")), color = "#047C91") +
+  annotate(geom = "label", x = 9.8, y = 8, 
+           label = paste0("Median Score = ", median_score_before),
+           hjust = "right", color = "#047C91") +
+
+  # add "Post-MEDS" median score ----
+  geom_vline(xintercept = median_score_after,  linetype = "dashed", color = "#003660") +
+  annotate(geom = "segment", x = 13, y = 8, xend = median_score_after, yend = 7.5,
+           arrow = arrow(length = unit(3, "mm")), color = "#003660") +
+  annotate(geom = "label", x = 14, y = 8, 
+           label = paste0("Median Score = ", median_score_after), 
+           hjust = "center", color = "#003660") +
+  
+  # make pretty ----
+  coord_cartesian(clip = "off") +
+  scale_fill_manual(values = meds_pal) +
+                    #labels = c("Pre-MEDS", "Post-MEDS")) +
   scale_x_continuous(breaks = seq(1, 14, 1)) +
-  labs(x = "Score", y = "Number of MEDS studnets",
+  labs(x = "Score", y = "Number of MEDS students",
        title = "Distribution of scores",
        caption = "Out of 14 available points") +
-  meds_theme
+  meds_theme()
 ```
 
 # **Individual Questions**
 
-::: {.callout-note}
-Questions that have a correct answer are color-coded green.
-:::
-
 ## **Part 1: OS and data/document storage**
 
-```{r}
+```{r Q1-what-OS}
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ##  ~ Question 1: What OS?  ----
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-q1_os_data <- clean_q1_os(meds2024_before_clean)
-plot_q1_os(q1_os_data)
+q1_os_data <- clean_q1_os_bothPP(both_timepoints_clean)
+plot_q1_os_bothPP(q1_os_data)
 ```
 
-```{r}
+```{r Q2-data-storage}
 #| fig-cap: "NOTE: Percentages will not sum to 100%"
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ##  ~ Question 2: Where do you store data?  ----
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-# combine written-in "server" option ----
-server <- c("Server", "Taylor server", "external server")
+# combine written-in "Other" option responses ----
+server <- c("Server", "Taylor server", "external server", "Taylor")
+external_drive <- c("External SSD", "External drive", "external hard drive")
 
 # wrangle & plot ----
-q2_store_data <- clean_q2_store_data(meds2024_before_clean)
-plot_q2_store_data(q2_store_data) + coord_flip()
+q2_store_data <- clean_q2_store_data_bothPP(both_timepoints_clean)
+plot_q2_store_data_bothPP(q2_store_data)
 ```
 
 ## **Part 2: How often do you currently use the following?**
 
-```{r}
+```{r Q3-GUI}
 ##~~~~~~~~~~~~~~~~~~~~~~~~~
 ##  ~ Question 3: GUI  ----
 ##~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q3_gui_data <- clean_q3_gui(meds2024_before_clean)
+q3_gui_data <- clean_q3_gui_bothPP(both_timepoints_clean)
 
 # plot ----
-plot_frequency_use(data = q3_gui_data,
-                   title = "A specialized software with a point-and-click graphical user\ninterface (e.g., for statistical analysis: SPSS, SAS...;for Geospatial\nanalysis: ArcGIS, QGIS...; for Genomics analysis: Geneious, …)",
-                   caption = "Question 3")
-
+plot_frequency_use_bothPP(data = q3_gui_data,
+                          title = "A specialized software with a point-and-click graphical user\ninterface (e.g., for statistical analysis: SPSS, SAS...;for Geospatial\nanalysis: ArcGIS, QGIS...; for Genomics analysis: Geneious, …)",
+                          caption = "Question 3")
 ```
 
-```{r}
+```{r Q4-prog-lang}
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ##  ~ Question 4: Programming Languages  ----
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q4_prog_lang_data <- clean_q4_prog_lang(meds2024_before_clean)
+q4_prog_lang_data <- clean_q4_prog_lang_bothPP(both_timepoints_clean)
 
 # plot ----
-plot_frequency_use(data = q4_prog_lang_data,
-                   title = "Programming languages (R, Python, etc.)",
-                   caption = "Question 4")
+plot_frequency_use_bothPP(data = q4_prog_lang_data,
+                          title = "Programming languages (R, Python, etc.)",
+                          caption = "Question 4")
 ```
 
-```{r}
+```{r Q5-databases}
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ##  ~ Question 5: Databases  ----
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q5_databases_data <- clean_q5_databases(meds2024_before_clean)
+q5_databases_data <- clean_q5_databases_bothPP(both_timepoints_clean)
 
 # plot ----
-plot_frequency_use(data = q5_databases_data, 
-                   title = "Databases (SQL, Access, etc.)",
-                   caption = "Question 5")
+plot_frequency_use_bothPP(data = q5_databases_data, 
+                          title = "Databases (SQL, Access, etc.)",
+                          caption = "Question 5")
 ```
 
-```{r}
+```{r Q6-version-control}
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ##  ~ Question 6: Version Control  ----
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q6_version_control_data <- clean_q6_version_control(meds2024_before_clean)
+#q6_version_control_data <- clean_q6_version_control(meds2024_before_clean)
+q6_version_control_data <- clean_q6_version_control_bothPP(PLO_data_clean = both_timepoints_clean)
 
 # plot ----
-plot_frequency_use(data = q6_version_control_data,
-                   title = "Version control software (Git, Subversion (SVN), Mercurial, etc.)",
-                   caption = "Question 6")
-
+plot_frequency_use_bothPP(data = q6_version_control_data,
+                          title = "Version control software (Git, Subversion (SVN), Mercurial, etc.)",
+                          caption = "Question 6")
 ```
 
-```{r}
+```{r Q7-command-shell}
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ##  ~ Question 7: Command Shell  ----
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q7_command_shell_data <- clean_q7_command_shell(meds2024_before_clean)
+q7_command_shell_data <- clean_q7_command_shell_bothPP(both_timepoints_clean)
 
 # plot ----
-plot_frequency_use(data = q7_command_shell_data,
+plot_frequency_use_bothPP(data = q7_command_shell_data,
                    title = "A command shell (usually accessed through Terminal on macOS or\nPowerShell on Windows)",
                    caption = "Question 7")
 ```
 
 ## **Part 3: Workflow satisfaction**
 
-```{r}
+```{r Q8-workflow-satisfaction}
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ##  ~ Question 8: Workflow Satisfaction  ----
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q8_workflow_satisfaction_data <- clean_q8_workflow_satisfaction(meds2024_before_clean)
+q8_workflow_satisfaction_data <- clean_q8_workflow_satisfaction_bothPP(both_timepoints_clean)
 
 # plot ----
-plot_q8_workflow_satisfaction(q8_workflow_satisfaction_data)
+plot_q8_workflow_satisfaction_bothPP(q8_workflow_satisfaction_data)
 ```
 
 ## **Part 4: Rank the following from 1 (strongly disagree) to 5 (strongly agree)**
 
-```{r}
+```{r Q9-raw-data}
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ##  ~ Question 9: Raw Data  ----
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q9_raw_data_data <- clean_q9_raw_data(meds2024_before_clean)
+q9_raw_data_data <- clean_q9_raw_data_bothPP(both_timepoints_clean)
 
 # plot ----
-plot_rank_agreement(data = q9_raw_data_data,
+plot_rank(data = q9_raw_data_data,
                     title = "Having access to the original, raw data is important to be able to\nrepeat an analysis",
                     caption = "Question 9")
 ```
 
-```{r}
+```{r Q10-write-script}
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ##  ~ Question 10: Small Program  ----
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q10_small_program_data <- clean_q10_small_program(meds2024_before_clean)
+q10_small_program_data <- clean_q10_small_program_bothPP(both_timepoints_clean)
 
 # plot ----
-plot_rank_agreement(data = q10_small_program_data,
+plot_rank(data = q10_small_program_data,
                     title = "I can write a small program, script, or macro to address a problem\nin my own work",
                     caption = "Question 10")
 ```
 
-```{r}
+```{r Q11-find-help}
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ##  ~ Question 11: Find Help Online  ----
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q11_find_help_online_data <- clean_q11_find_help_online(meds2024_before_clean)
+q11_find_help_online_data <- clean_q11_find_help_online_bothPP(both_timepoints_clean)
 
 # plot ----
-plot_rank_agreement(data = q11_find_help_online_data ,
+plot_rank(data = q11_find_help_online_data ,
                     title = "I know how to search for answers to my technical questions online",
                     caption = "Question 11")
 ```
 
-```{r}
+```{r Q12-overcome-problems}
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ##  ~ Question 12: Overcoming Problems  ----
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q12_overcoming_problems_data <- clean_q12_overcoming_problems(meds2024_before_clean)
+q12_overcoming_problems_data <- clean_q12_overcoming_problems_bothPP(both_timepoints_clean)
 
 # plot ----
-plot_rank_agreement(data = q12_overcoming_problems_data,
+plot_rank(data = q12_overcoming_problems_data,
                     title = "While working on a programming project, if I get stuck, I can find\nways of overcoming the problem",
                     caption = "Question 12")
 ```
 
-```{r}
+```{r Q13-confidence}
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ##  ~ Question 13: Confidence  ----
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q13_confidence_data <- clean_q13_confidence(meds2024_before_clean)
+q13_confidence_data <- clean_q13_confidence_bothPP(both_timepoints_clean)
 
 # plot ----
-plot_rank_agreement(data = q13_confidence_data,
+plot_rank(data = q13_confidence_data,
                     title = "I am confident in my ability to make use of programming software\nto work with data",
                     caption = "Question 13")
 ```
 
-```{r}
+```{r Q14-easier-analyses}
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ##  ~ Question 14: Easier Analyses  ----
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q14_easier_analysis_data <- clean_q14_easier_analysis(meds2024_before_clean)
+q14_easier_analysis_data <- clean_q14_easier_analysis_bothPP(both_timepoints_clean)
 
 # plot ----
-plot_rank_agreement(data = q14_easier_analysis_data,
+plot_rank(data = q14_easier_analysis_data,
                      title = "Using a programming language (like R or Python) can make my\nanalyses easier to reproduce",
                     caption = "Question 14")
 ```
 
-```{r}
+```{r Q15-increase-efficiency}
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ##  ~ Question 15: Increase Efficiency  ----
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q15_increase_efficiency_data <- clean_q15_increase_efficiency(meds2024_before_clean)
+q15_increase_efficiency_data <- clean_q15_increase_efficiency_bothPP(both_timepoints_clean)
 
 # plot ----
-plot_rank_agreement(data = q15_increase_efficiency_data,
+plot_rank(data = q15_increase_efficiency_data,
                     title = "Using a programming language (like R or Python) can make me\nmore efficient at working with data",
                     caption = "Question 15")
 ```
 
-## **Part 5: Stats**
+::: {.callout-note}
+## Unusual respondent
 
-<!-- NOTE TO MAINTAINERS: plotting functions expect palette to be called `pal` -->
+One respondent in the *Post-MEDS* PLO assessment answered **1 (strongly disagree)** to all questions 10 - 15.
 
 ```{r}
+#| include: false
+one_respondent <- meds2024_after_clean |> 
+  filter(response_id == "R_3izmKpw8QkR0dwg")
+```
+:::
 
+## **Part 5: Stats**
+
+```{r}
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ##  ~ Question 16a: Median  ----
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q16a_median_data <- clean_q16a_median(meds2024_before_clean)
+q16a_median_data <- clean_q16a_median_bothPP(both_timepoints_clean)
 
 # plot ----
-pal <- c("14" = "#7ECD7A", "0" = "#047C91", "10" = "#047C91", "5" = "#047C91", "10.1" = "#047C91")
-plot_q16a_median(q16a_median_data)
+plot_correct_answer_comparison(data = q16a_median_data,
+                               title = "Calculate the median of this sample distribution: 5, 17, 0, 14, 14",
+                               subtitle = "Correct answer: 14",
+                               caption = "Question 16a (free response)")
 ```
 
 ```{r}
@@ -319,11 +371,13 @@ plot_q16a_median(q16a_median_data)
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q16b_mode_data <- clean_q16b_mode(meds2024_before_clean)
+q16b_mode_data <- clean_q16b_mode_bothPP(both_timepoints_clean)
 
 # plot ----
-pal <- c("14" = "#7ECD7A", "2" = "#047C91", "9.5" = "#047C91", "10" = "#047C91", "17" = "#047C91")
-plot_q16b_mode(q16b_mode_data)
+plot_correct_answer_comparison(data = q16b_mode_data,
+                               title = "Calculate the mode of this sample distribution: 5, 17, 0, 14, 14",
+                               subtitle = "Correct answer: 14",
+                               caption = "Question 16b (free response)")
 ```
 
 ```{r}
@@ -332,25 +386,17 @@ plot_q16b_mode(q16b_mode_data)
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q17a_familiarity_lr_data <- clean_q17a_familiar_lr(meds2024_before_clean)
+q17a_familiarity_lr_data <- clean_q17a_familiar_lr_bothPP(both_timepoints_clean)
 
 # plot ----
-plot_q17a_familiar_lr(q17a_familiarity_lr_data)
+plot_rank(data = q17a_familiarity_lr_data,
+                           title = "How familiar are you with the term linear regression?",
+                           caption = "Question 17a (choosing '1 - never heard of it' skips respondent to question 18)")
 ```
 
-{{< include /sections/class2024_before/q17-callout-inline-code.qmd >}}
+{{< include /sections/class2024/q17-callout-inline-code.qmd >}}
 
-<!-- {{< include /sections/all_classes/q17b-screenshot.qmd >}} -->
-
-Below is a chunk of code showing a simple linear regression relating the number of pieces of microplastics to the number of days per year with rainfall.
-
-```{r}
-#| fig-align: center
-knitr::include_graphics("images/17-microplastics-lm.png")
-```
-
-
-<!-- NOTE TO MAINTAINERS: see `q17_linear_regression.R` for free response cleaning; will need to be modified for each new set of survey data -->
+{{< include /sections/all_classes/q17b-screenshot.qmd >}}
 
 ```{r}
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -358,27 +404,25 @@ knitr::include_graphics("images/17-microplastics-lm.png")
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q17b_microplastics_data <- clean_q17b_microplastics(meds2024_before_clean)
+q17b_microplastics_data <- clean_q17b_microplastics_bothPP(both_timepoints_clean)
 
 # plot ----
-pal <- c("77445" = "#047C91", "2430" = "#047C91",
-         "956" = "#047C91", "911" = "#047C91", "900" = "#047C91",
-         "76" = "#047C91",
-         "60" = "#047C91",
-         "59" = "#047C91", "53" = "#047C91",
-         "48" = "#047C91", "47" = "#7ECD7A", "46" = "#047C91", "43" = "#047C91", "41" = "#047C91", 
-         "28" = "#047C91", "27" = "#047C91", "26" = "#047C91", "20" = "#047C91", 
-         "17" = "#047C91", "7" = "#047C91", "4" = "#047C91", "2" = "#047C91", "1" = "#047C91",
-         "I don't know" = "#047C91")
-plot_q17b_microplastics(q17b_microplastics_data) +
-  coord_flip()
+plot_correct_answer_comparison(data = q17b_microplastics_data,
+                               title = "How many pieces of microplastic do we predict will be present\nin a location with 45 days of rain per year (round your answer up\nto the nearest integer)?",
+                               subtitle = "Correct answer: 47",
+                               caption = "Question 17b (free response)")
 ```
 
-::: {.callout-note}
+::: {.callout-note collapse=true}
 ## Question 17b raw responses
-Some respondents recorded their answers in sentence form, while others did not round their answers to the nearest integer. Cleaned responses are shown in the plot, above. Responses as they were recorded are included in the table, below:
+Respondents submitted a wide variety of answers -- responses as they were recorded are included in the tables, below:
 
 ```{r}
+
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##                                  Pre-MEDS                                ----
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 #~..........................wrangle.............................
 q17_microplastics_dt <- meds2024_before_clean |> 
   
@@ -387,6 +431,8 @@ q17_microplastics_dt <- meds2024_before_clean |>
 
 DT::datatable(q17_microplastics_dt, colnames = c("Free Response Answer to Q17b"),
               
+              caption = htmltools::tags$caption( style = 'caption-side: top; text-align: center; color:black;  font-size:200% ;','Pre-MEDS:'),
+              
                options = list(autoWidth = TRUE, 
                               pageLength = 5,
                               lengthMenu = c(5, 10, 20, 30),
@@ -394,6 +440,30 @@ DT::datatable(q17_microplastics_dt, colnames = c("Free Response Answer to Q17b")
               
               )
 ```
+
+```{r}
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##                                  Post-MEDS                               ----
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+#~..........................wrangle.............................
+q17_microplastics_dt <- meds2024_after_clean |>
+
+  # select necessary cols ----
+  select(microplastics_lr)
+
+DT::datatable(q17_microplastics_dt, colnames = c("Free Response Answer to Q17b"),
+
+              caption = htmltools::tags$caption( style = 'caption-side: top; text-align: center; color:black;  font-size:200% ;','Post-MEDS:'),
+
+               options = list(autoWidth = TRUE,
+                              pageLength = 5,
+                              lengthMenu = c(5, 10, 20, 30),
+                              dom = 'ltp')
+
+              )
+```
+
 :::
 
 ```{r}
@@ -402,43 +472,40 @@ DT::datatable(q17_microplastics_dt, colnames = c("Free Response Answer to Q17b")
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q18a_familiar_prob_dist_data <- clean_q18a_familiar_prob_dist(meds2024_before_clean)
+q18a_familiar_prob_dist_data <- clean_q18a_familiar_prob_dist_bothPP(both_timepoints_clean)
 
 # plot ----
-plot_q18a_familiar_prob_dist(q18a_familiar_prob_dist_data)
+plot_rank(data = q18a_familiar_prob_dist_data,
+                           title = "How familiar are you with the term probability distribution?",
+                           caption = "Question 18a (choosing '1 (never heard of it)' skips respondent to question 19)")
 ```
 
-{{< include /sections/class2024_before/q18-callout-inline-code.qmd >}}
+{{< include /sections/class2024/q18-callout-inline-code.qmd >}}
 
 ```{r}
-#| column: margin
-#| fig-cap: "9.7% of respondents correctly answered question 18b (i.e. chose exactly the following options: normal, uniform, bimodal, symmedtric)"
-##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-##  ~ Question 18b: Probabilty Distribution Terms  ----
-##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##                Question 18b: Probability Distribution Terms              ----
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-# for calculating percentages in wrangling step below ----
-q18b_num_answers <- meds2024_before_clean |>
-  select(prob_dist_terms) |>
-  count() |>
-  pull()
-
-# wrangle (FULLY CORRECT; margin plot) ----
-q18b_prob_dist_FULLY_CORRECT_data <- clean_q18b_FULLY_CORRECT(meds2024_before_clean)
-
-# plot (FULLY CORRECT; margin plot) ----
-pal <- c("yes" = "#7ECD7A", "no" = "#047C91", "NA" = "#047C91")
-plot_q18b_FULLY_CORRECT(q18b_prob_dist_FULLY_CORRECT_data)
-```
-
-```{r}
 # wrangle (INDIV RESPONSES) ----
-q18b_prob_dist_terms_data <- clean_q18b_prob_dist_terms(meds2024_before_clean)
+q18b_prob_dist_terms_data <- clean_q18b_prob_dist_terms_bothPP(both_timepoints_clean)
 
 # plot (INDIV RESPONSES) ----
-pal <- c("normal" = "#7ECD7A", "uniform" = "#7ECD7A", "bimodal" = "#7ECD7A", "symmetric" = "#7ECD7A", "variable" = "#047C91", "unequal" = "#047C91", "NA" = "#047C91") # NA not colored
-plot_q18b_prob_dist_terms(q18b_prob_dist_terms_data)
+plot_q18b_prob_dist_terms_bothPP(q18b_prob_dist_terms_data)
 ```
+
+::: {.callout-note}
+## The percentage of respondents who provided a *fully correct* answer to Queston 18b increased from Pre- to Post-MEDS PLO assessments
+
+Only students who chose 2 or greater in Question 18a were directed to answer Question 18b. A fully correct answer means choosing exactly the following options: **normal, uniform, bimodal, symmetrical**.  
+```{r}
+# wrangle (FULLY CORRECT) ----
+q18b_prob_dist_FULLY_CORRECT_data <- clean_q18b_FULLY_CORRECT_bothPP(both_timepoints_clean)
+
+# plot (FULLY CORRECT) ----
+plot_q18b_FULLY_CORRECT_bothPP(q18b_prob_dist_FULLY_CORRECT_data)
+```
+:::
 
 ## **Part 6: Programming 1**
 
@@ -447,20 +514,16 @@ plot_q18b_prob_dist_terms(q18b_prob_dist_terms_data)
 ##  ~ Question 19a: Familiarity with Functions  ----
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-# for calculating percentages in wrangling step below ----
-q19_num_answers <- meds2024_before_clean |> 
-  select(term_function) |> 
-  count() |> 
-  pull()
-
 # wrangle ----
-q19a_familiar_functions_data <- clean_q19a_familiar_functions(meds2024_before_clean)
+q19a_familiar_functions_data <- clean_q19a_familiar_functions_bothPP(both_timepoints_clean)
 
 # plot ----
-plot_q19a_familiar_functions(q19a_familiar_functions_data)
+plot_rank(data = q19a_familiar_functions_data,
+                           title = "How familiar are you with the term 'function' as it relates to\nprogramming?",
+                           caption = "Question 19a (choosing '1 (never heard of it)' skips respondent to question 20)")
 ```
 
-{{< include /sections/class2024_before/q19b-callout-inline-code.qmd >}}
+{{< include /sections/class2024/q19b-callout-inline-code.qmd >}}
 
 ```{r}
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -468,13 +531,15 @@ plot_q19a_familiar_functions(q19a_familiar_functions_data)
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q19b_writing_functions_data <- clean_q19b_writing_functions(meds2024_before_clean)
+q19b_writing_functions_data <- clean_q19b_writing_functions_bothPP(both_timepoints_clean)
 
 # plot ----
-plot_q19b_writing_functions(q19b_writing_functions_data)
+plot_rank(data = q19b_writing_functions_data,
+                           title = "How comfortable are you creating a function in code?",
+                           caption = "Question 19b (choosing '1 (not at all)' skips respondent to question 20)")
 ```
 
-{{< include /sections/class2024_before/q19c-callout-inline-code.qmd >}}
+{{< include /sections/class2024/q19c-callout-inline-code.qmd >}}
 
 {{< include /sections/all_classes/q19c-turbine-function.qmd >}}
 
@@ -484,11 +549,13 @@ plot_q19b_writing_functions(q19b_writing_functions_data)
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q19c_fxn_output_data <- clean_q19c_fxn_output(meds2024_before_clean)
+q19c_fxn_output_data <- clean_q19c_fxn_output_bothPP(both_timepoints_clean)
 
 # plot ----
-pal <- c("10" = "#7ECD7A", "2" = "#047C91", "5" = "#047C91", "I'm not sure" = "#047C91", "NULL" = "#047C91")
-plot_q19c_fxn_output(q19c_fxn_output_data)
+plot_correct_answer_comparison(data = q19c_fxn_output_data,
+                               title = "What is the value of power_turbine_A?",
+                               subtitle = "Correct answer: 10",
+                               caption = "Question 19c")
 ```
 
 ## **Part 7: Environmental Modeling**
@@ -499,13 +566,13 @@ plot_q19c_fxn_output(q19c_fxn_output_data)
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q20a_run_env_mod_data <- clean_q20a_run_env_mod(meds2024_before_clean)
+q20a_run_env_mod_data <- clean_q20a_run_env_mod_bothPP(both_timepoints_clean)
 
 # plot ----
-plot_q20a_run_env_mod(q20a_run_env_mod_data)
+plot_q20a_run_env_mod_bothPP(q20a_run_env_mod_data)
 ```
 
-{{< include /sections/class2024_before/q20a-callout.qmd >}}
+{{< include /sections/class2024/q20a-callout-inline-code.qmd >}}
 
 ```{r}
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -513,11 +580,13 @@ plot_q20a_run_env_mod(q20a_run_env_mod_data)
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q20b_sa_data <- clean_q20b_sa(meds2024_before_clean)
+q20b_sa_data <- clean_q20b_sa_bothPP(both_timepoints_clean)
 
 # plot ----
-plot_q20b_sa(q20b_sa_data)
+plot_q20b_sa_bothPP(q20b_sa_data)
 ```
+
+{{< include /sections/class2024/q20b-callout-inline-code.qmd >}}
 
 ```{r}
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -525,12 +594,13 @@ plot_q20b_sa(q20b_sa_data)
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q20c_param_int_data <- clean_q20c_param_int(meds2024_before_clean)
+q20c_param_int_data <- clean_q20c_param_int_bothPP(both_timepoints_clean)
 
 # plot ----
-pal <- c("a global sensitivity analysis" = "#7ECD7A", "a local sensitivity analysis" = "#047C91", 
-         "a first order approximation" = "#047C91", "I'm not sure" = "#047C91", "No response" = "#047C91")
-plot_q20c_param_int(q20c_param_int_data)
+plot_correct_answer_comparison(data = q20c_param_int_data,
+                               title = "If you want to explore how parameter interactions impact model\nresults, you would do...",
+                               subtitle = "Correct answer: a global sensitivity analysis",
+                               caption = "Question 20c")
 ```
 
 ## **Part 8: Geospatial Analysis & Remote Sensing**
@@ -540,52 +610,36 @@ plot_q20c_param_int(q20c_param_int_data)
 ##  ~ Question 21a: Comfort with Spatial Data  ----
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-# for calculating percentages in wrangling step below ----
-q21a_num_answers <- meds2024_before_clean |> 
-  select(spatial_data) |> 
-  count() |> 
-  pull()
-
 # wrangle ----
-q21a_comfort_spatial_data <- clean_q21a_comfort_spatial(meds2024_before_clean)
+q21a_comfort_spatial_data <- clean_q21a_comfort_spatial_bothPP(both_timepoints_clean)
 
 # plot ----
-plot_q21a_comfort_spatial(q21a_comfort_spatial_data)
+plot_rank(data = q21a_comfort_spatial_data,
+                           title = "How comfortable are you working with spatial data?",
+                           caption = "Question 21a (choosing '1 (never worked with it before)' skips respondent to question 22)")
 ```
 
-{{< include /sections/class2024_before/q21-callout-inline-code.qmd >}}
-
-```{r}
-#| column: margin
-#| fig-cap: "67.7% of respondents correctly answered question 21b (i.e. chose exactly the following options: raster, vector)"
-
-##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-##  ~ Question 21b: Representing Spatial Data  ----
-##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-# for calculating percentages in wrangling step below ----
-q21b_num_answers <- meds2024_before_clean |> 
-  select(rep_spatial_data) |> 
-  count() |> 
-  pull()
-
-# wrangle (FULLY CORRECT; margin) ----
-q21b_FULLY_CORRECT_data <- clean_q21b_FULLY_CORRECT(meds2024_before_clean)
-
-# plot (FULLY CORRECT; margin) ----
-pal <- c("yes" = "#7ECD7A", "no" = "#047C91", "NA" = "#047C91")
-plot_q21b_FULLY_CORRECT(q21b_FULLY_CORRECT_data)
-
-```
+{{< include /sections/class2024/q21-callout-inline-code.qmd >}}
 
 ```{r}
 # wrangle (INDIV RESPONSES) ----
-q21b_rep_spatial_data <- clean_q21b_rep_spatial(meds2024_before_clean)
+q21b_rep_spatial_data <- clean_q21b_rep_spatial_bothPP(both_timepoints_clean)
 
 # plot (INDIV RESPONSES) ----
-pal <- c("vector" = "#7ECD7A", "raster" = "#7ECD7A", "tabular" = "#047C91", "relational" = "#047C91", "I'm not sure" = "#047C91", "NA" = "#047C91")
-plot_q21b_rep_spatial(q21b_rep_spatial_data)
+plot_q21b_rep_spatial_bothPP(q21b_rep_spatial_data)
 ```
+
+::: {.callout-note}
+## The percentage of respondents who provided a *fully correct* answer to Question 21b increased from Pre- to Post-MEDS PLO assessments.
+
+```{r}
+# wrangle (FULLY CORRECT) ----
+q21b_FULLY_CORRECT_data <- clean_q21b_FULLY_CORRECT_bothPP(both_timepoints_clean)
+
+# plot (FULLY CORRECT) ----
+plot_q21b_FULLY_CORRECT_bothPP(q21b_FULLY_CORRECT_data)
+```
+:::
 
 ```{r}
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -593,11 +647,13 @@ plot_q21b_rep_spatial(q21b_rep_spatial_data)
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q21c_vec_ras_data <- clean_q21c_vec_ras(meds2024_before_clean)
+q21c_vec_ras_data <- clean_q21c_vec_ras_bothPP(both_timepoints_clean)
 
 # plot ----
-pal <- c("vector" = "#7ECD7A", "raster" = "#047C91", "I'm not sure" = "#047C91")
-plot_q21c_vec_ras(q21c_vec_ras_data)
+plot_correct_answer_comparison(data = q21c_vec_ras_data,
+                               title = "Is the following a vector or raster?",
+                               subtitle = "Correct answer: vector",
+                               caption = "Question 21c")
 ```
 
 ```{r}
@@ -611,13 +667,15 @@ knitr::include_graphics("images/21c-vector.png")
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q22a_comfort_rs_data <- clean_q22a_comfort_rs(meds2024_before_clean)
+q22a_comfort_rs_data <- clean_q22a_comfort_rs_bothPP(both_timepoints_clean)
 
 # plot ----
-plot_q22a_comfort_rs(q22a_comfort_rs_data)
+plot_rank(data = q22a_comfort_rs_data,
+                           title = "How comfortable are you working with remotely sensed data?",
+                           caption = "Question 22a (choosing '1 (never worked with it before)' skips respondent to question 23)")
 ```
 
-{{< include /sections/class2024_before/q22-callout-inline-code.qmd >}}
+{{< include /sections/class2024/q22-callout-inline-code.qmd >}}
 
 ```{r}
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -625,11 +683,13 @@ plot_q22a_comfort_rs(q22a_comfort_rs_data)
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q22b_rs_sun_data <- clean_q22b_rs_sun(meds2024_before_clean)
+q22b_rs_sun_data <- clean_q22b_rs_sun_bothPP(both_timepoints_clean)
 
 # plot ----
-pal <- c("passive" = "#7ECD7A", "active" = "#047C91", "I'm not sure" = "#047C91", "NA" = "#047C91")
-plot_q22b_rs_sun(q22b_rs_sun_data)
+plot_correct_answer_comparison(data = q22b_rs_sun_data,
+                               title = "The type of remote sensing that relies on reflected radiation\ngenerated by the sun is called ___? (fill in the blank)",
+                               subtitle = "Correct answer: passive",
+                               caption = "Question 22b")
 ```
 
 ```{r}
@@ -637,20 +697,16 @@ plot_q22b_rs_sun(q22b_rs_sun_data)
 ##  ~ Question 23a: Map Projections  ----
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-# for calculating percentages in wrangling step below ----
-q23a_num_answers <- meds2024_before_clean |> 
-  select(map_proj_comfort) |> 
-  count() |> 
-  pull()
-
 # wrangle ----
-q23a_comfort_map_proj_data <- clean_q23a_comfort_map_proj(meds2024_before_clean)
+q23a_comfort_map_proj_data <- clean_q23a_comfort_map_proj_bothPP(both_timepoints_clean)
 
 # plot ----
-plot_q23a_comfort_map_proj(q23a_comfort_map_proj_data)
+plot_rank(data = q23a_comfort_map_proj_data,
+                           title = "How comfortable are you working with map projections?",
+                           caption = "Question 23a (choosing '1 (never worked with it before)' skips respondent to question 24)")
 ```
 
-{{< include /sections/class2024_before/q23-callout-inline-code.qmd >}}
+{{< include /sections/class2024/q23-callout-inline-code.qmd >}}
 
 ```{r}
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -658,12 +714,13 @@ plot_q23a_comfort_map_proj(q23a_comfort_map_proj_data)
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q23b_reproj_data <- clean_q23b_reproj(meds2024_before_clean)
+q23b_reproj_data <- clean_q23b_reproj_bothPP(both_timepoints_clean)
 
 # plot ----
-pal <- c("3D to 2D" = "#7ECD7A", "Imprecise locations to precise locations" = "#047C91", 
-         "Meters to latitude/longitude" = "#047C91", "I'm not sure" = "#047C91", "No response" = "#047C91")
-plot_q23b_reproj(q23b_reproj_data)
+plot_correct_answer_comparison(data = q23b_reproj_data,
+                               title = "Converting from a geographic to projected coordinate system\n reprojects data from ___ (fill in the blank)",
+                               subtitle = "Correct answer: 3D to 2D",
+                               caption = "Question 23b")
 ```
 
 ```{r}
@@ -672,13 +729,15 @@ plot_q23b_reproj(q23b_reproj_data)
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q24a_familiarity_rs_data <- clean_q24a_familiarity_rs(meds2024_before_clean)
+q24a_familiarity_rs_data <- clean_q24a_familiarity_rs_bothPP(both_timepoints_clean)
 
 # plot ----
-plot_q24a_familiarity_rs(q24a_familiarity_rs_data)
+plot_rank(data = q24a_familiarity_rs_data,
+                           title = "How familiar are you with the term reflectance spectra?",
+                           caption = "Question 24a (choosing '1 (never heard of it)' skips respondent to question 25)")
 ```
 
-{{< include /sections/class2024_before/q24-callout-inline-code.qmd >}}
+{{< include /sections/class2024/q24-callout-inline-code.qmd >}}
 
 ```{r}
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -686,12 +745,13 @@ plot_q24a_familiarity_rs(q24a_familiarity_rs_data)
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q24b_veg_wave_data <- clean_q24b_veg_wave(meds2024_before_clean)
+q24b_veg_wave_data <- clean_q24b_veg_wave_bothPP(both_timepoints_clean)
 
 # plot ----
-pal <- c("green" = "#7ECD7A", "red" = "#047C91", "blue" = "#047C91", "blue and thermal" = "#047C91",
-         "I'm not sure" = "#047C91", "No response" = "#047C91")
-plot_q24b_veg_wave(q24b_veg_wave_data)
+plot_correct_answer_comparison(data = q24b_veg_wave_data,
+                               title = "Of the following wavelengths, which one does vegetation reflect the\nmost?",
+                               subtitle = "Correct answer: green",
+                               caption = "Question 24b")
 ```
 
 ## **Part 9: Machine Learning**
@@ -702,14 +762,16 @@ plot_q24b_veg_wave(q24b_veg_wave_data)
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q25a_familiar_ml_data <- clean_q25a_familiar_ml(meds2024_before_clean) |> 
-  filter(n != 0) # THIS IS JUST A BANDAID AND NEEDS FIXING
+q25a_familiar_ml_data <- clean_q25a_familiar_ml_bothPP(both_timepoints_clean)
 
 # plot ----
-plot_q25a_familiar_ml(q25a_familiar_ml_data)
+plot_rank(data = q25a_familiar_ml_data,
+                           title = "How familiar are you with the difference between supervised and\nunsupervised learning?",
+                           caption = "Question 25a (choosing '1 (never heard of it)' skips respondent to question 26)") +
+  scale_x_discrete(labels = function(x) str_wrap(x, width = 15))
 ```
 
-{{< include /sections/class2024_before/q25a-callout-inline-code.qmd >}}
+{{< include /sections/class2024/q25a-callout-inline-code.qmd >}}
 
 ```{r}
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -717,13 +779,16 @@ plot_q25a_familiar_ml(q25a_familiar_ml_data)
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q25b_unsup_alg_data <- clean_q25b_unsup_alg(meds2024_before_clean)
+q25b_unsup_alg_data <- clean_q25b_unsup_alg_bothPP(both_timepoints_clean)
 
 # plot ----
-plot_q25b_unsup_alg(q25b_unsup_alg_data)
+plot_rank(data = q25b_unsup_alg_data,
+                           title = "Have you ever implemented an unsupervised learning algorithm?",
+                           caption = "Question 25b (choosing '1 (definitely not)' skips respondent to question 26)") +
+  scale_x_discrete(labels = function(x) str_wrap(x, width = 15))
 ```
 
-{{< include /sections/class2024_before/q25b-callout-inline-code.qmd >}}
+{{< include /sections/class2024/q25b-callout-inline-code.qmd >}}
 
 ```{r}
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -731,16 +796,13 @@ plot_q25b_unsup_alg(q25b_unsup_alg_data)
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q25c_kmeans_data <- clean_q25c_kmeans(meds2024_before_clean)
+q25c_kmeans_data <- clean_q25c_kmeans_bothPP(both_timepoints_clean)
 
 # plot ----
-pal <- c("unsupervised, does not require expert labeling of data" = "#7ECD7A", 
-         "unsupervised, requires expert labeling of data" = "#047C91",
-         "supervised, does not require expert labeling of data" = "#047C91",
-         "supervised and requires expert labeling of data" = "#047C91", 
-         "I'm not sure" = "#047C91",
-         "NA" = "#047C91")
-plot_q25c_kmeans(q25c_kmeans_data)
+plot_correct_answer_comparison(data = q25c_kmeans_data,
+                               title = "K-means clustering is an example of a(n) ___ learning approach\nbecause it ___ (fill in the blanks).",
+                               subtitle = "Correct answer: unsupervised, does not require expert labeling of data",
+                               caption = "Question 25c")
 ```
 
 ```{r}
@@ -749,13 +811,15 @@ plot_q25c_kmeans(q25c_kmeans_data)
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q26a_div_data <- clean_q26a_div_data(meds2024_before_clean)
+q26a_div_data <- clean_q26a_div_data_bothPP(both_timepoints_clean)
 
 # plot ----
-plot_q26a_div_data(q26a_div_data)
+plot_rank(data = q26a_div_data,
+                           title = "How familiar are you with the procedure that divides your data into\nseparate “training”, “validation”, and “testing” sets?",
+                           caption = "Question 26a (choosing '1 (never heard of it)' skips respondent to question 27)")
 ```
 
-{{< include /sections/class2024_before/q26a-callout-inline-code.qmd >}}
+{{< include /sections/class2024/q26a-callout-inline-code.qmd >}}
 
 ```{r}
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -763,47 +827,37 @@ plot_q26a_div_data(q26a_div_data)
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q26b_tvs_data <- clean_q26b_tvs(meds2024_before_clean)
+q26b_tvs_data <- clean_q26b_tvs_bothPP(both_timepoints_clean)
 
 # plot ----
-plot_q26b_tvs(q26b_tvs_data)
+plot_rank(data = q26b_tvs_data,
+                           title = "How often have you implemented a train, validation, test split?",
+                           caption = "Question 26b (choosing '1 (never)' skips respondent to question 27)")
 ```
 
-{{< include /sections/class2024_before/q26b-callout-inline-code.qmd >}}
-
-```{r}
-#| column: margin
-#| fig-cap: "12.9% of respondents correctly answered question 26c (i.e. chose exactly the following options: My model is likely to perform very well when applied to new data, My test set has data entry errors in it)"
-
-##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-##  ~ Question 26c: Model Performance  ----
-##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-# for calculating percentages in wrangling step below ----
-q26c_num_answers <- meds2024_before_clean |>
-  select(learning_from_model) |>
-  count() |>
-  pull()
-
-# wrangle (FULLY CORRECT) ----
-q26c_FULLY_CORRECT_data <- clean_q26c_FULLY_CORRECT(meds2024_before_clean)
-
-# plot (FULLY CORRECT) ----
-pal <- c("yes" = "#7ECD7A", "no" = "#047C91")
-plot_q26c_FULLY_CORRECT(q26c_FULLY_CORRECT_data)
-```
+{{< include /sections/class2024/q26b-callout-inline-code.qmd >}}
 
 ```{r}
 # wrangle (INDIV RESPONSES) ----
-q26c_mod_perf_data <- clean_q26c_mod_perf(meds2024_before_clean)
+q26c_mod_perf_data <- clean_q26c_mod_perf_bothPP(both_timepoints_clean)
 
 # plot (INDIV RESPONSES) ----
-pal <- c("My model is unlikely to perform well when applied to new data" = "#7ECD7A", 
-         "My model is overfitting the training set" = "#7ECD7A", 
-         "My model is likely to perform very well when applied to new data" = "#047C91",
-         "My test set has data entry errors in it" = "#047C91")
-plot_q26c_mod_perf(q26c_mod_perf_data)
+plot_q26c_mod_perf_bothPP(q26c_mod_perf_data)
 ```
+
+::: {.callout-note}
+## The percentage of respondents who provided a *fully correct* answer to Queston 26c increased from Pre- to Post-MEDS PLO assessments
+
+Only students who chose 2 or greater in Question 26b were directed to answer Question 26c. A fully correct answer means choosing exactly the following options: **My model is overfitting the training set, My model is unlikely to perform well when applied to new data**.  
+
+```{r}
+# wrangle (FULLY CORRECT) ----
+q26c_FULLY_CORRECT_data <- clean_q26c_FULLY_CORRECT_bothPP(both_timepoints_clean)
+
+# plot (FULLY CORRECT) ----
+plot_q26c_FULLY_CORRECT_bothPP(q26c_FULLY_CORRECT_data)
+```
+:::
 
 ## **Part 10: Environmental Justice**
 
@@ -813,10 +867,12 @@ plot_q26c_mod_perf(q26c_mod_perf_data)
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q27_data_justice_data <- clean_q27_data_justice(meds2024_before_clean)
+q27_data_justice_data <- clean_q27_data_justice_bothPP(both_timepoints_clean)
 
 # plot ----
-plot_q27_data_justice(q27_data_justice_data)
+plot_rank(data = q27_data_justice_data,
+                 title = "How familiar are you with the term Data Justice?",
+                 caption = "Question 27")
 ```
 
 ```{r}
@@ -825,10 +881,12 @@ plot_q27_data_justice(q27_data_justice_data)
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q28_bias_data <- clean_q28_bias(meds2024_before_clean)
+q28_bias_data <- clean_q28_bias_bothPP(both_timepoints_clean)
 
 # plot ----
-plot_q28_bias(q28_bias_data)
+plot_rank(data = q28_bias_data,
+                 title = "I can identify areas of bias in approaches to data analysis.",
+                 caption = "Question 28")
 ```
 
 ## **Part 11: Data Viz & Communication**
@@ -839,49 +897,89 @@ plot_q28_bias(q28_bias_data)
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q29_create_viz_data <- clean_q29_create_viz(meds2024_before_clean)
+q29_create_viz_data <- clean_q29_create_viz_bothPP(both_timepoints_clean)
 
 # plot ----
-plot_q29_create_viz(q29_create_viz_data)
+plot_rank(data = q28_bias_data,
+                 title = "How comfortable are you with creating a data visualization using a\nprogramming language?",
+                 caption = "Question 29")
 ```
 
-#### Identify 4 areas for improvement in the following data visualization that shows information about Michigan counties with highest college attendance.
+#### Identify 4 areas for improvement in the following data visualization that shows information about Michigan counties with highest college attendance (Question 30).
 
 ```{r}
 #| fig-align: center
 knitr::include_graphics("images/30-plot.png")
 ```
 
-```{r}
-#| fig-width: 3
-#| fig-align: center
-#| fig-cap: "Wordcloud of most frequently occurring words used to describe suggested improvements to the above data visualization (Question 30)" 
-#| fig-cap-location: top
+::: {.center-text .body-text-m}
+*Wordcloud of most frequently occurring words used to describe suggested improvements to the above data visualization (Question 30)*
+:::
 
-##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-##  ~ Question 30: Improve Data Viz  ----
-##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+:::: {.columns}
+
+::: {.column width="50%"}
+::: {.center-text}
+**Pre-MEDS**
+:::
+
+```{r}
+#| eval: true
+#| echo: false
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##                  Question 30: Improve Data Viz (Pre-MEDS)                ----
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q30_improve_dv <- clean_q30_improve_dv(meds2024_before_clean)
+q30_improve_dv_pre <- clean_q30_improve_dv(meds2024_before_clean)
 
 # plot ----
-plot_q30_improve_dv(q30_improve_dv)
+plot_q30_improve_dv(q30_improve_dv_pre)
 ```
+:::
 
-::: {.callout-note}
-## Question 30 raw responses
-Free responses as they were recorded are included in the table, below:
+::: {.column width="50%"}
+::: {.center-text}
+**Post-MEDS**
+:::
 
 ```{r}
+#| eval: true
+#| echo: false
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##                  Question 30: Improve Data Viz (Post-MEDS)               ----
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 # wrangle ----
-q30_improve_dv <- meds2024_before_clean |> 
+q30_improve_dv_post <- clean_q30_improve_dv(meds2024_after_clean)
+
+# plot ----
+plot_q30_improve_dv(q30_improve_dv_post)
+```
+:::
+
+::::
+
+
+::: {.callout-note collapse=true}
+## Question 30 raw responses
+Responses as they were recorded are included in the tables, below:
+
+```{r}
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##                                  Pre-MEDS                                ----
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+#~..........................wrangle.............................
+q30_improve_dv_pre <- meds2024_before_clean |> 
   
   # select necessary cols ----
   select(improve_data_viz)
 
-# create table ----
-DT::datatable(q30_improve_dv, colnames = c("Free Response Answer to Q30"),
+#........................create DT table.........................
+DT::datatable(q30_improve_dv_pre, colnames = c("Free Response Answer to Q30"),
+              
+              caption = htmltools::tags$caption( style = 'caption-side: top; text-align: center; color:black;  font-size:200% ;','Pre-MEDS:'),
               
                options = list(autoWidth = TRUE, 
                               pageLength = 5,
@@ -890,6 +988,31 @@ DT::datatable(q30_improve_dv, colnames = c("Free Response Answer to Q30"),
               
               )
 ```
+
+```{r}
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##                                  Post-MEDS                               ----
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+#~..........................wrangle.............................
+q30_improve_dv_post <- meds2024_after_clean |> 
+  
+  # select necessary cols ----
+  select(improve_data_viz)
+
+#........................create DT table.........................
+DT::datatable(q30_improve_dv_post, colnames = c("Free Response Answer to Q30"),
+              
+              caption = htmltools::tags$caption( style = 'caption-side: top; text-align: center; color:black;  font-size:200% ;','Prost-MEDS:'),
+              
+               options = list(autoWidth = TRUE, 
+                              pageLength = 5,
+                              lengthMenu = c(5, 10, 20, 30),
+                              dom = 'ltp')
+              
+              )
+```
+
 :::
 
 ## **Part 12: Programming 2**
@@ -912,9 +1035,25 @@ convert_F_to_C(32)
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q31_lang_data <- clean_q31_lang(meds2024_before_clean)
+q31_lang_data <- clean_q31_lang_bothPP(both_timepoints_clean)
 
 # plot ----
-pal <- c("Python" = "#7ECD7A", "R" = "#047C91", "SQL" = "#047C91", "I'm not sure" = "#047C91")
-plot_q31_lang(q31_lang_data)
+plot_correct_answer_comparison(data = q31_lang_data,
+                               title = "What programming language is the above code written in?",
+                               subtitle = "Correct answer: Python",
+                               caption = "Question 31")
 ```
+
+<br>
+
+::: {.center-text}
+***End MEDS Class of 2024 PLO Assessment Report***
+:::
+
+<br>
+
+::: {.center-text}
+*Return to [main page](index.html)*
+:::
+
+

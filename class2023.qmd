@@ -3,9 +3,9 @@ title: "MEDS Class of 2023"
 subtitle: "Program Learning Outcome (PLO) #1 Assessment - Core Knowledge"
 author: "Sam Csik"
 date: June 9, 2023
-
 format: 
   html:
+    
     toc: true
     toc-location: left
     code-tools: 
@@ -14,7 +14,6 @@ format:
     theme: 
       - styles.scss
     mainfont: Nunito
-    
 execute: 
   eval: true
   echo: false
@@ -34,6 +33,7 @@ library(ggtext)
 library(DT)
 library(tidytext)
 library(wordcloud)
+library(scales)
 
 #........................import functions........................
 source("functions.R")
@@ -51,10 +51,6 @@ sysfonts::font_add_google(name = "Nunito", family = "nunito")
 # automatically use showtext to render text for future devices ----
 showtext::showtext_auto()
 ```
-
-<!-- # **Background** -->
-
-<!-- {{< include /sections/background.qmd >}} -->
 
 # **Summary**
 
@@ -78,7 +74,7 @@ ggplot(scores, aes(x = sc0)) +
   labs(x = "Score", y = "Number of MEDS studnets",
        title = "Distribution of scores",
        caption = "Out of 14 available points") +
-  meds_theme
+  meds_theme()
 ```
 
 # **Individual Questions**
@@ -107,9 +103,11 @@ plot_q1_os(q1_os_data)
 # combine written-in "server" option ----
 server <- c("Server", "Taylor server", "external server")
 
-# wrangle & plot ----
+# wrangle ----
 q2_store_data <- clean_q2_store_data(medsJune2023_clean)
-plot_q2_store_data(q2_store_data)
+
+# plot ----
+plot_q2_store_data(q2_store_data, survey = "Pre")
 ```
 
 ## **Part 2: How often do you currently use the following?**
@@ -125,7 +123,8 @@ q3_gui_data <- clean_q3_gui(medsJune2023_clean)
 # plot ----
 plot_frequency_use(data = q3_gui_data,
                    title = "A specialized software with a point-and-click graphical user\ninterface (e.g., for statistical analysis: SPSS, SAS...;for Geospatial\nanalysis: ArcGIS, QGIS...; for Genomics analysis: Geneious, …)",
-                   caption = "Question 3")
+                   caption = "Question 3",
+                   survey = "Pre")
 
 ```
 
@@ -140,7 +139,8 @@ q4_prog_lang_data <- clean_q4_prog_lang(medsJune2023_clean)
 # plot ----
 plot_frequency_use(data = q4_prog_lang_data,
                    title = "Programming languages (R, Python, etc.)",
-                   caption = "Question 4")
+                   caption = "Question 4",
+                   survey = "Pre")
 ```
 
 ```{r}
@@ -154,7 +154,8 @@ q5_databases_data <- clean_q5_databases(medsJune2023_clean)
 # plot ----
 plot_frequency_use(data = q5_databases_data, 
                    title = "Databases (SQL, Access, etc.)",
-                   caption = "Question 5")
+                   caption = "Question 5",
+                   survey = "Pre")
 ```
 
 ```{r}
@@ -168,7 +169,8 @@ q6_version_control_data <- clean_q6_version_control(medsJune2023_clean)
 # plot ----
 plot_frequency_use(data = q6_version_control_data,
                    title = "Version control software (Git, Subversion (SVN), Mercurial, etc.)",
-                   caption = "Question 6")
+                   caption = "Question 6",
+                   survey = "Pre")
 ```
 
 ```{r}
@@ -182,7 +184,8 @@ q7_command_shell_data <- clean_q7_command_shell(medsJune2023_clean)
 # plot ----
 plot_frequency_use(data = q7_command_shell_data,
                    title = "A command shell (usually accessed through Terminal on macOS or\nPowerShell on Windows)",
-                   caption = "Question 7")
+                   caption = "Question 7",
+                   survey = "Pre")
 ```
 
 ## **Part 3: Workflow satisfaction**
@@ -909,3 +912,15 @@ q31_lang_data <- clean_q31_lang(medsJune2023_clean)
 pal <- c("Python" = "#7ECD7A", "R" = "#047C91", "SQL" = "#047C91")
 plot_q31_lang(q31_lang_data)
 ```
+
+<br>
+
+::: {.center-text}
+***End MEDS Class of 2023 PLO Assessment Report***
+:::
+
+<br>
+
+::: {.center-text}
+*Return to [main page](index.html)*
+:::

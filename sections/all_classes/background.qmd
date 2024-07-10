@@ -16,4 +16,8 @@ Departments self-assess their PLO performance on a three-year cycle. A single ed
 ### What does that mean for the MEDS program?
 
 Bren has entered its assessment cycle, which will last from 2023 - 2025. During this 3-year span, MEDS PLO 1 (Core Knowledge) will be assessed by delivering a pre- and post-program survey to MEDS students in the form of a Qualtrics survey. This survey is not a test of individual students, but rather an assessment of the MEDS program.
+
+### Where can I find the raw data?
+
+Anyone who has "collaborator" access to the Qualtrics surveys can download the raw data results from a given PLO assessment. These raw data are then saved to [Google Drive](https://drive.google.com/drive/folders/1WQb-7IvLQ2rRi3xreuVKnY-rkrkBnj9E?usp=sharing) -- reach out to Sam Csik for access.
 <!-- ::: -->

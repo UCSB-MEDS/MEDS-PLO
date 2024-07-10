@@ -1,0 +1,64 @@
+---
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r in-line code q18}
+# total respondents ----
+q18a_num_answers_pre <- meds2024_before_clean |> 
+  select(prob_dist) |> 
+  count() |> 
+  pull()
+
+q18a_num_answers_post <- meds2024_after_clean |> 
+  select(prob_dist) |> 
+  count() |> 
+  pull()
+
+# total not answer 1 ----
+q18a_not1_pre <- meds2024_before_clean |> 
+  select(prob_dist) |> 
+  group_by(prob_dist) |>
+  filter(prob_dist != "1 (never heard of it)") |> 
+  count() |>
+  ungroup() |> 
+  summarize(n = sum(n)) |> 
+  pull()
+
+q18a_not1_post <- meds2024_after_clean |> 
+  select(prob_dist) |> 
+  group_by(prob_dist) |>
+  filter(prob_dist != "1 (never heard of it)") |> 
+  count() |>
+  ungroup() |> 
+  summarize(n = sum(n)) |> 
+  pull()
+
+# answered 1 ----
+q18a_1_pre <- meds2024_before_clean |> 
+  select(prob_dist) |> 
+  group_by(prob_dist) |>
+  filter(prob_dist == "1 (never heard of it)") |> 
+  count() |>
+  ungroup() |> 
+  summarize(n = sum(n)) |> 
+  pull()
+
+q18a_1_post <- meds2024_after_clean |> 
+  select(prob_dist) |> 
+  group_by(prob_dist) |>
+  filter(prob_dist == "1 (never heard of it)") |> 
+  count() |>
+  ungroup() |> 
+  summarize(n = sum(n)) |> 
+  pull()
+```
+
+::: {.callout-note}
+## All `r q18a_not1_post` Post-MEDS respondents were directed to answer Question 18b, as compared to `r q18a_not1_pre`/`r q18a_num_answers_pre` respondents in the Pre-MEDS PLO Assessment.
+
+- **Pre-MEDS: `r q18a_not1_pre`/`r q18a_num_answers_pre` student respondents (`r round((q18a_not1_pre/q18a_num_answers_pre)*100, 1)`%)** chose a familiarity level of 2 or greater, and therefore were directed to answer Question 18b. Those who selected a familiarity level of 1 (`r q18a_1_pre` students) were jumped directly to Question 19. 
+
+- **Post-MEDS: `r q18a_not1_post`/`r q18a_num_answers_post` student respondents (`r round((q18a_not1_post/q18a_num_answers_post)*100, 1)`%)** chose a familiarity level of 2 or greater, and therefore were directed to answer Question 18b. 
+:::
