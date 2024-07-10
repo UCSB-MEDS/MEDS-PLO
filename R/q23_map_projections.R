@@ -64,9 +64,9 @@ clean_q23a_comfort_map_proj <- function(PLO_data_clean){
   
 }
 
-##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-##  ~ for both pre & post assessments  ----
-##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##  ~ compare pre & post assessments  ----
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 clean_q23a_comfort_map_proj_bothPP <- function(PLO_data_clean){
   
@@ -203,9 +203,9 @@ plot_q23a_comfort_map_proj <- function(data){
   
 }
 
-##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-##  ~ for both pre & post assessments  ----
-##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##  ~ compare pre & post assessments  ----
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # see `plot_rank.R`
 
@@ -243,9 +243,9 @@ clean_q23b_reproj <- function(PLO_data_clean){
   
 }
 
-##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-##  ~ for both pre & post assessments  ----
-##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##  ~ compare pre & post assessments  ----
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 clean_q23b_reproj_bothPP <- function(PLO_data_clean){
   
@@ -319,7 +319,10 @@ plot_q23b_reproj <- function(data){
          caption = "Question 23b") +
     scale_x_discrete(labels = function(x) str_wrap(x, width = 15)) +
     scale_fill_manual(values = pal, limits = names(pal)) +
-    meds_theme() 
+    meds_theme() +
+    theme(
+      legend.position = "none"
+    )
   
 }
 

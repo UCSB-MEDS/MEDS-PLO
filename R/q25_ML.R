@@ -65,9 +65,9 @@ clean_q25a_familiar_ml <- function(PLO_data_clean){
   
 }
 
-##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-##  ~ for both pre & post assessments  ----
-##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##  ~ compare pre & post assessments  ----
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 clean_q25a_familiar_ml_bothPP <- function(PLO_data_clean){
   
@@ -247,9 +247,9 @@ clean_q25b_unsup_alg <- function(PLO_data_clean){
   
 }
 
-##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-##  ~ for both pre & post assessments  ----
-##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##  ~ compare pre & post assessments  ----
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 clean_q25b_unsup_alg_bothPP <- function(PLO_data_clean){
   
@@ -501,7 +501,10 @@ plot_q25c_kmeans <- function(data){
          caption = "Question 25c") +
     scale_x_discrete(labels = function(x) str_wrap(x, width = 15)) +
     scale_fill_manual(values = pal, limits = names(pal)) +
-    meds_theme()
+    meds_theme() +
+    theme(
+      legend.position = "none"
+    )
   
 }
 

@@ -63,9 +63,9 @@ clean_q24a_familiarity_rs <- function(PLO_data_clean){
   
 }
 
-##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-##  ~ for both pre & post assessments  ----
-##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##  ~ compare pre & post assessments  ----
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 clean_q24a_familiarity_rs_bothPP <- function(PLO_data_clean){
   
@@ -199,9 +199,9 @@ plot_q24a_familiarity_rs <- function(data){
   
 }
 
-##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-##  ~ for both pre & post assessments  ----
-##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##  ~ compare pre & post assessments  ----
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # see `part4_plot_rank.R`
 
@@ -236,9 +236,9 @@ clean_q24b_veg_wave <- function(PLO_data_clean){
   
 }
 
-##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-##  ~ for both pre & post assessments  ----
-##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##  ~ compare pre & post assessments  ----
+##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 clean_q24b_veg_wave_bothPP <- function(PLO_data_clean){
   
@@ -311,7 +311,10 @@ plot_q24b_veg_wave <- function(data){
          title = "Of the following wavelengths, which one does vegetation reflect the\nmost?",
          caption = "Question 24b") +
     scale_fill_manual(values = pal, limits = names(pal)) +
-    meds_theme()
+    meds_theme() +
+    theme(
+      legend.position = "none"
+    )
   
 }
 

@@ -1,11 +1,15 @@
 This PLO assessment was administered to the MEDS class of 2024 both [***before* beginning the program**]{.teal-text}, on August 4, 2023 **(response rate = `r nrow(meds2024_before_clean)`/31 students)**, and again [***after* completing the program**]{.dark-blue-text}, on June 5, 2024 **(response rate = `r nrow(meds2024_after_clean)`/31 students)**.
 
-The survey consists of **31 questions (28 multiple choice, 3 short free-response)** and takes ~30 minutes to complete. Questions 1 - 15 ask respondents to rank how often they use certain data science tools or workflows, or familiarity/comfort levels with particular topics (see [Part 1](#part-1-os-and-datadocument-storage) through [Part 4](#part-4-rank-the-following-from-1-strongly-disagree-to-5-strongly-agree), below). Questions 16 - 31 assess respondents' familiarity and application of domain-specific knowledge/tools taught during the MEDS program (see [Part 5](#part-5-stats) onward, below). Many of these question types are multi-part and begin with a question phrased as:
+The survey consists of **31 questions (28 multiple choice, 3 short free-response)** and takes ~30 minutes to complete. Questions 1 - 15 ask respondents to rank how often they use certain data science tools or workflows, or familiarity / comfort levels with particular topics (see [Part 1](#part-1-os-and-datadocument-storage) through [Part 4](#part-4-rank-the-following-from-1-strongly-disagree-to-5-strongly-agree), below). Questions 16 - 31 assess respondents' familiarity and application of domain-specific knowledge / tools taught during the MEDS program (see [Part 5](#part-5-stats) onward, below). Many of these question types are multi-part and begin with a question phrased as:
 
--  "How familiar/comfortable are you with X" (rank 1 (never heard of it) > 5 (very familiar))
--  "Have often have you done/implemented Y" (rank 1 (never) > 5 (all the time))
+-  "How familiar / comfortable are you with X" (rank 1 (never heard of it) > 5 (very familiar))
+-  "Have often have you done / implemented Y" (rank 1 (never) > 5 (all the time))
 
-If a respondent chooses a level of 2 or greater, they proceed to the remaining part(s) of the question to be tested on their knowledge/understanding of that topic. If a respondent chooses a level 1, they are skipped to the next question (to prevent respondents from guessing at answers). 
+If a respondent chooses a level of 2 or greater, they proceed to the remaining part(s) of the question to be tested on their knowledge / understanding of that topic. If a respondent chooses a level 1, they are skipped to the next question. These questions act as "gates" which prevent respondents who are unfamiliar with a topic from proceeding to and guessing on questions which are meant to test knowledge / understanding. 
+
+There are 14 questions which have a correct answer. These questions always follow at least one "gate" question. The results of these questions are presented as a comparison between the percentage of Pre- and Post-MEDS respondents who answered it correctly. It's important to note that these percentages are calculated based on the *total* number of students who participated in the assessment (that is `r pre_meds_num_respondents` for the Pre-MEDS assessment and `r post_meds_num_respondents` for the Post-MEDS assessment), and *not* the number of students who proceeded past the "gate" question(s). 
+
+<!-- An assumption is made that any student who did not proceed past a "gate" question(s) would not have had the knowledge necessary to provide an educated response. -->
 
 ```{r}
 #| eval: true
