@@ -33,24 +33,3 @@ source("R/q27_data_justice.R")
 source("R/q28_bias.R")
 source("R/q29_30_data_viz.R")
 source("R/q31_lang.R")
-
-
-# delete these ----
-# source("R/q3_gui.R")
-# source("R/q4_prog_lang.R")
-# source("R/q5_databases.R")
-# source("R/q6_version_control.R")
-# source("R/q7_command_shell.R")
-# source("R/q9_raw_data.R")
-# source("R/q10_small_program.R")
-# source("R/q11_find_help_online.R")
-# source("R/q12_overcoming_problems.R")
-# source("R/q13_confidence.R")
-# source("R/q14_easier_analysis.R")
-# source("R/q15_increase_efficiency.R")
-
-
-
-
-
-
