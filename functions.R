@@ -1,23 +1,23 @@
 
-source("R/clean_PLO_data.R")
+# all functions for just Pre-MEDS data as it appears in the class of 2023 report ----
+source("R/only_pre_fxns.R")
+
+# create ggplot theme for all visualizations ----
 source("R/meds_theme.R")
+
+# initial qualtrics data cleaning / parsing ----
+source("R/clean_PLO_data.R")
+
+# clean & plot data for Qs 1-2 ----
 source("R/q1_os.R")
 source("R/q2_store_data.R")
-source("R/plot_freq_use.R")
-source("R/q3_gui.R")
-source("R/q4_prog_lang.R")
-source("R/q5_databases.R")
-source("R/q6_version_control.R")
-source("R/q7_command_shell.R")
+
+# clean & plot data for Qs 3-31 ----
+source("R/clean_freq_rank_data.R")
+source("R/plot_freq_use_data.R")
+source("R/plot_rank_data.R")
+source("R/plot_correct_answer_comparison.R")
 source("R/q8_workflow_satisfaction.R")
-source("R/plot_rank.R")
-source("R/q9_raw_data.R")
-source("R/q10_small_program.R")
-source("R/q11_find_help_online.R")
-source("R/q12_overcoming_problems.R")
-source("R/q13_confidence.R")
-source("R/q14_easier_analysis.R")
-source("R/q15_increase_efficiency.R")
 source("R/q16_median_mode.R")
 source("R/q17_linear_regression.R")
 source("R/q18_prob_dist.R")
@@ -33,4 +33,3 @@ source("R/q27_data_justice.R")
 source("R/q28_bias.R")
 source("R/q29_30_data_viz.R")
 source("R/q31_lang.R")
-source("R/plot_correct_answer_comparison.R")
