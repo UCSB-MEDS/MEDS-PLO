@@ -29,5 +29,5 @@ editor_options:
 
 # PLO Assessments by Class
 
-- [MEDS Class of 2023](class2023.html)
+- [MEDS Class of 2023](class2023.html) (only pre-MEDS data available)
 - [MEDS Class of 2024](class2024.html)

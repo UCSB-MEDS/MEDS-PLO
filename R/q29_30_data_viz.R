@@ -5,70 +5,7 @@
 ##                                                                            --
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-##  ~ for just one PLO assessment (pre or post)  ----
-##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
 clean_q29_create_viz <- function(PLO_data_clean){
-  
-  # to iterate over ----
-  options <- c("1 (never done it)", "2", 
-               "3", "4", "5 (very comfortable, do it often)")
-  
-  df1 <- PLO_data_clean |> 
-    
-  # select necessary cols ----
-  select(data_viz_programming) |> 
-    
-  # sum ----
-  group_by(data_viz_programming) |>
-    count() |>
-    ungroup()
-    
-  # ADDING BC NO ONE SELECTED THE FOLLOWING OPTIONS ----
-  # add_row(data_viz_programming = "1 (never done it)", n = 0) |>
-  for (i in 1:length(options)){
-    
-    cat_name <- options[i]
-    
-    # if category already exists in df, skip to next one
-    if (cat_name %in% pull(df1[,1])) {
-      
-      message(cat_name, " already exists. Moving to next option.")
-      df1 <- df1
-      
-      # if category doesn't already exist, add it with n = 0 so that it still shows up on plot
-    } else {
-      
-      message(cat_name, " does not exist. Adding now.")
-      new_row <- data.frame(data_viz_programming = cat_name, n = 0)
-      df1 <- rbind(df1, new_row)
-      
-    }
-    
-    message("----------------------")
-    
-  } 
-  
-  # finish wrangling ----
-  df2 <- df1 |> 
-    
-  # reorder factors ----
-  mutate(data_viz_programming = fct_relevel(data_viz_programming, 
-                                            c("1 (never done it)", "2", 
-                                              "3", "4", "5 (very comfortable, do it often)"))) |>
-    
-  # add col for percentages ----
-  mutate(percentage = round((n/(sum(n)))*100, 1),
-         perc_label = paste0(percentage, "%"))
-  
-}
-
-##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-##  ~ compare pre & post assessments  ----
-##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-clean_q29_create_viz_bothPP <- function(PLO_data_clean){
   
   # ........................to iterate over.........................
   options <- c("1 (never done it)", "2", 
@@ -184,10 +121,6 @@ clean_q29_create_viz_bothPP <- function(PLO_data_clean){
 ##                                                                            --
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-##  ~ for one or two assessments  ----
-##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
 plot_q29_create_viz <- function(data){
 
   ggplot(data, aes(x = data_viz_programming, y = n, label = perc_label)) +
@@ -206,10 +139,6 @@ plot_q29_create_viz <- function(data){
 ##-------------------------- CLEAN QUESTION 30 DATA-----------------------------
 ##                                                                            --
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-##  ~ for one or two assessments  ----
-##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 clean_q30_improve_dv <- function(PLO_data_clean){
   
@@ -241,10 +170,6 @@ clean_q30_improve_dv <- function(PLO_data_clean){
 ##--------------------------- PLOT QUESTION 30 DATA-----------------------------
 ##                                                                            --
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-##  ~ for one or two assessments  ----
-##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 plot_q30_improve_dv <- function(data){
   
