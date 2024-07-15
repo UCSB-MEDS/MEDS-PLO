@@ -113,7 +113,6 @@ ggplot(both_timepoints_clean, aes(x = sc0)) +
   # make pretty ----
   coord_cartesian(clip = "off") +
   scale_fill_manual(values = meds_pal) +
-                    #labels = c("Pre-MEDS", "Post-MEDS")) +
   scale_x_continuous(breaks = seq(1, 14, 1)) +
   labs(x = "Score", y = "Number of MEDS students",
        title = "Distribution of scores",
@@ -158,18 +157,18 @@ plot_q2_store_data(q2_store_data)
 
 # wrangle ----
 q3_gui_data <- clean_freq_rank_data(all_PLO_data = both_timepoints_clean, 
-                                   col_name = "point_and_click_gui",
-                                   categories = c("Never", 
-                                                  "Less than once per year", 
-                                                  "Several times per year", 
-                                                  "Monthly", 
-                                                  "Weekly", 
-                                                  "Daily"))
+                                    col_name = "point_and_click_gui",
+                                    categories = c("Never", 
+                                                   "Less than once per year", 
+                                                   "Several times per year", 
+                                                   "Monthly", 
+                                                   "Weekly", 
+                                                   "Daily"))
 
 # plot ----
 plot_freq_use_data(data = q3_gui_data,
-                        title = "A specialized software with a point-and-click graphical user\ninterface (e.g., for statistical analysis: SPSS, SAS...;for Geospatial\nanalysis: ArcGIS, QGIS...; for Genomics analysis: Geneious, …)",
-                        caption = "Question 3")
+                   title = "A specialized software with a point-and-click graphical user\ninterface (e.g., for statistical analysis: SPSS, SAS...;for Geospatial\nanalysis: ArcGIS, QGIS...; for Genomics analysis: Geneious, …)",
+                   caption = "Question 3")
 ```
 
 ```{r Q4-prog-lang}
@@ -179,18 +178,18 @@ plot_freq_use_data(data = q3_gui_data,
 
 # wrangle ----
 q4_prog_lang_data <- clean_freq_rank_data(all_PLO_data = both_timepoints_clean, 
-                                         col_name = "program_lang",
-                                         categories = c("Never", 
-                                                  "Less than once per year", 
-                                                  "Several times per year", 
-                                                  "Monthly", 
-                                                  "Weekly", 
-                                                  "Daily"))
+                                          col_name = "program_lang",
+                                          categories = c("Never", 
+                                                         "Less than once per year", 
+                                                         "Several times per year", 
+                                                         "Monthly", 
+                                                         "Weekly", 
+                                                         "Daily"))
 
 # plot ----
 plot_freq_use_data(data = q4_prog_lang_data,
-                        title = "Programming languages (R, Python, etc.)",
-                        caption = "Question 4")
+                   title = "Programming languages (R, Python, etc.)",
+                   caption = "Question 4")
 ```
 
 ```{r Q5-databases}
@@ -200,18 +199,18 @@ plot_freq_use_data(data = q4_prog_lang_data,
 
 # wrangle ----
 q5_databases_data <- clean_freq_rank_data(all_PLO_data = both_timepoints_clean, 
-                                         col_name = "databases",
-                                         categories = c("Never", 
-                                                  "Less than once per year", 
-                                                  "Several times per year", 
-                                                  "Monthly", 
-                                                  "Weekly", 
-                                                  "Daily"))
+                                          col_name = "databases",
+                                          categories = c("Never", 
+                                                         "Less than once per year", 
+                                                         "Several times per year", 
+                                                         "Monthly", 
+                                                         "Weekly", 
+                                                         "Daily"))
 
 # plot ----
 plot_freq_use_data(data = q5_databases_data, 
-                        title = "Databases (SQL, Access, etc.)",
-                        caption = "Question 5")
+                   title = "Databases (SQL, Access, etc.)",
+                   caption = "Question 5")
 ```
 
 ```{r Q6-version-control}
@@ -221,18 +220,18 @@ plot_freq_use_data(data = q5_databases_data,
 
 # wrangle ----
 q6_version_control_data <- clean_freq_rank_data(all_PLO_data = both_timepoints_clean, 
-                                               col_name = "version_control",
-                                               categories = c("Never", 
-                                                  "Less than once per year", 
-                                                  "Several times per year", 
-                                                  "Monthly", 
-                                                  "Weekly", 
-                                                  "Daily"))
+                                                col_name = "version_control",
+                                                categories = c("Never", 
+                                                               "Less than once per year", 
+                                                               "Several times per year", 
+                                                               "Monthly", 
+                                                               "Weekly", 
+                                                               "Daily"))
 
 # plot ----
 plot_freq_use_data(data = q6_version_control_data,
-                        title = "Version control software (Git, Subversion (SVN), Mercurial, etc.)",
-                        caption = "Question 6")
+                   title = "Version control software (Git, Subversion (SVN), Mercurial, etc.)",
+                   caption = "Question 6")
 ```
 
 ```{r Q7-command-shell}
@@ -242,17 +241,17 @@ plot_freq_use_data(data = q6_version_control_data,
 
 # wrangle ----
 q7_command_shell_data <- clean_freq_rank_data(all_PLO_data = both_timepoints_clean, 
-                                             col_name = "command_shell",
-                                             categories = c("Never", 
-                                                  "Less than once per year", 
-                                                  "Several times per year", 
-                                                  "Monthly", 
-                                                  "Weekly", 
-                                                  "Daily"))
+                                              col_name = "command_shell",
+                                              categories = c("Never", 
+                                                             "Less than once per year", 
+                                                             "Several times per year", 
+                                                             "Monthly", 
+                                                             "Weekly", 
+                                                             "Daily"))
 # plot ----
 plot_freq_use_data(data = q7_command_shell_data,
-                        title = "A command shell (usually accessed through Terminal on macOS or\nPowerShell on Windows)",
-                        caption = "Question 7")
+                   title = "A command shell (usually accessed through Terminal on macOS or\nPowerShell on Windows)",
+                   caption = "Question 7")
 ```
 
 ## **Part 3: Workflow satisfaction**
@@ -278,17 +277,17 @@ plot_q8_workflow_sat(q8_workflow_satisfaction_data)
 
 # wrangle ----
 q9_raw_data_data <- clean_freq_rank_data(all_PLO_data = both_timepoints_clean,
-                                    col_name = "raw_data",
-                                    categories = c("1 (strongly disagree)", 
-                                                   "2", 
-                                                   "3 (neutral)", 
-                                                   "4", 
-                                                   "5 (strongly agree)"))
+                                         col_name = "raw_data",
+                                         categories = c("1 (strongly disagree)", 
+                                                        "2", 
+                                                        "3 (neutral)", 
+                                                        "4", 
+                                                        "5 (strongly agree)"))
 
 # plot ----
 plot_rank_data(data = q9_raw_data_data,
-                    title = "Having access to the original, raw data is important to be able to\nrepeat an analysis",
-                    caption = "Question 9")
+               title = "Having access to the original, raw data is important to be able to\nrepeat an analysis",
+               caption = "Question 9")
 ```
 
 ```{r Q10-write-script}
@@ -298,17 +297,17 @@ plot_rank_data(data = q9_raw_data_data,
 
 # wrangle ----
 q10_small_program_data <- clean_freq_rank_data(all_PLO_data = both_timepoints_clean,
-                                    col_name = "small_program",
-                                    categories = c("1 (strongly disagree)", 
-                                                   "2", 
-                                                   "3 (neutral)", 
-                                                   "4", 
-                                                   "5 (strongly agree)"))
+                                               col_name = "small_program",
+                                               categories = c("1 (strongly disagree)", 
+                                                              "2", 
+                                                              "3 (neutral)", 
+                                                              "4", 
+                                                              "5 (strongly agree)"))
 
 # plot ----
 plot_rank_data(data = q10_small_program_data,
-                    title = "I can write a small program, script, or macro to address a problem\nin my own work",
-                    caption = "Question 10")
+               title = "I can write a small program, script, or macro to address a problem\nin my own work",
+               caption = "Question 10")
 ```
 
 ```{r Q11-find-help}
@@ -318,17 +317,17 @@ plot_rank_data(data = q10_small_program_data,
 
 # wrangle ----
 q11_find_help_online_data <- clean_freq_rank_data(all_PLO_data = both_timepoints_clean,
-                                    col_name = "find_help_online",
-                                    categories = c("1 (strongly disagree)", 
-                                                   "2", 
-                                                   "3 (neutral)", 
-                                                   "4", 
-                                                   "5 (strongly agree)"))
+                                                  col_name = "find_help_online",
+                                                  categories = c("1 (strongly disagree)", 
+                                                                 "2", 
+                                                                 "3 (neutral)", 
+                                                                 "4", 
+                                                                 "5 (strongly agree)"))
 
 # plot ----
 plot_rank_data(data = q11_find_help_online_data ,
-                    title = "I know how to search for answers to my technical questions online",
-                    caption = "Question 11")
+               title = "I know how to search for answers to my technical questions online",
+               caption = "Question 11")
 ```
 
 ```{r Q12-overcome-problems}
@@ -338,16 +337,16 @@ plot_rank_data(data = q11_find_help_online_data ,
 
 # wrangle ----
 q12_overcoming_problems_data <- clean_freq_rank_data(all_PLO_data = both_timepoints_clean,
-                                    col_name = "overcoming_problems",
-                                    categories = c("1 (strongly disagree)", 
-                                                   "2", 
-                                                   "3 (neutral)", 
-                                                   "4", 
-                                                   "5 (strongly agree)"))
+                                                     col_name = "overcoming_problems",
+                                                     categories = c("1 (strongly disagree)", 
+                                                                    "2", 
+                                                                    "3 (neutral)", 
+                                                                    "4", 
+                                                                    "5 (strongly agree)"))
 # plot ----
 plot_rank_data(data = q12_overcoming_problems_data,
-                    title = "While working on a programming project, if I get stuck, I can find\nways of overcoming the problem",
-                    caption = "Question 12")
+               title = "While working on a programming project, if I get stuck, I can find\nways of overcoming the problem",
+               caption = "Question 12")
 ```
 
 ```{r Q13-confidence}
@@ -357,17 +356,17 @@ plot_rank_data(data = q12_overcoming_problems_data,
 
 # wrangle ----
 q13_confidence_data <- clean_freq_rank_data(all_PLO_data = both_timepoints_clean,
-                                    col_name = "confident_programmer",
-                                    categories = c("1 (strongly disagree)", 
-                                                   "2", 
-                                                   "3 (neutral)", 
-                                                   "4", 
-                                                   "5 (strongly agree)"))
+                                            col_name = "confident_programmer",
+                                            categories = c("1 (strongly disagree)", 
+                                                           "2", 
+                                                           "3 (neutral)", 
+                                                           "4", 
+                                                           "5 (strongly agree)"))
 
 # plot ----
 plot_rank_data(data = q13_confidence_data,
-                    title = "I am confident in my ability to make use of programming software\nto work with data",
-                    caption = "Question 13")
+               title = "I am confident in my ability to make use of programming software\nto work with data",
+               caption = "Question 13")
 ```
 
 ```{r Q14-easier-analyses}
@@ -377,16 +376,16 @@ plot_rank_data(data = q13_confidence_data,
 
 # wrangle ----
 q14_easier_analysis_data <- clean_freq_rank_data(all_PLO_data = both_timepoints_clean,
-                                    col_name = "easier_analyses",
-                                    categories = c("1 (strongly disagree)", 
-                                                   "2", 
-                                                   "3 (neutral)", 
-                                                   "4", 
-                                                   "5 (strongly agree)"))
+                                                 col_name = "easier_analyses",
+                                                 categories = c("1 (strongly disagree)", 
+                                                                "2", 
+                                                                "3 (neutral)", 
+                                                                "4", 
+                                                                "5 (strongly agree)"))
 # plot ----
 plot_rank_data(data = q14_easier_analysis_data,
-                     title = "Using a programming language (like R or Python) can make my\nanalyses easier to reproduce",
-                    caption = "Question 14")
+               title = "Using a programming language (like R or Python) can make my\nanalyses easier to reproduce",
+               caption = "Question 14")
 ```
 
 ```{r Q15-increase-efficiency}
@@ -396,17 +395,17 @@ plot_rank_data(data = q14_easier_analysis_data,
 
 # wrangle ----
 q15_increase_efficiency_data <- clean_freq_rank_data(all_PLO_data = both_timepoints_clean,
-                                    col_name = "increase_efficiency",
-                                    categories = c("1 (strongly disagree)", 
-                                                   "2", 
-                                                   "3 (neutral)", 
-                                                   "4", 
-                                                   "5 (strongly agree)"))
+                                                     col_name = "increase_efficiency",
+                                                     categories = c("1 (strongly disagree)", 
+                                                                    "2", 
+                                                                    "3 (neutral)", 
+                                                                    "4", 
+                                                                    "5 (strongly agree)"))
 
 # plot ----
 plot_rank_data(data = q15_increase_efficiency_data,
-                    title = "Using a programming language (like R or Python) can make me\nmore efficient at working with data",
-                    caption = "Question 15")
+               title = "Using a programming language (like R or Python) can make me\nmore efficient at working with data",
+               caption = "Question 15")
 ```
 
 ::: {.callout-note}
@@ -459,7 +458,13 @@ plot_correct_answer_comparison(data = q16b_mode_data,
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q17a_familiarity_lr_data <- clean_q17a_familiar_lr(both_timepoints_clean)
+q17a_familiarity_lr_data <- clean_freq_rank_data(all_PLO_data = both_timepoints_clean,
+                                                 col_name = "linear_regression",
+                                                 categories = c("1 - never heard of it",
+                                                                "2",
+                                                                "3 - vague sense of what it means",
+                                                                "4",
+                                                                "5 - very familiar"))
 
 # plot ----
 plot_rank_data(data = q17a_familiarity_lr_data,
@@ -545,7 +550,13 @@ DT::datatable(q17_microplastics_dt, colnames = c("Free Response Answer to Q17b")
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q18a_familiar_prob_dist_data <- clean_q18a_familiar_prob_dist(both_timepoints_clean)
+q18a_familiar_prob_dist_data <- clean_freq_rank_data(all_PLO_data = both_timepoints_clean,
+                                                     col_name = "prob_dist",
+                                                     categories = c("1 (never heard of it)", 
+                                                                    "2",
+                                                                    "3 (vague sense of what it means)",
+                                                                    "4", 
+                                                                    "5 (very familiar)"))
 
 # plot ----
 plot_rank_data(data = q18a_familiar_prob_dist_data,
@@ -588,8 +599,13 @@ plot_q18b_FULLY_CORRECT(q18b_prob_dist_FULLY_CORRECT_data)
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q19a_familiar_functions_data <- clean_q19a_familiar_functions(both_timepoints_clean)
-
+q19a_familiar_functions_data  <- clean_freq_rank_data(all_PLO_data = both_timepoints_clean,
+                                                      col_name = "term_function",
+                                                      categories = c("1 (never heard of it)", 
+                                                                     "2",
+                                                                     "3 (vague sense of what it means)",
+                                                                     "4", 
+                                                                     "5 (very familiar)"))
 # plot ----
 plot_rank_data(data = q19a_familiar_functions_data,
                            title = "How familiar are you with the term 'function' as it relates to\nprogramming?",
@@ -604,7 +620,13 @@ plot_rank_data(data = q19a_familiar_functions_data,
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q19b_writing_functions_data <- clean_q19b_writing_functions(both_timepoints_clean)
+q19b_writing_functions_data  <- clean_freq_rank_data(all_PLO_data = both_timepoints_clean,
+                                                     col_name = "writing_functions",
+                                                     categories = c("1 (not at all comfortable)",
+                                                                    "2",
+                                                                    "3",
+                                                                    "4",
+                                                                    "5 (very comfortable)"))
 
 # plot ----
 plot_rank_data(data = q19b_writing_functions_data,
@@ -684,7 +706,13 @@ plot_correct_answer_comparison(data = q20c_param_int_data,
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q21a_comfort_spatial_data <- clean_q21a_comfort_spatial(both_timepoints_clean)
+q21a_comfort_spatial_data  <- clean_freq_rank_data(all_PLO_data = both_timepoints_clean,
+                                                   col_name = "spatial_data",
+                                                   categories = c("1 (never worked with it before)", 
+                                                                  "2", 
+                                                                  "3", 
+                                                                  "4", 
+                                                                  "5 (work with it all the time)"))
 
 # plot ----
 plot_rank_data(data = q21a_comfort_spatial_data,
@@ -740,8 +768,13 @@ knitr::include_graphics("images/21c-vector.png")
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q22a_comfort_rs_data <- clean_q22a_comfort_rs(both_timepoints_clean)
-
+q22a_comfort_rs_data  <- clean_freq_rank_data(all_PLO_data = both_timepoints_clean,
+                                              col_name = "remote_sense_comfort",
+                                              categories = c("1 (never worked with it before)", 
+                                                             "2", 
+                                                             "3", 
+                                                             "4", 
+                                                             "5 (work with it all the time)"))
 # plot ----
 plot_rank_data(data = q22a_comfort_rs_data,
                            title = "How comfortable are you working with remotely sensed data?",
@@ -771,8 +804,13 @@ plot_correct_answer_comparison(data = q22b_rs_sun_data,
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q23a_comfort_map_proj_data <- clean_q23a_comfort_map_proj(both_timepoints_clean)
-
+q23a_comfort_map_proj_data  <- clean_freq_rank_data(all_PLO_data = both_timepoints_clean,
+                                                    col_name = "map_proj_comfort",
+                                                    categories = c("1 (never worked with it before)", 
+                                                                   "2", 
+                                                                   "3", 
+                                                                   "4", 
+                                                                   "5 (work it with all the time)"))
 # plot ----
 plot_rank_data(data = q23a_comfort_map_proj_data,
                            title = "How comfortable are you working with map projections?",
@@ -802,7 +840,13 @@ plot_correct_answer_comparison(data = q23b_reproj_data,
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q24a_familiarity_rs_data <- clean_q24a_familiarity_rs(both_timepoints_clean)
+q24a_familiarity_rs_data  <- clean_freq_rank_data(all_PLO_data = both_timepoints_clean,
+                                                  col_name = "reflec_spec",
+                                                  categories = c("1 (never heard of it)",
+                                                                 "2",
+                                                                 "3 (vague sense of what it means)",
+                                                                 "4",
+                                                                 "5 (very familiar)"))
 
 # plot ----
 plot_rank_data(data = q24a_familiarity_rs_data,
@@ -835,7 +879,13 @@ plot_correct_answer_comparison(data = q24b_veg_wave_data,
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q25a_familiar_ml_data <- clean_q25a_familiar_ml(both_timepoints_clean)
+q25a_familiar_ml_data  <- clean_freq_rank_data(all_PLO_data = both_timepoints_clean,
+                                               col_name = "sup_vs_unsup_learn",
+                                               categories = c("1 (never heard of either of those terms)", 
+                                                              "2",
+                                                              "3 (vague sense of these terms, but not why they are distinct from one another)",
+                                                              "4", 
+                                                              "5 (very familiar with both concepts and how they differ)"))
 
 # plot ----
 plot_rank_data(data = q25a_familiar_ml_data,
@@ -852,7 +902,14 @@ plot_rank_data(data = q25a_familiar_ml_data,
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q25b_unsup_alg_data <- clean_q25b_unsup_alg(both_timepoints_clean)
+q25b_unsup_alg_data  <- clean_freq_rank_data(all_PLO_data = both_timepoints_clean,
+                                             col_name = "implemented_algo",
+                                             categories = c("1 (definitely not)", 
+                                                            "2",
+                                                            "3 (maybe, but I'm not sure)",
+                                                            "4", 
+                                                            "5 (yes)")) |> 
+  filter(xvar != "NULL")
 
 # plot ----
 plot_rank_data(data = q25b_unsup_alg_data,
@@ -884,12 +941,18 @@ plot_correct_answer_comparison(data = q25c_kmeans_data,
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q26a_div_data <- clean_q26a_div_data(both_timepoints_clean)
+q26a_div_data  <- clean_freq_rank_data(all_PLO_data = both_timepoints_clean,
+                                       col_name = "ml_div_data",
+                                       categories = c("1 (never heard of it)", 
+                                                      "2",
+                                                      "3 (vague sense of what it means)",
+                                                      "4", 
+                                                      "5 (very familiar)"))
 
 # plot ----
 plot_rank_data(data = q26a_div_data,
-                           title = "How familiar are you with the procedure that divides your data into\nseparate “training”, “validation”, and “testing” sets?",
-                           caption = "Question 26a (choosing '1 (never heard of it)' skips respondent to question 27)")
+               title = "How familiar are you with the procedure that divides your data into\nseparate “training”, “validation”, and “testing” sets?",
+               caption = "Question 26a (choosing '1 (never heard of it)' skips respondent to question 27)")
 ```
 
 {{< include /sections/class2024/q26a-callout-inline-code.qmd >}}
@@ -900,12 +963,19 @@ plot_rank_data(data = q26a_div_data,
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q26b_tvs_data <- clean_q26b_tvs(both_timepoints_clean)
+q26b_tvs_data  <- clean_freq_rank_data(all_PLO_data = both_timepoints_clean,
+                                       col_name = "train_valid_split",
+                                       categories = c("1 (never)", 
+                                                      "2", 
+                                                      "3", 
+                                                      "4", 
+                                                      "5 (all the time)")) |> 
+  filter(xvar != "NULL")
 
 # plot ----
 plot_rank_data(data = q26b_tvs_data,
-                           title = "How often have you implemented a train, validation, test split?",
-                           caption = "Question 26b (choosing '1 (never)' skips respondent to question 27)")
+               title = "How often have you implemented a train, validation, test split?",
+               caption = "Question 26b (choosing '1 (never)' skips respondent to question 27)")
 ```
 
 {{< include /sections/class2024/q26b-callout-inline-code.qmd >}}
@@ -940,12 +1010,18 @@ plot_q26c_FULLY_CORRECT(q26c_FULLY_CORRECT_data)
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q27_data_justice_data <- clean_q27_data_justice(both_timepoints_clean)
+q27_data_justice_data  <- clean_freq_rank_data(all_PLO_data = both_timepoints_clean,
+                                               col_name = "data_justice",
+                                               categories = c("1 (never heard of it)", 
+                                                              "2", 
+                                                              "3 (vague sense of what it means)", 
+                                                              "4", 
+                                                              "5 (very familiar)"))
 
 # plot ----
 plot_rank_data(data = q27_data_justice_data,
-                 title = "How familiar are you with the term Data Justice?",
-                 caption = "Question 27")
+               title = "How familiar are you with the term Data Justice?",
+               caption = "Question 27")
 ```
 
 ```{r}
@@ -954,12 +1030,18 @@ plot_rank_data(data = q27_data_justice_data,
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q28_bias_data <- clean_q28_bias(both_timepoints_clean)
+q28_bias_data  <- clean_freq_rank_data(all_PLO_data = both_timepoints_clean,
+                                       col_name = "bias",
+                                       categories = c("1 (strongly disagree)",
+                                                      "2", 
+                                                      "3 (neutral)",
+                                                      "4", 
+                                                      "5 (strongly agree)"))
 
 # plot ----
 plot_rank_data(data = q28_bias_data,
-                 title = "I can identify areas of bias in approaches to data analysis.",
-                 caption = "Question 28")
+               title = "I can identify areas of bias in approaches to data analysis.",
+               caption = "Question 28")
 ```
 
 ## **Part 11: Data Viz & Communication**
@@ -970,12 +1052,17 @@ plot_rank_data(data = q28_bias_data,
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q29_create_viz_data <- clean_q29_create_viz(both_timepoints_clean)
-
+q29_create_viz_data  <- clean_freq_rank_data(all_PLO_data = both_timepoints_clean,
+                                             col_name = "data_viz_programming",
+                                             categories = c("1 (never done it)",
+                                                            "2", 
+                                                            "3",
+                                                            "4",
+                                                            "5 (very comfortable, do it often)"))
 # plot ----
 plot_rank_data(data = q29_create_viz_data,
-                 title = "How comfortable are you with creating a data visualization using a\nprogramming language?",
-                 caption = "Question 29")
+               title = "How comfortable are you with creating a data visualization using a\nprogramming language?",
+               caption = "Question 29")
 ```
 
 #### Identify 4 areas for improvement in the following data visualization that shows information about Michigan counties with highest college attendance (Question 30).

@@ -1,4 +1,4 @@
-#' Wrangle data for Questions 3 - 7, which asks respondents to select how frequently they use a tool or workflow
+#' Wrangle data for for questions which asks respondents to  select how frequently they use a tool / workflow or rank their level of agreement with a particular statement
 #'
 #' @param all_PLO_data both Pre- and Post-MEDS data frame (named in class2024.qmd as `both_timepoints_clean`)
 #' @param col_name column in `all_PLO_data` that corresponds to the target question responses (for any Qs 3-7) as a character string
@@ -74,17 +74,7 @@ clean_freq_rank_data <- function(all_PLO_data, col_name, categories){
 
   #................recombine pre- and post-MEDS data...............
   all_data <- rbind(pre_meds, post_meds) |>
-    mutate(xvar = fct_relevel(xvar,
-                                          c("Never",
-                                            "Less than once per year",
-                                            "Several times per year",
-                                            "Monthly", "Weekly", "Daily"))) |> 
-    mutate(xvar = fct_relevel(xvar, 
-                              c("1 (strongly disagree)", 
-                                "2", 
-                                "3 (neutral)", 
-                                "4", 
-                                "5 (strongly agree)")))
+    mutate(xvar = fct_relevel(xvar, options))
 
   return(all_data)
 

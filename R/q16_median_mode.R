@@ -11,13 +11,13 @@ clean_q16a_median <- function(PLO_data_clean){
   df <- PLO_data_clean |> 
     
     # select necessary cols ----
-  select(median, timepoint) |> 
+    select(median, timepoint) |> 
     
-    # coerce to factor ----
-  #mutate(median = as_factor(median)) |> 
+    ## coerce to factor ----
+    # mutate(median = as_factor(median)) |> 
     
     # sum ----
-  group_by(timepoint, median) |>
+    group_by(timepoint, median) |>
     count() |>
     ungroup() 
   
@@ -62,14 +62,6 @@ clean_q16a_median <- function(PLO_data_clean){
 
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ##                                                                            --
-##-------------------------- PLOT QUESTION 16A DATA-----------------------------
-##                                                                            --
-##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-# see `plot_correct_answer_comparison.R`
-
-##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-##                                                                            --
 ##------------------------- CLEAN QUESTION 16B DATA-----------------------------
 ##                                                                            --
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -80,13 +72,13 @@ clean_q16b_mode <- function(PLO_data_clean){
   df <- PLO_data_clean |> 
     
     # select necessary cols ----
-  select(mode, timepoint) |> 
+    select(mode, timepoint) |> 
     
-    # coerce to factor ----
-  #mutate(median = as_factor(median)) |> 
+    ## coerce to factor ----
+    # mutate(median = as_factor(median)) |> 
   
-  # sum ----
-  group_by(timepoint, mode) |>
+    # sum ----
+    group_by(timepoint, mode) |>
     count() |>
     ungroup() 
   
@@ -123,17 +115,10 @@ clean_q16b_mode <- function(PLO_data_clean){
   all_q16b_mode <- rbind(pre_meds, post_meds) |> 
     
     # filter only for correct answer ----
-  filter(mode == 14) 
+    filter(mode == 14) 
   
   return(all_q16b_mode)
   
 }
 
-##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-##                                                                            --
-##-------------------------- PLOT QUESTION 16B DATA-----------------------------
-##                                                                            --
-##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-# see `plot_correct_answer_comparison.R`
 

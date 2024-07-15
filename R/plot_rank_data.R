@@ -1,6 +1,6 @@
 #' Plot data for Questions 9 - 15, which asks respondents to rank their level of agreement
 #'
-#' @param data 
+#' @param data data generated from `clean_rank_data()`
 #' @param title plot title
 #' @param caption plot caption
 #'
