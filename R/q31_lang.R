@@ -70,6 +70,8 @@ clean_q31_lang <- function(PLO_data_clean){
   post_meds <- df |> 
     filter(timepoint == "Post-MEDS") 
   
+  if("Post-MEDS" %in% df$timepoint){
+  
   #................add 0s where missing (post-MEDS)................
   for (i in 1:length(options)){
     
@@ -101,6 +103,15 @@ clean_q31_lang <- function(PLO_data_clean){
            perc_label = paste0(percentage, "%"),
            perc_label_long = paste0(perc_label, "\n(", n, "/", total_respondents, " respondents)")) |>
     mutate(xvar = what_lang_is_this)
+  
+  } else{
+    post_meds <- post_meds %>%
+      mutate(total_respondents = 0,
+             percentage = 0,
+             perc_label = NA,
+             per_label_long = NA,
+             what_lang_is_this = NA)
+  }
   
   ##~~~~~~~~~~~~~~~~~~~~~~~
   ##  ~ recombine dfs  ----

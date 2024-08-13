@@ -58,21 +58,26 @@ clean_q8_workflow_sat <- function(PLO_data_clean){
     mutate(total_respondents = sum(n),
            percentage = round((n/total_respondents)*100, 1),
            perc_label = paste0(percentage, "%")) |>
-    mutate(xvar = rate_satisfaction)
+    mutate(xvar = rate_satisfaction) %>%
+    drop_na()
   
   ##~~~~~~~~~~~~~~~~~~~
   ##  ~ post-MEDS  ----
   ##~~~~~~~~~~~~~~~~~~~
-  
+
+
+    
   #........separate post-MEDS (to add 0s for missing cats).........
   post_meds <- df |> 
     filter(timepoint == "Post-MEDS") 
+  
+  if("Post-MEDS" %in% df$timepoint){
   
   #................add 0s where missing (post-MEDS)................
   for (i in 1:length(options)){
     
     cat_name <- options[i]
-    
+    print(cat_name)
     # if category already exists in df, skip to next one ----
     if (cat_name %in% pull(post_meds[,2])) {
       
@@ -98,6 +103,14 @@ clean_q8_workflow_sat <- function(PLO_data_clean){
            percentage = round((n/total_respondents)*100, 1),
            perc_label = paste0(percentage, "%")) |>
     mutate(xvar = rate_satisfaction)
+  
+  } else{
+    post_meds <- post_meds %>%
+      mutate(total_respondents = 0,
+             percentage = 0,
+             rate_satisfaction = NA)
+  }
+  
   
   ##~~~~~~~~~~~~~~~~~~~~~~~
   ##  ~ recombine dfs  ----

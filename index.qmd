@@ -1,7 +1,7 @@
 ---
 title: "Master of Environmental Data Science (MEDS)"
 subtitle: "Program Learning Outcome (PLO) #1 Assessment - Core Knowledge"
-author: "Sam Csik"
+author: "Sam Csik & Jamie Montgomery"
 date: June 9, 2023
 date-modified: last-modified
 format: 
@@ -29,5 +29,6 @@ editor_options:
 
 # PLO Assessments by Class
 
-- [MEDS Class of 2023](class2023.html) (only pre-MEDS data available)
+- [MEDS Class of 2023](class2023.html) (only post-MEDS data available)
 - [MEDS Class of 2024](class2024.html)
+- [MEDS Class of 2025](class2025.html) (only pre-MEDS data available)
