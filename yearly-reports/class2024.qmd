@@ -69,7 +69,7 @@ meds_pal <- c("Pre-MEDS" = "#047C91",
 
 # **Summary**
 
-{{< include /sections/class2024/summary.qmd >}}
+{{< include /summary-text/class2024/summary.qmd >}}
 
 ```{r overall-scores}
 #| fig-align: center
@@ -472,9 +472,9 @@ plot_rank_data(data = q17a_familiarity_lr_data,
                            caption = "Question 17a (choosing '1 - never heard of it' skips respondent to question 18)")
 ```
 
-{{< include /sections/class2024/q17-callout-inline-code.qmd >}}
+{{< include /summary-text/class2024/q17-callout-inline-code.qmd >}}
 
-{{< include /sections/all_classes/q17b-screenshot.qmd >}}
+{{< include /summary-text/all_classes/q17b-screenshot.qmd >}}
 
 ```{r}
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -564,7 +564,7 @@ plot_rank_data(data = q18a_familiar_prob_dist_data,
                            caption = "Question 18a (choosing '1 (never heard of it)' skips respondent to question 19)")
 ```
 
-{{< include /sections/class2024/q18-callout-inline-code.qmd >}}
+{{< include /summary-text/class2024/q18-callout-inline-code.qmd >}}
 
 ```{r}
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -612,7 +612,7 @@ plot_rank_data(data = q19a_familiar_functions_data,
                            caption = "Question 19a (choosing '1 (never heard of it)' skips respondent to question 20)")
 ```
 
-{{< include /sections/class2024/q19b-callout-inline-code.qmd >}}
+{{< include /summary-text/class2024/q19b-callout-inline-code.qmd >}}
 
 ```{r}
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -634,9 +634,9 @@ plot_rank_data(data = q19b_writing_functions_data,
                            caption = "Question 19b (choosing '1 (not at all)' skips respondent to question 20)")
 ```
 
-{{< include /sections/class2024/q19c-callout-inline-code.qmd >}}
+{{< include /summary-text/class2024/q19c-callout-inline-code.qmd >}}
 
-{{< include /sections/all_classes/q19c-turbine-function.qmd >}}
+{{< include /summary-text/all_classes/q19c-turbine-function.qmd >}}
 
 ```{r}
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -667,7 +667,7 @@ q20a_run_env_mod_data <- clean_q20a_run_env_mod(both_timepoints_clean)
 plot_q20a_run_env_mod(q20a_run_env_mod_data)
 ```
 
-{{< include /sections/class2024/q20a-callout-inline-code.qmd >}}
+{{< include /summary-text/class2024/q20a-callout-inline-code.qmd >}}
 
 ```{r}
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -681,7 +681,7 @@ q20b_sa_data <- clean_q20b_sa(both_timepoints_clean)
 plot_q20b_sa(q20b_sa_data)
 ```
 
-{{< include /sections/class2024/q20b-callout-inline-code.qmd >}}
+{{< include /summary-text/class2024/q20b-callout-inline-code.qmd >}}
 
 ```{r}
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -720,7 +720,7 @@ plot_rank_data(data = q21a_comfort_spatial_data,
                            caption = "Question 21a (choosing '1 (never worked with it before)' skips respondent to question 22)")
 ```
 
-{{< include /sections/class2024/q21-callout-inline-code.qmd >}}
+{{< include /summary-text/class2024/q21-callout-inline-code.qmd >}}
 
 ```{r}
 # wrangle (INDIV RESPONSES) ----
@@ -781,7 +781,7 @@ plot_rank_data(data = q22a_comfort_rs_data,
                            caption = "Question 22a (choosing '1 (never worked with it before)' skips respondent to question 23)")
 ```
 
-{{< include /sections/class2024/q22-callout-inline-code.qmd >}}
+{{< include /summary-text/class2024/q22-callout-inline-code.qmd >}}
 
 ```{r}
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -817,7 +817,7 @@ plot_rank_data(data = q23a_comfort_map_proj_data,
                            caption = "Question 23a (choosing '1 (never worked with it before)' skips respondent to question 24)")
 ```
 
-{{< include /sections/class2024/q23-callout-inline-code.qmd >}}
+{{< include /summary-text/class2024/q23-callout-inline-code.qmd >}}
 
 ```{r}
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -854,7 +854,7 @@ plot_rank_data(data = q24a_familiarity_rs_data,
                            caption = "Question 24a (choosing '1 (never heard of it)' skips respondent to question 25)")
 ```
 
-{{< include /sections/class2024/q24-callout-inline-code.qmd >}}
+{{< include /summary-text/class2024/q24-callout-inline-code.qmd >}}
 
 ```{r}
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -894,7 +894,7 @@ plot_rank_data(data = q25a_familiar_ml_data,
   scale_x_discrete(labels = function(x) str_wrap(x, width = 15))
 ```
 
-{{< include /sections/class2024/q25a-callout-inline-code.qmd >}}
+{{< include /summary-text/class2024/q25a-callout-inline-code.qmd >}}
 
 ```{r}
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -918,7 +918,7 @@ plot_rank_data(data = q25b_unsup_alg_data,
   scale_x_discrete(labels = function(x) str_wrap(x, width = 15))
 ```
 
-{{< include /sections/class2024/q25b-callout-inline-code.qmd >}}
+{{< include /summary-text/class2024/q25b-callout-inline-code.qmd >}}
 
 ```{r}
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -955,7 +955,7 @@ plot_rank_data(data = q26a_div_data,
                caption = "Question 26a (choosing '1 (never heard of it)' skips respondent to question 27)")
 ```
 
-{{< include /sections/class2024/q26a-callout-inline-code.qmd >}}
+{{< include /summary-text/class2024/q26a-callout-inline-code.qmd >}}
 
 ```{r}
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -978,7 +978,7 @@ plot_rank_data(data = q26b_tvs_data,
                caption = "Question 26b (choosing '1 (never)' skips respondent to question 27)")
 ```
 
-{{< include /sections/class2024/q26b-callout-inline-code.qmd >}}
+{{< include /summary-text/class2024/q26b-callout-inline-code.qmd >}}
 
 ```{r}
 # wrangle (INDIV RESPONSES) ----

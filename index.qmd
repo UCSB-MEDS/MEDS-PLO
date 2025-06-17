@@ -25,10 +25,10 @@ editor_options:
 
 # **Background**
 
-{{< include /sections/all_classes/background.qmd >}}
+{{< include /summary-text/all_classes/background.qmd >}}
 
 # PLO Assessments by Class
 
-- [MEDS Class of 2023](class2023.html) (only post-MEDS data available)
-- [MEDS Class of 2024](class2024.html)
-- [MEDS Class of 2025](class2025.html) (only pre-MEDS data available)
+- [MEDS Class of 2023](yearly-reports/class2023.html){target="_blank"} (only post-MEDS data available)
+- [MEDS Class of 2024](yearly-reports/class2024.html){target="_blank"}
+- [MEDS Class of 2025](yearly-reports/class2025.html){target="_blank"} 

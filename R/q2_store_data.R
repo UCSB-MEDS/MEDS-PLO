@@ -11,42 +11,45 @@ clean_q2_store_data <- function(PLO_data_clean){
   df <- PLO_data_clean |> 
     
     # select necessary cols ----
-  select(where_store_data, where_store_data_6_text, timepoint) |> 
+    select(where_store_data, where_store_data_6_text, timepoint) |> 
     
     # split strings by `,` delim ----
-  separate_longer_delim(where_store_data, delim = ",") |> 
+    separate_longer_delim(where_store_data, delim = ",") |> 
     
     # if "Other", replace with written-in response ----
-  mutate(store_data_new = case_when(
-    where_store_data == "Other" ~ where_store_data_6_text,
-    TRUE ~ where_store_data
-  )) |>
+    mutate(store_data_new = case_when(
+      where_store_data == "Other" ~ where_store_data_6_text,
+      TRUE ~ where_store_data
+    )) |>
     
     # remove unnecessary cols ----
-  select(where_store_data = store_data_new, timepoint) |> 
+    select(where_store_data = store_data_new, timepoint) |> 
     
     # split strings by `;` delim (someone had written in 'Other' and separated responses with ;) ----    
-  separate_longer_delim(where_store_data, delim = "; ") |> 
-    
-    # combine similar "other" choices ----
-  mutate(where_store_data = case_when(
-    where_store_data %in% server ~ "Server",
-    where_store_data %in% external_drive ~ "External Hard Drive",
-    TRUE ~ where_store_data
-  )) |> 
+    separate_longer_delim(where_store_data, delim = "; ") |> 
     
     # make consistent responses ----
-  mutate(where_store_data = str_replace(string = where_store_data,
-                                        pattern = "Locally on my computer", 
-                                        replacement = "Locally"),
-         where_store_data = str_replace(string = where_store_data, 
-                                        pattern = "Github", 
-                                        replacement = "GitHub")) |>
+    mutate(where_store_data = case_when(
+      where_store_data %in% server ~ "Server",
+      where_store_data %in% external_drive ~ "External Hard Drive",
+      where_store_data %in% icloud ~ "iCloud",
+      where_store_data %in% github ~ "GitHub",
+      where_store_data %in% locally ~ "Locally",
+      TRUE ~ where_store_data
+    )) |> 
+    
+    # make consistent responses ----
+    # mutate(where_store_data = str_replace(string = where_store_data,
+    #                                       pattern = "Locally on my computer", 
+    #                                       replacement = "Locally"),
+    #       where_store_data = str_replace(string = where_store_data, 
+    #                                       pattern = "Github", 
+    #                                       replacement = "GitHub")) |>
     
     # count ----
-  group_by(timepoint, where_store_data) |> 
-    count() |> 
-    ungroup() #|> 
+    group_by(timepoint, where_store_data) |> 
+      count() |> 
+      ungroup() 
   
   #........separate pre-MEDS data to calculate percentages.........
   pre_meds <- df |> 
