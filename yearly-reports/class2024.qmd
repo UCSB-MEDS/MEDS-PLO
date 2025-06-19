@@ -6,14 +6,13 @@ date: August 4, 2023
 date-modified: last-modified
 format: 
   html:
-    
     toc: true
     toc-location: left
     code-tools: 
       source: true
       toggle: false
     theme: 
-      - styles.scss
+      - ../styles.scss
     mainfont: Nunito
 execute: 
   eval: true
@@ -37,7 +36,7 @@ library(wordcloud)
 library(scales)
 
 #........................import functions........................
-source("functions.R")
+source(here::here("functions.R"))
 
 #..........................import data...........................
 meds2024_before <- read_sheet("https://docs.google.com/spreadsheets/d/1cJddylTu-eyb2fjbnVuvv-tvy6Knq1HfHjz_5zlW0fc/edit?usp=sharing")
@@ -142,6 +141,9 @@ plot_q1_os(q1_os_data)
 # combine written-in "Other" option responses ----
 server <- c("Server", "Taylor server", "external server", "Taylor")
 external_drive <- c("External SSD", "External drive", "external hard drive")
+icloud <- c()
+github <- c("Github")
+locally <- c()
 
 # wrangle & plot ----
 q2_store_data <- clean_q2_store_data(both_timepoints_clean)

@@ -202,8 +202,9 @@ clean_q21b_FULLY_CORRECT <- function(PLO_data_clean){
   ##  ~ pre-MEDS  ----
   ##~~~~~~~~~~~~~~~~~~
   
-  #....total respondents that continued onto answer question 18b...
-  total_pre_resp <- meds2025_before_clean |> 
+  #....total respondents that continued onto answer question 21b...
+  total_pre_resp <- both_timepoints_clean |> #meds2025_before_clean |>
+    filter(timepoint == "Pre-MEDS") |>
     select(rep_spatial_data) |>
     group_by(rep_spatial_data) |>
     filter(rep_spatial_data != "1 (never worked with it before)") |>
@@ -226,8 +227,9 @@ clean_q21b_FULLY_CORRECT <- function(PLO_data_clean){
   ##  ~ post-MEDS  ----
   ##~~~~~~~~~~~~~~~~~~~
   
-  #....total respondents that continued onto answer question 18b...
-  total_post_resp <- meds2025_after_clean |>
+  #....total respondents that continued onto answer question 21b...
+  total_post_resp <- both_timepoints_clean |> #meds2025_after_clean |>
+    filter(timepoint == "Post-MEDS") |>
     select(rep_spatial_data) |>
     group_by(rep_spatial_data) |>
     filter(rep_spatial_data != "1 (never worked with it before)") |>

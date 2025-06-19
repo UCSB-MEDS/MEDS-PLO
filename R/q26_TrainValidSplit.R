@@ -213,8 +213,9 @@ clean_q26c_FULLY_CORRECT <- function(PLO_data_clean){
   ##  ~ pre-MEDS  ----
   ##~~~~~~~~~~~~~~~~~~
   
-  #....total respondents that continued onto answer question 18b...
-  total_pre_resp <- meds2025_before_clean |> 
+  #....total respondents that continued onto answer question 26b...
+  total_pre_resp <- both_timepoints_clean |> #meds2025_before_clean |>
+    filter(timepoint == "Pre-MEDS") |>
     select(learning_from_model) |>
     group_by(learning_from_model) |>
     # filter(learning_from_model != "1 (never heard of it)") |> # include this if you want % calculation to be out of only students who advanced to this question
@@ -239,8 +240,9 @@ clean_q26c_FULLY_CORRECT <- function(PLO_data_clean){
   ##  ~ post-MEDS  ----
   ##~~~~~~~~~~~~~~~~~~~
   
-  #....total respondents that continued onto answer question 18b...
-  total_post_resp <- meds2025_after_clean |>
+  #....total respondents that continued onto answer question 26b...
+  total_post_resp <- both_timepoints_clean |> #meds2025_after_clean |>
+    filter(timepoint == "Post-MEDS") |>
     select(learning_from_model) |>
     group_by(learning_from_model) |>
     # filter(learning_from_model != "1 (never heard of it)") |> # include this if you want % calculation to be out of only students who advanced to this question
