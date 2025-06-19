@@ -13,7 +13,7 @@ format:
       source: true
       toggle: false
     theme: 
-      - styles.scss
+      - ../styles.scss
     mainfont: Nunito
 execute: 
   eval: true
@@ -37,7 +37,7 @@ library(wordcloud)
 library(scales)
 
 #........................import functions........................
-source("functions.R")
+source(here::here("functions.R"))
 
 #..........................import data...........................
 meds2025_before <- read_sheet("https://docs.google.com/spreadsheets/d/1E3WbMZuOl33sUgbJcPmrqMQbCp3-AsmRAjuxdNXk6oM/edit?gid=1486409728#gid=1486409728")
@@ -418,6 +418,8 @@ plot_rank_data(data = q15_increase_efficiency_data,
 ::: {.callout-note}
 ## Unusual respondent
 
+One respondent in the Post-MEDS PLO assessment answered 1 (strongly disagree) to all questions 9 - 15.
+
 ```{r}
 #| include: false
 #| eval: false
@@ -482,8 +484,6 @@ plot_rank_data(data = q17a_familiarity_lr_data,
 
 {{< include /summary-text/all_classes/q17b-screenshot.qmd >}}
 
-## DID ANYONE GET THIS RIGHT IN THE PRE-MEDS PLO???
-
 ```{r}
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ##  ~ Question 17b: Microplastics  ----
@@ -510,16 +510,20 @@ Respondents submitted a wide variety of answers -- responses as they were record
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 #~..........................wrangle.............................
-q17_microplastics_dt <- meds2025_before_clean |> 
+q17_microplastics_dt <- both_timepoints_clean |> 
   
   # select necessary cols ----
-  select(microplastics_lr)
+  select(timepoint, microplastics_lr) |> 
+  
+  # group and count similar responses ----
+  group_by(timepoint, microplastics_lr) |> 
+  count() |> 
+  arrange(desc(n))
 
-DT::datatable(q17_microplastics_dt, colnames = c("Free Response Answer to Q17b"),
-              
-              caption = htmltools::tags$caption( style = 'caption-side: top; text-align: center; color:black;  font-size:200% ;','Pre-MEDS:'),
-              
-               options = list(autoWidth = TRUE, 
+DT::datatable(q17_microplastics_dt, 
+              colnames = c("Timepoint", "Free Response Answer to Q17b", "# of similar responses"),
+              #caption = htmltools::tags$caption( style = 'caption-side: top; text-align: center; color:black;  font-size:200% ;','Pre-MEDS:'),
+              options = list(autoWidth = TRUE, 
                               pageLength = 5,
                               lengthMenu = c(5, 10, 20, 30),
                               dom = 'ltp')
@@ -528,28 +532,32 @@ DT::datatable(q17_microplastics_dt, colnames = c("Free Response Answer to Q17b")
 ```
 
 ```{r}
-#| eval: false
 
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ##                                  Post-MEDS                               ----
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-#~..........................wrangle.............................
-q17_microplastics_dt <- meds2025_after_clean |>
-
-  # select necessary cols ----
-  select(microplastics_lr)
-
-DT::datatable(q17_microplastics_dt, colnames = c("Free Response Answer to Q17b"),
-
-              caption = htmltools::tags$caption( style = 'caption-side: top; text-align: center; color:black;  font-size:200% ;','Post-MEDS:'),
-
-               options = list(autoWidth = TRUE,
-                              pageLength = 5,
-                              lengthMenu = c(5, 10, 20, 30),
-                              dom = 'ltp')
-
-              )
+# #~..........................wrangle.............................
+# q17_microplastics_dt <- meds2025_after_clean |>
+# 
+#   # select necessary cols ----
+#   select(microplastics_lr) |> 
+#   
+#   # group and count similar responses ----
+#   group_by(microplastics_lr) |> 
+#   count() |> 
+#   arrange(desc(n))
+# 
+# DT::datatable(q17_microplastics_dt, colnames = c("Free Response Answer to Q17b", "# of similar responses"),
+# 
+#               caption = htmltools::tags$caption( style = 'caption-side: top; text-align: center; color:black;  font-size:200% ;','Post-MEDS:'),
+# 
+#                options = list(autoWidth = TRUE,
+#                               pageLength = 5,
+#                               lengthMenu = c(5, 10, 20, 30),
+#                               dom = 'ltp')
+# 
+#               )
 ```
 
 :::
@@ -574,7 +582,7 @@ plot_rank_data(data = q18a_familiar_prob_dist_data,
                            caption = "Question 18a (choosing '1 (never heard of it)' skips respondent to question 19)")
 ```
 
-{{< include /summary-text/class2025/q18-callout-inline-code.qmd >}}
+<!-- {{< include /summary-text/class2025/q18-callout-inline-code.qmd >}} -->
 
 ```{r}
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -624,7 +632,7 @@ plot_rank_data(data = q19a_familiar_functions_data,
                            caption = "Question 19a (choosing '1 (never heard of it)' skips respondent to question 20)")
 ```
 
-{{< include /summary-text/class2025/q19b-callout-inline-code.qmd >}}
+<!-- {{< include /summary-text/class2025/q19b-callout-inline-code.qmd >}} -->
 
 ```{r}
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -646,9 +654,9 @@ plot_rank_data(data = q19b_writing_functions_data,
                            caption = "Question 19b (choosing '1 (not at all)' skips respondent to question 20)")
 ```
 
-{{< include /summary-text/class2025/q19c-callout-inline-code.qmd >}}
+<!-- {{< include /summary-text/class2025/q19c-callout-inline-code.qmd >}} -->
 
-{{< include /summary-text/all_classes/q19c-turbine-function.qmd >}}
+<!-- {{< include /summary-text/all_classes/q19c-turbine-function.qmd >}} -->
 
 ```{r}
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -679,7 +687,7 @@ q20a_run_env_mod_data <- clean_q20a_run_env_mod(both_timepoints_clean)
 plot_q20a_run_env_mod(q20a_run_env_mod_data)
 ```
 
-{{< include /summary-text/class2025/q20a-callout-inline-code.qmd >}}
+<!-- {{< include /summary-text/class2025/q20a-callout-inline-code.qmd >}} -->
 
 ```{r}
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -693,7 +701,7 @@ q20b_sa_data <- clean_q20b_sa(both_timepoints_clean)
 plot_q20b_sa(q20b_sa_data)
 ```
 
-{{< include /summary-text/class2025/q20b-callout-inline-code.qmd >}}
+<!-- {{< include /summary-text/class2025/q20b-callout-inline-code.qmd >}} -->
 
 ```{r}
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -732,7 +740,7 @@ plot_rank_data(data = q21a_comfort_spatial_data,
                            caption = "Question 21a (choosing '1 (never worked with it before)' skips respondent to question 22)")
 ```
 
-{{< include /summary-text/class2025/q21-callout-inline-code.qmd >}}
+<!-- {{< include /summary-text/class2025/q21-callout-inline-code.qmd >}} -->
 
 ```{r}
 # wrangle (INDIV RESPONSES) ----
@@ -774,7 +782,7 @@ plot_correct_answer_comparison(data = q21c_vec_ras_data,
 
 ```{r}
 #| fig-align: center
-knitr::include_graphics("images/21c-vector.png")
+knitr::include_graphics(here::here("yearly-reports", "images", "21c-vector.png"))
 ```
 
 ```{r}
@@ -796,7 +804,7 @@ plot_rank_data(data = q22a_comfort_rs_data,
                            caption = "Question 22a (choosing '1 (never worked with it before)' skips respondent to question 23)")
 ```
 
-{{< include /summary-text/class2025/q22-callout-inline-code.qmd >}}
+<!-- {{< include /summary-text/class2025/q22-callout-inline-code.qmd >}} -->
 
 ```{r}
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -832,7 +840,7 @@ plot_rank_data(data = q23a_comfort_map_proj_data,
                            caption = "Question 23a (choosing '1 (never worked with it before)' skips respondent to question 24)")
 ```
 
-{{< include /summary-text/class2025/q23-callout-inline-code.qmd >}}
+<!-- {{< include /summary-text/class2025/q23-callout-inline-code.qmd >}} -->
 
 ```{r}
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -869,7 +877,7 @@ plot_rank_data(data = q24a_familiarity_rs_data,
                            caption = "Question 24a (choosing '1 (never heard of it)' skips respondent to question 25)")
 ```
 
-{{< include /summary-text/class2025/q24-callout-inline-code.qmd >}}
+<!-- {{< include /summary-text/class2025/q24-callout-inline-code.qmd >}} -->
 
 ```{r}
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -909,7 +917,7 @@ plot_rank_data(data = q25a_familiar_ml_data,
   scale_x_discrete(labels = function(x) str_wrap(x, width = 15))
 ```
 
-{{< include /summary-text/class2025/q25a-callout-inline-code.qmd >}}
+<!-- {{< include /summary-text/class2025/q25a-callout-inline-code.qmd >}} -->
 
 ```{r}
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -933,7 +941,7 @@ plot_rank_data(data = q25b_unsup_alg_data,
   scale_x_discrete(labels = function(x) str_wrap(x, width = 15))
 ```
 
-{{< include /summary-text/class2025/q25b-callout-inline-code.qmd >}}
+<!-- {{< include /summary-text/class2025/q25b-callout-inline-code.qmd >}} -->
 
 ```{r}
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -970,7 +978,7 @@ plot_rank_data(data = q26a_div_data,
                caption = "Question 26a (choosing '1 (never heard of it)' skips respondent to question 27)")
 ```
 
-{{< include /summary-text/class2025/q26a-callout-inline-code.qmd >}}
+<!-- {{< include /summary-text/class2025/q26a-callout-inline-code.qmd >}} -->
 
 ```{r}
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -993,7 +1001,7 @@ plot_rank_data(data = q26b_tvs_data,
                caption = "Question 26b (choosing '1 (never)' skips respondent to question 27)")
 ```
 
-{{< include /summary-text/class2025/q26b-callout-inline-code.qmd >}}
+<!-- {{< include /summary-text/class2025/q26b-callout-inline-code.qmd >}} -->
 
 ```{r}
 # wrangle (INDIV RESPONSES) ----
@@ -1086,7 +1094,7 @@ plot_rank_data(data = q29_create_viz_data,
 
 ```{r}
 #| fig-align: center
-knitr::include_graphics("images/30-plot.png")
+knitr::include_graphics(here::here("yearly-reports", "images", "30-plot.png"))
 ```
 
 ::: {.center-text .body-text-m}
