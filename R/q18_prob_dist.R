@@ -126,7 +126,7 @@ clean_q18b_prob_dist_terms <- function(PLO_data_clean){
   
   
   } else{
-    post_meds <- post_meds %>%
+    post_meds <- post_meds |> 
       mutate(total_respondents = 0,
              percentage = 0,
              prob_dist_terms = NA)
@@ -200,7 +200,8 @@ clean_q18b_FULLY_CORRECT <- function(PLO_data_clean){
   ##~~~~~~~~~~~~~~~~~~
   
   #....total respondents that continued onto answer question 18b...
-  total_pre_resp <- meds2025_before_clean |> 
+  total_pre_resp <- both_timepoints_clean |> #meds2025_before_clean |> 
+    filter(timepoint == "Pre-MEDS") |> 
     select(prob_dist) |>
     group_by(prob_dist) |>
     # filter(prob_dist != "1 (never heard of it)") |> # include this if you want % calculation to be out of only students who advanced to this question
@@ -226,32 +227,33 @@ clean_q18b_FULLY_CORRECT <- function(PLO_data_clean){
   ##~~~~~~~~~~~~~~~~~~~
   
   #....total respondents that continued onto answer question 18b...
-  # total_post_resp <- meds2025_after_clean |> 
-  #   select(prob_dist) |>
-  #   group_by(prob_dist) |>
-  #   # filter(prob_dist != "1 (never heard of it)") |> # include this if you want % calculation to be out of only students who advanced to this question
-  #   count() |>
-  #   ungroup() |>
-  #   summarize(n = sum(n)) |>
-  #   pull()
+  total_post_resp <- both_timepoints_clean |> #meds2025_after_clean |>
+    filter(timepoint == "Post-MEDS") |>
+    select(prob_dist) |>
+    group_by(prob_dist) |>
+    # filter(prob_dist != "1 (never heard of it)") |> # include this if you want % calculation to be out of only students who advanced to this question
+    count() |>
+    ungroup() |>
+    summarize(n = sum(n)) |>
+    pull()
   
-  # post_meds <- df |> 
-  #   filter(timepoint == "Post-MEDS") |> 
-  #   group_by(correctness) |> 
-  #   count() |> 
-  #   # summarize(total = sum(n)) |> 
-  #   # ungroup() |> 
-  #   mutate(timepoint = rep("Post-MEDS")) |> 
-  #   mutate(total_respondents = total_post_resp,
-  #          percentage = round((n/total_respondents)*100, 1),
-  #          perc_label = paste0(percentage, "%")) |> 
-  #   mutate(perc_label_long = paste0(perc_label, "\n(", n, "/", total_respondents, " respondents)"))
+  post_meds <- df |>
+    filter(timepoint == "Post-MEDS") |>
+    group_by(correctness) |>
+    count() |>
+    # summarize(total = sum(n)) |>
+    # ungroup() |>
+    mutate(timepoint = rep("Post-MEDS")) |>
+    mutate(total_respondents = total_post_resp,
+           percentage = round((n/total_respondents)*100, 1),
+           perc_label = paste0(percentage, "%")) |>
+    mutate(perc_label_long = paste0(perc_label, "\n(", n, "/", total_respondents, " respondents)"))
   
   ##~~~~~~~~~~~~~~~~~~~~~~~
   ##  ~ recombine dfs  ----
   ##~~~~~~~~~~~~~~~~~~~~~~~
   
-  all_q18b_fully_correct <- pre_meds |> #rbind(pre_meds, post_meds) |> 
+  all_q18b_fully_correct <- rbind(pre_meds, post_meds) |> 
     filter(correctness == "yes") |> 
     mutate(timepoint = fct_relevel(timepoint, c("Pre-MEDS", "Post-MEDS"))) 
   

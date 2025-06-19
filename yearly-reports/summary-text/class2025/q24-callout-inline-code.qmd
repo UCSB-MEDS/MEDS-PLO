@@ -1,0 +1,58 @@
+```{r in-line code q24a}
+# total respondents ----
+q24a_num_answers_pre <- meds2025_before_clean |>
+  select(reflec_spec) |>
+  count() |>
+  pull()
+
+q24a_num_answers_post <- meds2025_after_clean |>
+  select(reflec_spec) |>
+  count() |>
+  pull()
+
+# total not answer 1 ----
+q24a_not1_pre <- meds2025_before_clean |>
+  select(reflec_spec) |>
+  group_by(reflec_spec) |>
+  count() |>
+  ungroup() |>
+  filter(reflec_spec != "1 (never heard of it)") |> 
+  summarize(n = sum(n)) |>
+  pull()
+
+q24a_not1_post <- meds2025_after_clean |>
+  select(reflec_spec) |>
+  group_by(reflec_spec) |>
+  count() |>
+  ungroup() |>
+  filter(reflec_spec != "1 (never heard of it)") |>
+  summarize(n = sum(n)) |>
+  pull()
+
+# answered 1 ----
+q24a_1_pre <- meds2025_before_clean |>
+  select(reflec_spec) |>
+  group_by(reflec_spec) |>
+  count() |>
+  ungroup() |>
+  filter(reflec_spec == "1 (never heard of it)") |> 
+  summarize(n = sum(n)) |>
+  pull()
+
+q24a_1_post <- meds2025_after_clean |>
+  select(reflec_spec) |>
+  group_by(reflec_spec) |>
+  count() |>
+  ungroup() |>
+  filter(reflec_spec == "1 (never heard of it)") |>
+  summarize(n = sum(n)) |>
+  pull()
+```
+
+::: {.callout-note}
+## `r q24a_not1_post`/`r q24a_num_answers_post` Post-MEDS respondents were directed to answer Question 24b, as compared to the `r q24a_not1_pre`/`r q24a_num_answers_pre` respondents in the Pre-MEDS PLO Assessment.
+
+- **Pre-MEDS: `r q24a_not1_pre`/`r q24a_num_answers_pre` student respondents (`r round((q24a_not1_pre/q24a_num_answers_pre)*100, 1)`%)** chose a familiarity level of 2 or greater, and therefore were directed to answer Question 24b. Those who answered "1" (`r q24a_1_pre` students) were jumped directly to Question 25. 
+
+- **Post-MEDS: `r q24a_not1_post`/`r q24a_num_answers_post` student respondents (`r round((q24a_not1_post/q24a_num_answers_post)*100, 1)`%)** chose a familiarity level of 2 or greater, and therefore were directed to answer Question 24b. Those who answered "1" (`r q24a_1_post` student) were jumped directly to Question 25.
+:::

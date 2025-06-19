@@ -1,0 +1,40 @@
+This PLO assessment was administered to the MEDS class of 2025 both [***before* beginning the program**]{.teal-text}, on August 2, 2024 **(response rate = `r nrow(meds2025_before_clean)`/29 students)**, and again [***after* completing the program**]{.dark-blue-text}, on June 4, 2024 **(response rate = `r nrow(meds2025_after_clean)`/30 students)**.
+
+::: {.callout-note}
+## Discrepancy in total # of students in pre- and post-MEDS PLO assessments
+One student from the class of 2025 completed MEDS in two years and therefore only took this PLO assessment at the *end* of the program.
+:::
+
+The survey consists of **31 questions (28 multiple choice, 3 short free-response)** and takes ~30 minutes to complete. Questions 1 - 15 ask respondents to rank how often they use certain data science tools or workflows, or familiarity / comfort levels with particular topics (see [Part 1](#part-1-os-and-datadocument-storage) through [Part 4](#part-4-rank-the-following-from-1-strongly-disagree-to-5-strongly-agree), below). Questions 16 - 31 assess respondents' familiarity and application of domain-specific knowledge / tools taught during the MEDS program (see [Part 5](#part-5-stats) onward, below). Many of these question types are multi-part and begin with a question phrased as:
+
+-  "How familiar / comfortable are you with X" (rank 1 (never heard of it) > 5 (very familiar))
+-  "Have often have you done / implemented Y" (rank 1 (never) > 5 (all the time))
+
+If a respondent chooses a level of 2 or greater, they proceed to the remaining part(s) of the question to be tested on their knowledge / understanding of that topic. If a respondent chooses a level 1, they are skipped to the next question. These questions act as "gates" which prevent respondents who are unfamiliar with a topic from proceeding to and guessing on questions which are meant to test knowledge / understanding. 
+
+There are 14 questions which have a correct answer. These questions always follow at least one "gate" question. The results of these questions are presented as a comparison between the percentage of Pre- and Post-MEDS respondents who answered it correctly. It's important to note that these percentages are calculated based on the *total* number of students who participated in the assessment (that is `r pre_meds_num_respondents` for the Pre-MEDS assessment and `r post_meds_num_respondents` for the Post-MEDS assessment), and *not* the number of students who proceeded past the "gate" question(s). 
+
+<!-- An assumption is made that any student who did not proceed past a "gate" question(s) would not have had the knowledge necessary to provide an educated response. -->
+
+```{r}
+#| eval: true
+#| echo: false
+#........................Pre-MEDS scores.........................
+scores_before <- meds2025_before_clean |> 
+  select(sc0) 
+
+mean_score_before <- mean(scores_before$sc0)
+median_score_before <- median(scores_before$sc0)
+
+#........................Post-MEDS scores........................
+scores_after <- meds2025_after_clean |>
+ select(sc0)
+
+mean_score_after <- mean(scores_after$sc0)
+median_score_after <- median(scores_after$sc0)
+
+#....................Percent change in score.....................
+perc_increase <- round(((median_score_after - median_score_before) / median_score_before)*100, 1)
+```
+
+A perfect score is 14 points. **The median score increased by `r perc_increase`% from the pre- to post-MEDS PLO assessments.** 

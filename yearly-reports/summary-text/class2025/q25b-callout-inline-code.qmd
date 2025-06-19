@@ -1,0 +1,58 @@
+```{r in-line code q25b}
+# total respondents ----
+q25b_num_answers_pre <- meds2025_before_clean |>
+  select(implemented_algo) |>
+  count() |>
+  pull()
+
+q25b_num_answers_post <- meds2025_after_clean |>
+  select(implemented_algo) |>
+  count() |>
+  pull()
+
+# total not answer 1 ----
+q25b_not1_pre <- meds2025_before_clean |>
+  select(implemented_algo) |>
+  group_by(implemented_algo) |>
+  count() |>
+  ungroup() |>
+  filter(implemented_algo != "1 (definitely not)") |> 
+  summarize(n = sum(n)) |>
+  pull()
+
+q25b_not1_post <- meds2025_after_clean |>
+  select(implemented_algo) |>
+  group_by(implemented_algo) |>
+  count() |>
+  ungroup() |>
+  filter(implemented_algo != "1 (definitely not)") |>
+  summarize(n = sum(n)) |>
+  pull()
+
+# answered 1 ----
+q25b_1_pre <- meds2025_before_clean |>
+  select(implemented_algo) |>
+  group_by(implemented_algo) |>
+  count() |>
+  ungroup() |>
+  filter(implemented_algo == "1 (definitely not)") |> 
+  summarize(n = sum(n)) |>
+  pull()
+
+q25b_1_post <- meds2025_after_clean |>
+  select(implemented_algo) |>
+  group_by(implemented_algo) |>
+  count() |>
+  ungroup() |>
+  filter(implemented_algo == "1 (definitely not)") |>
+  summarize(n = sum(n)) |>
+  pull()
+```
+
+::: {.callout-note}
+## All Post-MEDS respondents were directed to answer Question 25c, as compared to the `r q25b_not1_pre`/`r q25b_num_answers_pre` respondents in the Pre-MEDS PLO assessment.
+
+- **Pre-MEDS: `r q25b_not1_pre`/`r q25b_num_answers_pre` student respondents (`r round((q25b_not1_pre/q25b_num_answers_pre)*100, 1)`%)** chose a familiarity level of 2 or greater, and therefore were directed to answer Question 25b. Those who answered "1" (`r q25b_1_pre` students) were jumped directly to Question 26.
+
+- **Post-MEDS: `r q25b_not1_post`/`r q25b_num_answers_post` student respondents (`r round((q25b_not1_post/q25b_num_answers_post)*100, 1)`%)** chose a familiarity level of 2 or greater, and therefore were directed to answer Question 25c.
+:::

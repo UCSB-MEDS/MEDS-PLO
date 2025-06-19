@@ -1,0 +1,40 @@
+```{r in-line code q19b}
+# total respondents ----
+q19b_num_answers_pre <- meds2025_before_clean |> 
+  select(writing_functions) |> 
+  count() |> 
+  pull()
+
+q19b_num_answers_post <- meds2025_after_clean |>
+  select(writing_functions) |>
+  count() |>
+  pull()
+
+# total not answer 1 ----
+q19b_not1_pre <- meds2025_before_clean |> 
+  select(writing_functions) |> 
+  group_by(writing_functions) |>
+  filter(writing_functions != "1 (not at all comfortable)") |> 
+  count() |>
+  ungroup() |> 
+  summarize(n = sum(n)) |> 
+  pull()
+
+q19b_not1_post <- meds2025_after_clean |>
+  select(writing_functions) |>
+  group_by(writing_functions) |>
+  filter(writing_functions != "1 (not at all comfortable)") |>
+  count() |>
+  ungroup() |>
+  summarize(n = sum(n)) |>
+  pull()
+```
+
+::: {.callout-note}
+## All Post-MEDS respondents were directed to answer Question 19c, as compared to  `r q19b_not1_pre` / `r q19b_num_answers_pre` respondents in the Pre-MEDS PLO Assessment.
+
+- **Pre-MEDS: `r q19b_not1_pre`/`r q19b_num_answers_pre` student respondents (`r round((q19b_not1_pre/q19b_num_answers_pre)*100, 1)`%)** chose a familiarity level of 2 or greater, and therefore were directed to answer question 19c.
+
+- **Post-MEDS: `r q19b_not1_post`/`r q19b_num_answers_post` student respondents (`r round((q19b_not1_post/q19b_num_answers_post)*100, 1)`%)** chose a familiarity level of 2 or greater, and therefore were directed to answer question 19c.
+
+:::

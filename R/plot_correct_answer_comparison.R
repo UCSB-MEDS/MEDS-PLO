@@ -1,6 +1,9 @@
 
 plot_correct_answer_comparison <- function(data, title, subtitle, caption){
   
+  data <- tidyr::complete(data, timepoint = c("Pre-MEDS", "Post-MEDS"), fill = list(percentage = 0, perc_label_long = "")) |> 
+    mutate(timepoint = fct_relevel(timepoint, c("Pre-MEDS", "Post-MEDS")))
+  
   ggplot(data, aes(x = timepoint, y = percentage)) +
     geom_col(aes(fill = timepoint)) +
     geom_text(aes(label = perc_label_long), 

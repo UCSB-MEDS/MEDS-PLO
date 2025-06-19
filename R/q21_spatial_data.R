@@ -202,8 +202,9 @@ clean_q21b_FULLY_CORRECT <- function(PLO_data_clean){
   ##  ~ pre-MEDS  ----
   ##~~~~~~~~~~~~~~~~~~
   
-  #....total respondents that continued onto answer question 18b...
-  total_pre_resp <- meds2025_before_clean |> 
+  #....total respondents that continued onto answer question 21b...
+  total_pre_resp <- both_timepoints_clean |> #meds2025_before_clean |>
+    filter(timepoint == "Pre-MEDS") |>
     select(rep_spatial_data) |>
     group_by(rep_spatial_data) |>
     filter(rep_spatial_data != "1 (never worked with it before)") |>
@@ -226,31 +227,32 @@ clean_q21b_FULLY_CORRECT <- function(PLO_data_clean){
   ##  ~ post-MEDS  ----
   ##~~~~~~~~~~~~~~~~~~~
   
-  #....total respondents that continued onto answer question 18b...
-  # total_post_resp <- meds2025_after_clean |> 
-  #   select(rep_spatial_data) |>
-  #   group_by(rep_spatial_data) |>
-  #   filter(rep_spatial_data != "1 (never worked with it before)") |>
-  #   count() |>
-  #   ungroup() |>
-  #   summarize(n = sum(n)) |>
-  #   pull()
-  # 
-  # post_meds <- df |> 
-  #   filter(timepoint == "Post-MEDS") |> 
-  #   group_by(correctness) |> 
-  #   count() |> 
-  #   ungroup() |> 
-  #   mutate(timepoint = rep("Post-MEDS")) |> 
-  #   mutate(total_respondents = sum(n), #total_post_resp,
-  #          percentage = round((n/total_respondents)*100, 1),
-  #          perc_label = paste0(percentage, "%"))
+  #....total respondents that continued onto answer question 21b...
+  total_post_resp <- both_timepoints_clean |> #meds2025_after_clean |>
+    filter(timepoint == "Post-MEDS") |>
+    select(rep_spatial_data) |>
+    group_by(rep_spatial_data) |>
+    filter(rep_spatial_data != "1 (never worked with it before)") |>
+    count() |>
+    ungroup() |>
+    summarize(n = sum(n)) |>
+    pull()
+
+  post_meds <- df |>
+    filter(timepoint == "Post-MEDS") |>
+    group_by(correctness) |>
+    count() |>
+    ungroup() |>
+    mutate(timepoint = rep("Post-MEDS")) |>
+    mutate(total_respondents = sum(n), #total_post_resp,
+           percentage = round((n/total_respondents)*100, 1),
+           perc_label = paste0(percentage, "%"))
   
   ##~~~~~~~~~~~~~~~~~~~~~~~
   ##  ~ recombine dfs  ----
   ##~~~~~~~~~~~~~~~~~~~~~~~
   
-  all_q21b_fully_correct <- pre_meds |> #rbind(pre_meds, post_meds) |> 
+  all_q21b_fully_correct <- rbind(pre_meds, post_meds) |> 
     filter(correctness == "yes") |> 
     mutate(timepoint = fct_relevel(timepoint, c("Pre-MEDS", "Post-MEDS"))) |> 
     mutate(perc_label_long = paste0(perc_label, "\n(", n, "/", total_respondents, " respondents)"))
@@ -324,20 +326,20 @@ clean_q21c_vec_ras <- function(PLO_data_clean){
   ##~~~~~~~~~~~~~~~~~~~
   
   #........separate post-MEDS (to add 0s for missing cats).........
-  # post_meds <- df |> 
-  #   filter(timepoint == "Post-MEDS") |> 
-  #   # drop_na() |> # include this if you want % calculation to be out of only students who advanced to this question
-  #   mutate(total_respondents = sum(n),
-  #          percentage = round((n/total_respondents)*100, 1),
-  #          perc_label = paste0(percentage, "%")) |>
-  #   mutate(xvar = vec_or_ras) |> 
-  #   mutate(perc_label_long = paste0(perc_label, "\n(", n, "/", total_respondents, " respondents)"))
+  post_meds <- df |>
+    filter(timepoint == "Post-MEDS") |>
+    # drop_na() |> # include this if you want % calculation to be out of only students who advanced to this question
+    mutate(total_respondents = sum(n),
+           percentage = round((n/total_respondents)*100, 1),
+           perc_label = paste0(percentage, "%")) |>
+    mutate(xvar = vec_or_ras) |>
+    mutate(perc_label_long = paste0(perc_label, "\n(", n, "/", total_respondents, " respondents)"))
   
   #~~~~~~~~~~~~~~~~~~~~~~~
   ##  ~ recombine dfs  ----
   ##~~~~~~~~~~~~~~~~~~~~~~~
   
-  all_q21c_data <- pre_meds |> #rbind(pre_meds, post_meds) |> 
+  all_q21c_data <- rbind(pre_meds, post_meds) |> 
     filter(vec_or_ras == "vector") 
   
   return(all_q21c_data)
