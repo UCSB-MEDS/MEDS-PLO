@@ -65,8 +65,6 @@ clean_q8_workflow_sat <- function(PLO_data_clean){
   ##  ~ post-MEDS  ----
   ##~~~~~~~~~~~~~~~~~~~
 
-
-    
   #........separate post-MEDS (to add 0s for missing cats).........
   post_meds <- df |> 
     filter(timepoint == "Post-MEDS") 

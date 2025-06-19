@@ -264,6 +264,8 @@ plot_freq_use_data(data = q7_command_shell_data,
 ## **Part 3: Workflow satisfaction**
 
 ```{r Q8-workflow-satisfaction}
+#| results: hide
+
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ##  ~ Question 8: Workflow Satisfaction  ----
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

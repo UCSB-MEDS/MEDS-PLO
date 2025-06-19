@@ -1,7 +1,7 @@
 This PLO assessment was administered to the MEDS class of 2025 both [***before* beginning the program**]{.teal-text}, on August 2, 2024 **(response rate = `r nrow(meds2025_before_clean)`/29 students)**, and again [***after* completing the program**]{.dark-blue-text}, on June 4, 2024 **(response rate = `r nrow(meds2025_after_clean)`/30 students)**.
 
 ::: {.callout-note}
-## Discrepancy in total # of students in pre- and post-MEDS PLO assessments
+## Discrepancy in total # of students in Pre- and Post-MEDS PLO assessments
 One student from the class of 2025 completed MEDS in two years and therefore only took this PLO assessment at the *end* of the program.
 :::
 
