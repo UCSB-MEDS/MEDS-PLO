@@ -240,32 +240,32 @@ clean_q26c_FULLY_CORRECT <- function(PLO_data_clean){
   ##~~~~~~~~~~~~~~~~~~~
   
   #....total respondents that continued onto answer question 18b...
-  # total_post_resp <- meds2025_after_clean |> 
-  #   select(learning_from_model) |>
-  #   group_by(learning_from_model) |>
-  #   # filter(learning_from_model != "1 (never heard of it)") |> # include this if you want % calculation to be out of only students who advanced to this question
-  #   count() |>
-  #   ungroup() |>
-  #   summarize(n = sum(n)) |>
-  #   pull()
-  # 
-  # post_meds <- df |> 
-  #   filter(timepoint == "Post-MEDS") |> 
-  #   group_by(correctness) |> 
-  #   count() |> 
-  #   # summarize(total = sum(n)) |> 
-  #   # ungroup() |> 
-  #   mutate(timepoint = rep("Post-MEDS")) |> 
-  #   mutate(total_respondents = total_post_resp,
-  #          percentage = round((n/total_respondents)*100, 1),
-  #          perc_label = paste0(percentage, "%")) |> 
-  #   mutate(perc_label_long = paste0(perc_label, "\n(", n, "/", total_respondents, " respondents)"))
+  total_post_resp <- meds2025_after_clean |>
+    select(learning_from_model) |>
+    group_by(learning_from_model) |>
+    # filter(learning_from_model != "1 (never heard of it)") |> # include this if you want % calculation to be out of only students who advanced to this question
+    count() |>
+    ungroup() |>
+    summarize(n = sum(n)) |>
+    pull()
+
+  post_meds <- df |>
+    filter(timepoint == "Post-MEDS") |>
+    group_by(correctness) |>
+    count() |>
+    # summarize(total = sum(n)) |>
+    # ungroup() |>
+    mutate(timepoint = rep("Post-MEDS")) |>
+    mutate(total_respondents = total_post_resp,
+           percentage = round((n/total_respondents)*100, 1),
+           perc_label = paste0(percentage, "%")) |>
+    mutate(perc_label_long = paste0(perc_label, "\n(", n, "/", total_respondents, " respondents)"))
   
   ##~~~~~~~~~~~~~~~~~~~~~~~
   ##  ~ recombine dfs  ----
   ##~~~~~~~~~~~~~~~~~~~~~~~
   
-  all_q26c_data <- pre_meds |> #rbind(pre_meds, post_meds) |> 
+  all_q26c_data <- rbind(pre_meds, post_meds) |> 
     filter(correctness == "yes") |> 
     mutate(timepoint = fct_relevel(timepoint, c("Pre-MEDS", "Post-MEDS"))) 
   

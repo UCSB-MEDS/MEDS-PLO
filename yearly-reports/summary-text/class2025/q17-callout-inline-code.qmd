@@ -32,9 +32,9 @@ q17_not1_post <- meds2025_after_clean |>
 ```
 
 ::: {.callout-note}
-## All Post-MEDS respondents were directed to answer Question 17b, as compared to 28/29 respondents in the Pre-MEDS PLO Assessment.
+## All Post-MEDS respondents were directed to answer Question 17b, as compared to  `r q17_not1_pre` / `r q17_num_answers_pre` respondents in the Pre-MEDS PLO Assessment.
 
-- **Pre-MEDS: `r q17_not1_pre` / `r q17_num_answers_pre` student respondents (`r ((q17_not1_pre/q17_num_answers_pre)*100)`%)** chose a familiarity level of 2 or greater, and therefore were directed to answer all parts of Question 17b.
+- **Pre-MEDS: `r q17_not1_pre` / `r q17_num_answers_pre` student respondents (`r round((q17_not1_pre/q17_num_answers_pre)*100, 1)`%)** chose a familiarity level of 2 or greater, and therefore were directed to answer all parts of Question 17b.
 
-- **Post-MEDS: `r q17_not1_post` / `r q17_num_answers_post` student respondents (`r ((q17_not1_post/q17_num_answers_post)*100)`%)** chose a familiarity level of 2 or greater, and therefore were directed to answer all parts of Question 17b.
+- **Post-MEDS: `r q17_not1_post` / `r q17_num_answers_post` student respondents (`r round((q17_not1_post/q17_num_answers_post)*100, 1)`%)** chose a familiarity level of 2 or greater, and therefore were directed to answer all parts of Question 17b.
 :::

@@ -5,10 +5,10 @@ q22a_num_answers_pre <- meds2025_before_clean |>
   count() |> 
   pull()
 
-# q22a_num_answers_post <- meds2025_after_clean |> 
-#   select(remote_sense_comfort) |> 
-#   count() |> 
-#   pull()
+q22a_num_answers_post <- meds2025_after_clean |>
+  select(remote_sense_comfort) |>
+  count() |>
+  pull()
 
 # total not answer 1 ----
 q22a_not1_pre <- meds2025_before_clean |> 
@@ -20,14 +20,14 @@ q22a_not1_pre <- meds2025_before_clean |>
   summarize(n = sum(n)) |> 
   pull()
 
-# q22a_not1_post <- meds2025_after_clean |> 
-#   select(remote_sense_comfort) |> 
-#   group_by(remote_sense_comfort) |>
-#   filter(remote_sense_comfort != "1 (never worked with it before)") |> 
-#   count() |>
-#   ungroup() |> 
-#   summarize(n = sum(n)) |> 
-#   pull()
+q22a_not1_post <- meds2025_after_clean |>
+  select(remote_sense_comfort) |>
+  group_by(remote_sense_comfort) |>
+  filter(remote_sense_comfort != "1 (never worked with it before)") |>
+  count() |>
+  ungroup() |>
+  summarize(n = sum(n)) |>
+  pull()
 
 # answered 1 ----
 q22a_1_pre <- meds2025_before_clean |> 
@@ -39,20 +39,20 @@ q22a_1_pre <- meds2025_before_clean |>
   summarize(n = sum(n)) |> 
   pull()
 
-# q22a_1_post <- meds2025_after_clean |> 
-#   select(remote_sense_comfort) |> 
-#   group_by(remote_sense_comfort) |>
-#   filter(remote_sense_comfort == "1 (never worked with it before)") |> 
-#   count() |>
-#   ungroup() |> 
-#   summarize(n = sum(n)) |> 
-#   pull()
+q22a_1_post <- meds2025_after_clean |>
+  select(remote_sense_comfort) |>
+  group_by(remote_sense_comfort) |>
+  filter(remote_sense_comfort == "1 (never worked with it before)") |>
+  count() |>
+  ungroup() |>
+  summarize(n = sum(n)) |>
+  pull()
 ```
 
 ::: {.callout-note}
-## All `q22a_not1_post`/`q22a_num_answers_post` Post-MEDS respondents were directed to answer Question 22b, as compared to the `q22a_not1_pre`/`q22a_num_answers_pre` respondents in the Pre-MEDS PLO assessment.
+## All Post-MEDS respondents were directed to answer Question 22b, as compared to the `r q22a_not1_pre`/`r q22a_num_answers_pre` respondents in the Pre-MEDS PLO assessment.
 
 - **Pre-MEDS: `r q22a_not1_pre`/`r q22a_num_answers_pre` student respondents (`r round((q22a_not1_pre/q22a_num_answers_pre)*100, 1)`%)** chose a familiarity level of 2 or greater, and therefore were directed to answer Question 22b. Those who answered "1" (`r q22a_1_pre` students) were jumped directly to Question 23.
 
-- **Post-MEDS: `q22a_not1_post`/`q22a_num_answers_post` student respondents (`round((q22a_not1_post/q22a_num_answers_post)*100, 1)`%)** chose a familiarity level of 2 or greater, and therefore were directed to answer Question 22b.
+- **Post-MEDS: `r q22a_not1_post`/`r q22a_num_answers_post` student respondents (`r round((q22a_not1_post/q22a_num_answers_post)*100, 1)`%)** chose a familiarity level of 2 or greater, and therefore were directed to answer Question 22b.
 :::

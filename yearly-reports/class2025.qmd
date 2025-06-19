@@ -1,7 +1,7 @@
 ---
 title: "MEDS Class of 2025"
 subtitle: "Program Learning Outcome (PLO) #1 Assessment - Core Knowledge"
-author: "Jamie Montgomery"
+author: "Sam Shanny-Csik & Jamie Montgomery"
 date: August 13, 2024
 date-modified: last-modified
 format: 
@@ -531,35 +531,6 @@ DT::datatable(q17_microplastics_dt,
               )
 ```
 
-```{r}
-
-##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-##                                  Post-MEDS                               ----
-##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-# #~..........................wrangle.............................
-# q17_microplastics_dt <- meds2025_after_clean |>
-# 
-#   # select necessary cols ----
-#   select(microplastics_lr) |> 
-#   
-#   # group and count similar responses ----
-#   group_by(microplastics_lr) |> 
-#   count() |> 
-#   arrange(desc(n))
-# 
-# DT::datatable(q17_microplastics_dt, colnames = c("Free Response Answer to Q17b", "# of similar responses"),
-# 
-#               caption = htmltools::tags$caption( style = 'caption-side: top; text-align: center; color:black;  font-size:200% ;','Post-MEDS:'),
-# 
-#                options = list(autoWidth = TRUE,
-#                               pageLength = 5,
-#                               lengthMenu = c(5, 10, 20, 30),
-#                               dom = 'ltp')
-# 
-#               )
-```
-
 :::
 
 ```{r}
@@ -582,7 +553,7 @@ plot_rank_data(data = q18a_familiar_prob_dist_data,
                            caption = "Question 18a (choosing '1 (never heard of it)' skips respondent to question 19)")
 ```
 
-<!-- {{< include /summary-text/class2025/q18-callout-inline-code.qmd >}} -->
+{{< include /summary-text/class2025/q18-callout-inline-code.qmd >}}
 
 ```{r}
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -597,8 +568,7 @@ plot_q18b_prob_dist_terms(q18b_prob_dist_terms_data)
 ```
 
 ::: {.callout-note}
-
-COME BACK TO THIS
+## The percentage of respondents who provided a fully correct answer to Queston 18b increased from Pre- to Post-MEDS PLO assessments
 
 Only students who chose 2 or greater in Question 18a were directed to answer Question 18b. A fully correct answer means choosing exactly the following options: **normal, uniform, bimodal, symmetrical**.  
 
@@ -632,7 +602,7 @@ plot_rank_data(data = q19a_familiar_functions_data,
                            caption = "Question 19a (choosing '1 (never heard of it)' skips respondent to question 20)")
 ```
 
-<!-- {{< include /summary-text/class2025/q19b-callout-inline-code.qmd >}} -->
+{{< include /summary-text/class2025/q19b-callout-inline-code.qmd >}}
 
 ```{r}
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -654,9 +624,9 @@ plot_rank_data(data = q19b_writing_functions_data,
                            caption = "Question 19b (choosing '1 (not at all)' skips respondent to question 20)")
 ```
 
-<!-- {{< include /summary-text/class2025/q19c-callout-inline-code.qmd >}} -->
+{{< include /summary-text/class2025/q19c-callout-inline-code.qmd >}}
 
-<!-- {{< include /summary-text/all_classes/q19c-turbine-function.qmd >}} -->
+{{< include /summary-text/all_classes/q19c-turbine-function.qmd >}}
 
 ```{r}
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -687,7 +657,7 @@ q20a_run_env_mod_data <- clean_q20a_run_env_mod(both_timepoints_clean)
 plot_q20a_run_env_mod(q20a_run_env_mod_data)
 ```
 
-<!-- {{< include /summary-text/class2025/q20a-callout-inline-code.qmd >}} -->
+{{< include /summary-text/class2025/q20a-callout-inline-code.qmd >}}
 
 ```{r}
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -701,7 +671,7 @@ q20b_sa_data <- clean_q20b_sa(both_timepoints_clean)
 plot_q20b_sa(q20b_sa_data)
 ```
 
-<!-- {{< include /summary-text/class2025/q20b-callout-inline-code.qmd >}} -->
+{{< include /summary-text/class2025/q20b-callout-inline-code.qmd >}}
 
 ```{r}
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -740,7 +710,7 @@ plot_rank_data(data = q21a_comfort_spatial_data,
                            caption = "Question 21a (choosing '1 (never worked with it before)' skips respondent to question 22)")
 ```
 
-<!-- {{< include /summary-text/class2025/q21-callout-inline-code.qmd >}} -->
+{{< include /summary-text/class2025/q21-callout-inline-code.qmd >}}
 
 ```{r}
 # wrangle (INDIV RESPONSES) ----
@@ -751,9 +721,6 @@ plot_q21b_rep_spatial(q21b_rep_spatial_data)
 ```
 
 ::: {.callout-note}
-
-COME BACK TO THIS 
-
 ```{r}
 # wrangle (FULLY CORRECT) ----
 q21b_FULLY_CORRECT_data <- clean_q21b_FULLY_CORRECT(both_timepoints_clean)
@@ -762,8 +729,6 @@ q21b_FULLY_CORRECT_data <- clean_q21b_FULLY_CORRECT(both_timepoints_clean)
 plot_q21b_FULLY_CORRECT(q21b_FULLY_CORRECT_data)
 ```
 :::
-
-COME BACK TO THIS
 
 ```{r}
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -804,7 +769,7 @@ plot_rank_data(data = q22a_comfort_rs_data,
                            caption = "Question 22a (choosing '1 (never worked with it before)' skips respondent to question 23)")
 ```
 
-<!-- {{< include /summary-text/class2025/q22-callout-inline-code.qmd >}} -->
+{{< include /summary-text/class2025/q22-callout-inline-code.qmd >}}
 
 ```{r}
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -840,7 +805,7 @@ plot_rank_data(data = q23a_comfort_map_proj_data,
                            caption = "Question 23a (choosing '1 (never worked with it before)' skips respondent to question 24)")
 ```
 
-<!-- {{< include /summary-text/class2025/q23-callout-inline-code.qmd >}} -->
+{{< include /summary-text/class2025/q23-callout-inline-code.qmd >}}
 
 ```{r}
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -877,7 +842,7 @@ plot_rank_data(data = q24a_familiarity_rs_data,
                            caption = "Question 24a (choosing '1 (never heard of it)' skips respondent to question 25)")
 ```
 
-<!-- {{< include /summary-text/class2025/q24-callout-inline-code.qmd >}} -->
+{{< include /summary-text/class2025/q24-callout-inline-code.qmd >}}
 
 ```{r}
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -917,7 +882,7 @@ plot_rank_data(data = q25a_familiar_ml_data,
   scale_x_discrete(labels = function(x) str_wrap(x, width = 15))
 ```
 
-<!-- {{< include /summary-text/class2025/q25a-callout-inline-code.qmd >}} -->
+{{< include /summary-text/class2025/q25a-callout-inline-code.qmd >}}
 
 ```{r}
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -941,7 +906,7 @@ plot_rank_data(data = q25b_unsup_alg_data,
   scale_x_discrete(labels = function(x) str_wrap(x, width = 15))
 ```
 
-<!-- {{< include /summary-text/class2025/q25b-callout-inline-code.qmd >}} -->
+{{< include /summary-text/class2025/q25b-callout-inline-code.qmd >}}
 
 ```{r}
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -978,7 +943,7 @@ plot_rank_data(data = q26a_div_data,
                caption = "Question 26a (choosing '1 (never heard of it)' skips respondent to question 27)")
 ```
 
-<!-- {{< include /summary-text/class2025/q26a-callout-inline-code.qmd >}} -->
+{{< include /summary-text/class2025/q26a-callout-inline-code.qmd >}}
 
 ```{r}
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1001,7 +966,7 @@ plot_rank_data(data = q26b_tvs_data,
                caption = "Question 26b (choosing '1 (never)' skips respondent to question 27)")
 ```
 
-<!-- {{< include /summary-text/class2025/q26b-callout-inline-code.qmd >}} -->
+{{< include /summary-text/class2025/q26b-callout-inline-code.qmd >}}
 
 ```{r}
 # wrangle (INDIV RESPONSES) ----
@@ -1015,8 +980,6 @@ plot_q26c_mod_perf(q26c_mod_perf_data)
 ## The percentage of respondents who provided a *fully correct* answer to Queston 26c increased from Pre- to Post-MEDS PLO assessments
 
 Only students who chose 2 or greater in Question 26b were directed to answer Question 26c. A fully correct answer means choosing exactly the following options: **My model is overfitting the training set, My model is unlikely to perform well when applied to new data**.  
-
-COME BACK TO THIS
 
 ```{r}
 # wrangle (FULLY CORRECT) ----
@@ -1129,8 +1092,7 @@ plot_q30_improve_dv(q30_improve_dv_pre)
 :::
 
 ```{r}
-#| eval: false
-#| echo: false
+
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ##                  Question 30: Improve Data Viz (Post-MEDS)               ----
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1151,20 +1113,17 @@ plot_q30_improve_dv(q30_improve_dv_post)
 Responses as they were recorded are included in the tables, below:
 
 ```{r}
-##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-##                                  Pre-MEDS                                ----
-##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
 #~..........................wrangle.............................
-q30_improve_dv_pre <- meds2025_before_clean |> 
+q30_improve_dv_pre <- both_timepoints_clean |> 
   
-  # select necessary cols ----
-  select(improve_data_viz)
+  # select necessary cols & arrange ----
+  select(timepoint, improve_data_viz) |> 
+  arrange(timepoint)
 
 #........................create DT table.........................
-DT::datatable(q30_improve_dv_pre, colnames = c("Free Response Answer to Q30"),
+DT::datatable(q30_improve_dv_pre, colnames = c("Timepoint", "Free Response Answer to Q30"),
               
-              caption = htmltools::tags$caption( style = 'caption-side: top; text-align: center; color:black;  font-size:200% ;','Pre-MEDS:'),
+              #caption = htmltools::tags$caption( style = 'caption-side: top; text-align: center; color:black;  font-size:200% ;','Pre-MEDS:'),
               
                options = list(autoWidth = TRUE, 
                               pageLength = 5,
@@ -1174,30 +1133,55 @@ DT::datatable(q30_improve_dv_pre, colnames = c("Free Response Answer to Q30"),
               )
 ```
 
+
+```{r}
+# ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ##                                  Pre-MEDS                                ----
+# ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# 
+# #~..........................wrangle.............................
+# q30_improve_dv_pre <- meds2025_before_clean |> 
+#   
+#   # select necessary cols ----
+#   select(improve_data_viz)
+# 
+# #........................create DT table.........................
+# DT::datatable(q30_improve_dv_pre, colnames = c("Free Response Answer to Q30"),
+#               
+#               caption = htmltools::tags$caption( style = 'caption-side: top; text-align: center; color:black;  font-size:200% ;','Pre-MEDS:'),
+#               
+#                options = list(autoWidth = TRUE, 
+#                               pageLength = 5,
+#                               lengthMenu = c(5, 10, 20, 30),
+#                               dom = 'ltp')
+#               
+#               )
+```
+
 ```{r}
 #| eval: false
 
-##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-##                                  Post-MEDS                               ----
-##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-#~..........................wrangle.............................
-q30_improve_dv_post <- meds2025_after_clean |> 
-  
-  # select necessary cols ----
-  select(improve_data_viz)
-
-#........................create DT table.........................
-DT::datatable(q30_improve_dv_post, colnames = c("Free Response Answer to Q30"),
-              
-              caption = htmltools::tags$caption( style = 'caption-side: top; text-align: center; color:black;  font-size:200% ;','Prost-MEDS:'),
-              
-               options = list(autoWidth = TRUE, 
-                              pageLength = 5,
-                              lengthMenu = c(5, 10, 20, 30),
-                              dom = 'ltp')
-              
-              )
+# ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ##                                  Post-MEDS                               ----
+# ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# 
+# #~..........................wrangle.............................
+# q30_improve_dv_post <- meds2025_after_clean |> 
+#   
+#   # select necessary cols ----
+#   select(improve_data_viz)
+# 
+# #........................create DT table.........................
+# DT::datatable(q30_improve_dv_post, colnames = c("Free Response Answer to Q30"),
+#               
+#               caption = htmltools::tags$caption( style = 'caption-side: top; text-align: center; color:black;  font-size:200% ;','Prost-MEDS:'),
+#               
+#                options = list(autoWidth = TRUE, 
+#                               pageLength = 5,
+#                               lengthMenu = c(5, 10, 20, 30),
+#                               dom = 'ltp')
+#               
+#               )
 ```
 
 :::
@@ -1222,7 +1206,7 @@ convert_F_to_C(32)
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q31_lang_data <- clean_q31_lang(meds2025_before_clean)#both_timepoints_clean)
+q31_lang_data <- clean_q31_lang(both_timepoints_clean)
 
 # plot ----
 plot_correct_answer_comparison(data = q31_lang_data,

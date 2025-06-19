@@ -4,11 +4,11 @@ q26b_num_answers_pre <- meds2025_before_clean |>
   select(train_valid_split) |>
   count() |>
   pull()
-# 
-# q26b_num_answers_post <- meds2025_after_clean |>
-#   select(train_valid_split) |>
-#   count() |>
-#   pull()
+
+q26b_num_answers_post <- meds2025_after_clean |>
+  select(train_valid_split) |>
+  count() |>
+  pull()
 
 # total not answer 1 or NULL ----
 q26b_not1_pre <- meds2025_before_clean |>
@@ -20,16 +20,16 @@ q26b_not1_pre <- meds2025_before_clean |>
   filter(train_valid_split != "1 (never)") |>
   summarize(n = sum(n)) |>
   pull()
-# 
-# q26b_not1_post <- meds2025_after_clean |>
-#   select(train_valid_split) |>
-#   filter(train_valid_split %in% c("2", "3", "4", "5 (all the time)")) |> 
-#   group_by(train_valid_split) |>
-#   count() |>
-#   ungroup() |>
-#   filter(train_valid_split != "1 (never)") |>
-#   summarize(n = sum(n)) |>
-#   pull()
+
+q26b_not1_post <- meds2025_after_clean |>
+  select(train_valid_split) |>
+  filter(train_valid_split %in% c("2", "3", "4", "5 (all the time)")) |>
+  group_by(train_valid_split) |>
+  count() |>
+  ungroup() |>
+  filter(train_valid_split != "1 (never)") |>
+  summarize(n = sum(n)) |>
+  pull()
 
 # answered 1 ----
 q26b_1_pre <- meds2025_before_clean |>
@@ -40,21 +40,21 @@ q26b_1_pre <- meds2025_before_clean |>
   filter(train_valid_split == "1 (never)") |>
   summarize(n = sum(n)) |>
   pull()
-# 
-# q26b_1_post <- meds2025_after_clean |>
-#   select(train_valid_split) |>
-#   group_by(train_valid_split) |>
-#   count() |>
-#   ungroup() |>
-#   filter(train_valid_split == "1 (never)") |>
-#   summarize(n = sum(n)) |>
-#   pull()
+
+q26b_1_post <- meds2025_after_clean |>
+  select(train_valid_split) |>
+  group_by(train_valid_split) |>
+  count() |>
+  ungroup() |>
+  filter(train_valid_split == "1 (never)") |>
+  summarize(n = sum(n)) |>
+  pull()
 ```
 
 ::: {.callout-note}
-## All `q26b_not1_post`/`q26b_num_answers_post` Post-MEDS respondents were directed to answer Question 26c, as compared to the `q26b_not1_pre`/`q26b_num_answers_pre` respondents in the Pre-MEDS PLO assessment.
+## All Post-MEDS respondents were directed to answer Question 26c, as compared to the `r q26b_not1_pre`/`r q26b_num_answers_pre` respondents in the Pre-MEDS PLO assessment.
 
 - **Pre-MEDS: `r q26b_not1_pre`/`r q26b_num_answers_pre` student respondents (`r round((q26b_not1_pre/q26b_num_answers_pre)*100, 1)`%)** chose a familiarity level of 2 or greater, and therefore were directed to answer Question 26c. Those who answered "1" (`r q26b_1_pre` students) were jumped directly to Question 27 – these non-responses are missing from the Question 26c plot, below, which is why percentages for the Pre-MEDS assessment do not add up to 100%.
 
-- **Post-MEDS: `q26b_not1_post`/`q26b_num_answers_post` student respondents (`round((q26b_not1_post/q26b_num_answers_post)*100, 1)`%)** chose a familiarity level of 2 or greater, and therefore were directed to answer Question 26c.
+- **Post-MEDS: `r q26b_not1_post`/`r q26b_num_answers_post` student respondents (`r round((q26b_not1_post/q26b_num_answers_post)*100, 1)`%)** chose a familiarity level of 2 or greater, and therefore were directed to answer Question 26c.
 :::
