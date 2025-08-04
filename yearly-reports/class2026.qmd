@@ -1,12 +1,11 @@
 ---
-title: "MEDS Class of 2025"
+title: "MEDS Class of 2026"
 subtitle: "Program Learning Outcome (PLO) #1 Assessment - Core Knowledge"
-author: "Sam Shanny-Csik & Jamie Montgomery"
+author: "Sam Shanny-Csik"
 date: August 13, 2024
 date-modified: last-modified
 format: 
   html:
-    
     toc: true
     toc-location: left
     code-tools: 
@@ -40,20 +39,20 @@ library(scales)
 source(here::here("functions.R"))
 
 #..........................import data...........................
-meds2025_before <- read_sheet("https://docs.google.com/spreadsheets/d/1E3WbMZuOl33sUgbJcPmrqMQbCp3-AsmRAjuxdNXk6oM/edit?gid=1486409728#gid=1486409728")
-meds2025_after <- read_sheet("https://docs.google.com/spreadsheets/d/1sEetdIXKXQNhVShJHddZd2tnS1QP5-uw0Sk8x3qd7Is/edit?usp=sharing")
+meds2026_before <- read_sheet("https://docs.google.com/spreadsheets/d/1labN4-g9vjaOL96uAg152fQ15rYUiOrfvNgdDGyaJ4A/edit?gid=0#gid=0")
+# meds2026_after <- read_sheet("")
   
 #...........................clean data...........................
-meds2025_before_clean <- clean_PLO_data(meds2025_before) |> mutate(timepoint = rep("Pre-MEDS"))
-meds2025_after_clean <- clean_PLO_data(meds2025_after) |> mutate(timepoint = rep("Post-MEDS"))
+meds2026_before_clean <- clean_PLO_data(meds2026_before) |> mutate(timepoint = rep("Pre-MEDS"))
+# meds2026_after_clean <- clean_PLO_data(meds2026_after) |> mutate(timepoint = rep("Post-MEDS"))
 
 #...............combine pre- and post-MEDS results...............
-both_timepoints_clean <- rbind(meds2025_before_clean, meds2025_after_clean) |>
-  mutate(timepoint = fct_relevel(timepoint, c("Pre-MEDS", "Post-MEDS")))
+# both_timepoints_clean <- rbind(meds2026_before_clean, meds2026_after_clean) |>
+#   mutate(timepoint = fct_relevel(timepoint, c("Pre-MEDS", "Post-MEDS")))
 
 #..................number of survey respondents..................=
-pre_meds_num_respondents <- nrow(meds2025_before_clean)
-post_meds_num_respondents <- nrow(meds2025_after_clean)
+pre_meds_num_respondents <- nrow(meds2026_before_clean)
+# post_meds_num_respondents <- nrow(meds2026_after_clean)
 
 #......................import Google fonts.......................
 sysfonts::font_add_google(name = "Sanchez", family = "sanchez")
@@ -69,27 +68,27 @@ meds_pal <- c("Pre-MEDS" = "#047C91",
 
 # **Summary**
 
-{{< include /summary-text/class2025/summary.qmd >}}
+<!-- {{< include /summary-text/class2025/summary.qmd >}} -->
 
 ```{r overall-scores}
 #| fig-align: center
 
 #........................Pre-MEDS scores.........................
-scores_before <- meds2025_before_clean |> 
+scores_before <- meds2026_before_clean |> 
   select(sc0) 
 
 mean_score_before <- mean(scores_before$sc0)
 median_score_before <- median(scores_before$sc0)
 
 #........................Post-MEDS scores........................
-scores_after <- meds2025_after_clean |>
- select(sc0)
+# scores_after <- meds2026_after_clean |>
+#  select(sc0)
 
-mean_score_after <- mean(scores_after$sc0)
-median_score_after <- median(scores_after$sc0)
+# mean_score_after <- mean(scores_after$sc0)
+# median_score_after <- median(scores_after$sc0)
 
 #..........................combined plot.........................
-ggplot(both_timepoints_clean, aes(x = sc0)) +
+ggplot(meds2026_before_clean, aes(x = sc0)) + #both_timepoints_clean
   geom_histogram(aes(fill = timepoint), color = "white", 
                  binwidth = 1, position = "identity", 
                  alpha = 0.8) +
@@ -102,13 +101,13 @@ ggplot(both_timepoints_clean, aes(x = sc0)) +
            label = paste0("Median Score = ", median_score_before),
            hjust = "right", color = "#047C91") +
 
-  # add "Post-MEDS" median score ----
-  geom_vline(xintercept = median_score_after,  linetype = "dashed", color = "#003660") +
-  annotate(geom = "segment", x = 13, y = 8, xend = median_score_after, yend = 7.5,
-           arrow = arrow(length = unit(3, "mm")), color = "#003660") +
-  annotate(geom = "label", x = 14, y = 8,
-           label = paste0("Median Score = ", median_score_after),
-           hjust = "center", color = "#003660") +
+  # # add "Post-MEDS" median score ----
+  # geom_vline(xintercept = median_score_after,  linetype = "dashed", color = "#003660") +
+  # annotate(geom = "segment", x = 13, y = 8, xend = median_score_after, yend = 7.5,
+  #          arrow = arrow(length = unit(3, "mm")), color = "#003660") +
+  # annotate(geom = "label", x = 14, y = 8,
+  #          label = paste0("Median Score = ", median_score_after),
+  #          hjust = "center", color = "#003660") +
   
   # make pretty ----
   coord_cartesian(clip = "off") +
@@ -129,7 +128,7 @@ ggplot(both_timepoints_clean, aes(x = sc0)) +
 ##  ~ Question 1: What OS?  ----
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-q1_os_data <- clean_q1_os(both_timepoints_clean)
+q1_os_data <- clean_q1_os(meds2026_before_clean) # both_timepoints_clean
 plot_q1_os(q1_os_data)
 ```
 
@@ -151,7 +150,7 @@ github <- c("github")
 locally <- c("Locally on my computer")
 
 # wrangle & plot ----
-q2_store_data <- clean_q2_store_data(both_timepoints_clean)
+q2_store_data <- clean_q2_store_data(meds2026_before_clean) #both_timepoints_clean
 plot_q2_store_data(q2_store_data)
 ```
 
@@ -163,7 +162,7 @@ plot_q2_store_data(q2_store_data)
 ##~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q3_gui_data <- clean_freq_rank_data(all_PLO_data = both_timepoints_clean, 
+q3_gui_data <- clean_freq_rank_data(all_PLO_data = meds2026_before_clean, #both_timepoints_clean, 
                                     col_name = "point_and_click_gui",
                                     categories = c("Never", 
                                                    "Less than once per year", 
@@ -184,7 +183,7 @@ plot_freq_use_data(data = q3_gui_data,
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q4_prog_lang_data <- clean_freq_rank_data(all_PLO_data = both_timepoints_clean, 
+q4_prog_lang_data <- clean_freq_rank_data(all_PLO_data = meds2026_before_clean,#both_timepoints_clean, 
                                           col_name = "program_lang",
                                           categories = c("Never", 
                                                          "Less than once per year", 
@@ -205,7 +204,7 @@ plot_freq_use_data(data = q4_prog_lang_data,
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q5_databases_data <- clean_freq_rank_data(all_PLO_data = both_timepoints_clean, 
+q5_databases_data <- clean_freq_rank_data(all_PLO_data = meds2026_before_clean, #both_timepoints_clean, 
                                           col_name = "databases",
                                           categories = c("Never", 
                                                          "Less than once per year", 
@@ -226,7 +225,7 @@ plot_freq_use_data(data = q5_databases_data,
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q6_version_control_data <- clean_freq_rank_data(all_PLO_data = both_timepoints_clean, 
+q6_version_control_data <- clean_freq_rank_data(all_PLO_data = meds2026_before_clean, #both_timepoints_clean, 
                                                 col_name = "version_control",
                                                 categories = c("Never", 
                                                                "Less than once per year", 
@@ -247,7 +246,7 @@ plot_freq_use_data(data = q6_version_control_data,
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q7_command_shell_data <- clean_freq_rank_data(all_PLO_data = both_timepoints_clean, 
+q7_command_shell_data <- clean_freq_rank_data(all_PLO_data = meds2026_before_clean, #both_timepoints_clean, 
                                               col_name = "command_shell",
                                               categories = c("Never", 
                                                              "Less than once per year", 
@@ -271,7 +270,7 @@ plot_freq_use_data(data = q7_command_shell_data,
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q8_workflow_satisfaction_data <- clean_q8_workflow_sat(both_timepoints_clean)
+q8_workflow_satisfaction_data <- clean_q8_workflow_sat(meds2026_before_clean) # both_timepoints_clean
 
 # plot ----
 plot_q8_workflow_sat(q8_workflow_satisfaction_data)
@@ -285,7 +284,7 @@ plot_q8_workflow_sat(q8_workflow_satisfaction_data)
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q9_raw_data_data <- clean_freq_rank_data(all_PLO_data = both_timepoints_clean,
+q9_raw_data_data <- clean_freq_rank_data(all_PLO_data = meds2026_before_clean, #both_timepoints_clean,
                                          col_name = "raw_data",
                                          categories = c("1 (strongly disagree)", 
                                                         "2", 
@@ -305,7 +304,7 @@ plot_rank_data(data = q9_raw_data_data,
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q10_small_program_data <- clean_freq_rank_data(all_PLO_data = both_timepoints_clean,
+q10_small_program_data <- clean_freq_rank_data(all_PLO_data = meds2026_before_clean, #both_timepoints_clean,
                                                col_name = "small_program",
                                                categories = c("1 (strongly disagree)", 
                                                               "2", 
@@ -325,7 +324,7 @@ plot_rank_data(data = q10_small_program_data,
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q11_find_help_online_data <- clean_freq_rank_data(all_PLO_data = both_timepoints_clean,
+q11_find_help_online_data <- clean_freq_rank_data(all_PLO_data = meds2026_before_clean, #both_timepoints_clean,
                                                   col_name = "find_help_online",
                                                   categories = c("1 (strongly disagree)", 
                                                                  "2", 
@@ -345,7 +344,7 @@ plot_rank_data(data = q11_find_help_online_data ,
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q12_overcoming_problems_data <- clean_freq_rank_data(all_PLO_data = both_timepoints_clean,
+q12_overcoming_problems_data <- clean_freq_rank_data(all_PLO_data = meds2026_before_clean, #both_timepoints_clean,
                                                      col_name = "overcoming_problems",
                                                      categories = c("1 (strongly disagree)", 
                                                                     "2", 
@@ -364,7 +363,7 @@ plot_rank_data(data = q12_overcoming_problems_data,
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q13_confidence_data <- clean_freq_rank_data(all_PLO_data = both_timepoints_clean,
+q13_confidence_data <- clean_freq_rank_data(all_PLO_data = meds2026_before_clean, #both_timepoints_clean,
                                             col_name = "confident_programmer",
                                             categories = c("1 (strongly disagree)", 
                                                            "2", 
@@ -384,7 +383,7 @@ plot_rank_data(data = q13_confidence_data,
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q14_easier_analysis_data <- clean_freq_rank_data(all_PLO_data = both_timepoints_clean,
+q14_easier_analysis_data <- clean_freq_rank_data(all_PLO_data = meds2026_before_clean, #both_timepoints_clean,
                                                  col_name = "easier_analyses",
                                                  categories = c("1 (strongly disagree)", 
                                                                 "2", 
@@ -403,7 +402,7 @@ plot_rank_data(data = q14_easier_analysis_data,
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q15_increase_efficiency_data <- clean_freq_rank_data(all_PLO_data = both_timepoints_clean,
+q15_increase_efficiency_data <- clean_freq_rank_data(all_PLO_data = meds2026_before_clean, #both_timepoints_clean,
                                                      col_name = "increase_efficiency",
                                                      categories = c("1 (strongly disagree)", 
                                                                     "2", 
@@ -417,18 +416,18 @@ plot_rank_data(data = q15_increase_efficiency_data,
                caption = "Question 15")
 ```
 
-::: {.callout-note}
-## Unusual respondent
+<!-- ::: {.callout-note} -->
+<!-- ## Unusual respondent -->
 
-One respondent in the Post-MEDS PLO assessment answered 1 (strongly disagree) to all questions 9 - 15.
+<!-- One respondent in the Post-MEDS PLO assessment answered 1 (strongly disagree) to all questions 9 - 15. -->
 
-```{r}
-#| include: false
-#| eval: false
-one_respondent <- meds2025_after_clean |> 
-  filter(response_id == "R_7VavVcv8LKGMkO6")
-```
-:::
+<!-- ```{r} -->
+<!-- #| include: false -->
+<!-- #| eval: false -->
+<!-- one_respondent <- meds2026_after_clean |>  -->
+<!--   filter(response_id == "R_7VavVcv8LKGMkO6") -->
+<!-- ``` -->
+<!-- ::: -->
 
 ## **Part 5: Stats**
 
@@ -438,7 +437,7 @@ one_respondent <- meds2025_after_clean |>
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q16a_median_data <- clean_q16a_median(both_timepoints_clean)
+q16a_median_data <- clean_q16a_median(meds2026_before_clean) #both_timepoints_clean
 
 # plot ----
 plot_correct_answer_comparison(data = q16a_median_data,
@@ -453,7 +452,7 @@ plot_correct_answer_comparison(data = q16a_median_data,
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q16b_mode_data <- clean_q16b_mode(both_timepoints_clean)
+q16b_mode_data <- clean_q16b_mode(meds2026_before_clean) #both_timepoints_clean
 
 # plot ----
 plot_correct_answer_comparison(data = q16b_mode_data,
@@ -468,7 +467,7 @@ plot_correct_answer_comparison(data = q16b_mode_data,
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q17a_familiarity_lr_data <- clean_freq_rank_data(all_PLO_data = both_timepoints_clean,
+q17a_familiarity_lr_data <- clean_freq_rank_data(all_PLO_data = meds2026_before_clean, #both_timepoints_clean,
                                                  col_name = "linear_regression",
                                                  categories = c("1 - never heard of it",
                                                                 "2",
@@ -482,7 +481,7 @@ plot_rank_data(data = q17a_familiarity_lr_data,
                            caption = "Question 17a (choosing '1 - never heard of it' skips respondent to question 18)")
 ```
 
-{{< include /summary-text/class2025/q17-callout-inline-code.qmd >}}
+<!-- {{< include /summary-text/class2025/q17-callout-inline-code.qmd >}} -->
 
 {{< include /summary-text/all_classes/q17b-screenshot.qmd >}}
 
@@ -492,7 +491,7 @@ plot_rank_data(data = q17a_familiarity_lr_data,
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q17b_microplastics_data <- clean_q17b_microplastics(both_timepoints_clean)
+q17b_microplastics_data <- clean_q17b_microplastics(meds2026_before_clean) # both_timepoints_clean
 
 # plot ----
 plot_correct_answer_comparison(data = q17b_microplastics_data,
@@ -512,7 +511,7 @@ Respondents submitted a wide variety of answers -- responses as they were record
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 #~..........................wrangle.............................
-q17_microplastics_dt <- both_timepoints_clean |> 
+q17_microplastics_dt <- meds2026_before_clean |> #both_timepoints_clean |> 
   
   # select necessary cols ----
   select(timepoint, microplastics_lr) |> 
@@ -541,7 +540,7 @@ DT::datatable(q17_microplastics_dt,
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q18a_familiar_prob_dist_data <- clean_freq_rank_data(all_PLO_data = both_timepoints_clean,
+q18a_familiar_prob_dist_data <- clean_freq_rank_data(all_PLO_data = meds2026_before_clean, #both_timepoints_clean,
                                                      col_name = "prob_dist",
                                                      categories = c("1 (never heard of it)", 
                                                                     "2",
@@ -555,7 +554,7 @@ plot_rank_data(data = q18a_familiar_prob_dist_data,
                            caption = "Question 18a (choosing '1 (never heard of it)' skips respondent to question 19)")
 ```
 
-{{< include /summary-text/class2025/q18-callout-inline-code.qmd >}}
+<!-- {{< include /summary-text/class2025/q18-callout-inline-code.qmd >}} -->
 
 ```{r}
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -563,25 +562,25 @@ plot_rank_data(data = q18a_familiar_prob_dist_data,
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle (INDIV RESPONSES) ----
-q18b_prob_dist_terms_data <- clean_q18b_prob_dist_terms(both_timepoints_clean)
+q18b_prob_dist_terms_data <- clean_q18b_prob_dist_terms(meds2026_before_clean) #both_timepoints_clean
 
 # plot (INDIV RESPONSES) ----
 plot_q18b_prob_dist_terms(q18b_prob_dist_terms_data)
 ```
 
-::: {.callout-note}
-## The percentage of respondents who provided a fully correct answer to Queston 18b increased from Pre- to Post-MEDS PLO assessments
+<!-- ::: {.callout-note} -->
+<!-- ## The percentage of respondents who provided a fully correct answer to Queston 18b increased from Pre- to Post-MEDS PLO assessments -->
 
-Only students who chose 2 or greater in Question 18a were directed to answer Question 18b. A fully correct answer means choosing exactly the following options: **normal, uniform, bimodal, symmetrical**.  
+<!-- Only students who chose 2 or greater in Question 18a were directed to answer Question 18b. A fully correct answer means choosing exactly the following options: **normal, uniform, bimodal, symmetrical**. -->
 
-```{r}
-# wrangle (FULLY CORRECT) ----
-q18b_prob_dist_FULLY_CORRECT_data <- clean_q18b_FULLY_CORRECT(both_timepoints_clean)
+<!-- ```{r} -->
+<!-- # wrangle (FULLY CORRECT) ---- -->
+<!-- q18b_prob_dist_FULLY_CORRECT_data <- clean_q18b_FULLY_CORRECT(both_timepoints_clean) -->
 
-# plot (FULLY CORRECT) ----
-plot_q18b_FULLY_CORRECT(q18b_prob_dist_FULLY_CORRECT_data)
-```
-:::
+<!-- # plot (FULLY CORRECT) ---- -->
+<!-- plot_q18b_FULLY_CORRECT(q18b_prob_dist_FULLY_CORRECT_data) -->
+<!-- ``` -->
+<!-- ::: -->
 
 ## **Part 6: Programming 1**
 
@@ -591,7 +590,7 @@ plot_q18b_FULLY_CORRECT(q18b_prob_dist_FULLY_CORRECT_data)
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q19a_familiar_functions_data  <- clean_freq_rank_data(all_PLO_data = both_timepoints_clean,
+q19a_familiar_functions_data  <- clean_freq_rank_data(all_PLO_data = meds2026_before_clean, #both_timepoints_clean,
                                                       col_name = "term_function",
                                                       categories = c("1 (never heard of it)", 
                                                                      "2",
@@ -604,7 +603,7 @@ plot_rank_data(data = q19a_familiar_functions_data,
                            caption = "Question 19a (choosing '1 (never heard of it)' skips respondent to question 20)")
 ```
 
-{{< include /summary-text/class2025/q19b-callout-inline-code.qmd >}}
+<!-- {{< include /summary-text/class2025/q19b-callout-inline-code.qmd >}} -->
 
 ```{r}
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -612,7 +611,7 @@ plot_rank_data(data = q19a_familiar_functions_data,
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q19b_writing_functions_data  <- clean_freq_rank_data(all_PLO_data = both_timepoints_clean,
+q19b_writing_functions_data  <- clean_freq_rank_data(all_PLO_data = meds2026_before_clean, # both_timepoints_clean,
                                                      col_name = "writing_functions",
                                                      categories = c("1 (not at all comfortable)",
                                                                     "2",
@@ -626,7 +625,7 @@ plot_rank_data(data = q19b_writing_functions_data,
                            caption = "Question 19b (choosing '1 (not at all)' skips respondent to question 20)")
 ```
 
-{{< include /summary-text/class2025/q19c-callout-inline-code.qmd >}}
+<!-- {{< include /summary-text/class2025/q19c-callout-inline-code.qmd >}} -->
 
 {{< include /summary-text/all_classes/q19c-turbine-function.qmd >}}
 
@@ -636,7 +635,7 @@ plot_rank_data(data = q19b_writing_functions_data,
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q19c_fxn_output_data <- clean_q19c_fxn_output(both_timepoints_clean)
+q19c_fxn_output_data <- clean_q19c_fxn_output(meds2026_before_clean) #both_timepoints_clean
 
 # plot ----
 plot_correct_answer_comparison(data = q19c_fxn_output_data,
@@ -653,13 +652,13 @@ plot_correct_answer_comparison(data = q19c_fxn_output_data,
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q20a_run_env_mod_data <- clean_q20a_run_env_mod(both_timepoints_clean)
+q20a_run_env_mod_data <- clean_q20a_run_env_mod(meds2026_before_clean) #both_timepoints_clean
 
 # plot ----
 plot_q20a_run_env_mod(q20a_run_env_mod_data)
 ```
 
-{{< include /summary-text/class2025/q20a-callout-inline-code.qmd >}}
+<!-- {{< include /summary-text/class2025/q20a-callout-inline-code.qmd >}} -->
 
 ```{r}
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -667,13 +666,13 @@ plot_q20a_run_env_mod(q20a_run_env_mod_data)
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q20b_sa_data <- clean_q20b_sa(both_timepoints_clean)
+q20b_sa_data <- clean_q20b_sa(meds2026_before_clean) #both_timepoints_clean
 
 # plot ----
 plot_q20b_sa(q20b_sa_data)
 ```
 
-{{< include /summary-text/class2025/q20b-callout-inline-code.qmd >}}
+<!-- {{< include /summary-text/class2025/q20b-callout-inline-code.qmd >}} -->
 
 ```{r}
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -681,7 +680,7 @@ plot_q20b_sa(q20b_sa_data)
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q20c_param_int_data <- clean_q20c_param_int(both_timepoints_clean)
+q20c_param_int_data <- clean_q20c_param_int(meds2026_before_clean) # both_timepoints_clean
 
 # plot ----
 plot_correct_answer_comparison(data = q20c_param_int_data,
@@ -698,7 +697,7 @@ plot_correct_answer_comparison(data = q20c_param_int_data,
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q21a_comfort_spatial_data  <- clean_freq_rank_data(all_PLO_data = both_timepoints_clean,
+q21a_comfort_spatial_data  <- clean_freq_rank_data(all_PLO_data = meds2026_before_clean, #both_timepoints_clean,
                                                    col_name = "spatial_data",
                                                    categories = c("1 (never worked with it before)", 
                                                                   "2", 
@@ -712,25 +711,25 @@ plot_rank_data(data = q21a_comfort_spatial_data,
                            caption = "Question 21a (choosing '1 (never worked with it before)' skips respondent to question 22)")
 ```
 
-{{< include /summary-text/class2025/q21-callout-inline-code.qmd >}}
+<!-- {{< include /summary-text/class2025/q21-callout-inline-code.qmd >}} -->
 
 ```{r}
 # wrangle (INDIV RESPONSES) ----
-q21b_rep_spatial_data <- clean_q21b_rep_spatial(both_timepoints_clean)
+q21b_rep_spatial_data <- clean_q21b_rep_spatial(meds2026_before_clean) # both_timepoints_clean
 
 # plot (INDIV RESPONSES) ----
 plot_q21b_rep_spatial(q21b_rep_spatial_data)
 ```
 
-::: {.callout-note}
-```{r}
-# wrangle (FULLY CORRECT) ----
-q21b_FULLY_CORRECT_data <- clean_q21b_FULLY_CORRECT(both_timepoints_clean)
+<!-- ::: {.callout-note} -->
+<!-- ```{r} -->
+<!-- # wrangle (FULLY CORRECT) ---- -->
+<!-- q21b_FULLY_CORRECT_data <- clean_q21b_FULLY_CORRECT(both_timepoints_clean) -->
 
-# plot (FULLY CORRECT) ----
-plot_q21b_FULLY_CORRECT(q21b_FULLY_CORRECT_data)
-```
-:::
+<!-- # plot (FULLY CORRECT) ---- -->
+<!-- plot_q21b_FULLY_CORRECT(q21b_FULLY_CORRECT_data) -->
+<!-- ``` -->
+<!-- ::: -->
 
 ```{r}
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -738,7 +737,7 @@ plot_q21b_FULLY_CORRECT(q21b_FULLY_CORRECT_data)
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q21c_vec_ras_data <- clean_q21c_vec_ras(both_timepoints_clean)
+q21c_vec_ras_data <- clean_q21c_vec_ras(meds2026_before_clean) # both_timepoints_clean
 
 # plot ----
 plot_correct_answer_comparison(data = q21c_vec_ras_data,
@@ -758,7 +757,7 @@ knitr::include_graphics(here::here("yearly-reports", "images", "21c-vector.png")
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q22a_comfort_rs_data  <- clean_freq_rank_data(all_PLO_data = both_timepoints_clean,
+q22a_comfort_rs_data  <- clean_freq_rank_data(all_PLO_data = meds2026_before_clean, # both_timepoints_clean,
                                               col_name = "remote_sense_comfort",
                                               categories = c("1 (never worked with it before)", 
                                                              "2", 
@@ -771,7 +770,7 @@ plot_rank_data(data = q22a_comfort_rs_data,
                            caption = "Question 22a (choosing '1 (never worked with it before)' skips respondent to question 23)")
 ```
 
-{{< include /summary-text/class2025/q22-callout-inline-code.qmd >}}
+<!-- {{< include /summary-text/class2025/q22-callout-inline-code.qmd >}} -->
 
 ```{r}
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -779,7 +778,7 @@ plot_rank_data(data = q22a_comfort_rs_data,
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q22b_rs_sun_data <- clean_q22b_rs_sun(both_timepoints_clean)
+q22b_rs_sun_data <- clean_q22b_rs_sun(meds2026_before_clean) #both_timepoints_clean
 
 # plot ----
 plot_correct_answer_comparison(data = q22b_rs_sun_data,
@@ -794,7 +793,7 @@ plot_correct_answer_comparison(data = q22b_rs_sun_data,
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q23a_comfort_map_proj_data  <- clean_freq_rank_data(all_PLO_data = both_timepoints_clean,
+q23a_comfort_map_proj_data  <- clean_freq_rank_data(all_PLO_data = meds2026_before_clean, #both_timepoints_clean,
                                                     col_name = "map_proj_comfort",
                                                     categories = c("1 (never worked with it before)", 
                                                                    "2", 
@@ -807,7 +806,7 @@ plot_rank_data(data = q23a_comfort_map_proj_data,
                            caption = "Question 23a (choosing '1 (never worked with it before)' skips respondent to question 24)")
 ```
 
-{{< include /summary-text/class2025/q23-callout-inline-code.qmd >}}
+<!-- {{< include /summary-text/class2025/q23-callout-inline-code.qmd >}} -->
 
 ```{r}
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -815,7 +814,7 @@ plot_rank_data(data = q23a_comfort_map_proj_data,
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q23b_reproj_data <- clean_q23b_reproj(both_timepoints_clean)
+q23b_reproj_data <- clean_q23b_reproj(meds2026_before_clean) # both_timepoints_clean
 
 # plot ----
 plot_correct_answer_comparison(data = q23b_reproj_data,
@@ -830,7 +829,7 @@ plot_correct_answer_comparison(data = q23b_reproj_data,
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q24a_familiarity_rs_data  <- clean_freq_rank_data(all_PLO_data = both_timepoints_clean,
+q24a_familiarity_rs_data  <- clean_freq_rank_data(all_PLO_data = meds2026_before_clean, # both_timepoints_clean,
                                                   col_name = "reflec_spec",
                                                   categories = c("1 (never heard of it)",
                                                                  "2",
@@ -844,7 +843,7 @@ plot_rank_data(data = q24a_familiarity_rs_data,
                            caption = "Question 24a (choosing '1 (never heard of it)' skips respondent to question 25)")
 ```
 
-{{< include /summary-text/class2025/q24-callout-inline-code.qmd >}}
+<!-- {{< include /summary-text/class2025/q24-callout-inline-code.qmd >}} -->
 
 ```{r}
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -852,7 +851,7 @@ plot_rank_data(data = q24a_familiarity_rs_data,
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q24b_veg_wave_data <- clean_q24b_veg_wave(both_timepoints_clean)
+q24b_veg_wave_data <- clean_q24b_veg_wave(meds2026_before_clean) # both_timepoints_clean
 
 # plot ----
 plot_correct_answer_comparison(data = q24b_veg_wave_data,
@@ -869,7 +868,7 @@ plot_correct_answer_comparison(data = q24b_veg_wave_data,
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q25a_familiar_ml_data  <- clean_freq_rank_data(all_PLO_data = both_timepoints_clean,
+q25a_familiar_ml_data  <- clean_freq_rank_data(all_PLO_data = meds2026_before_clean, #both_timepoints_clean,
                                                col_name = "sup_vs_unsup_learn",
                                                categories = c("1 (never heard of either of those terms)", 
                                                               "2",
@@ -884,7 +883,7 @@ plot_rank_data(data = q25a_familiar_ml_data,
   scale_x_discrete(labels = function(x) str_wrap(x, width = 15))
 ```
 
-{{< include /summary-text/class2025/q25a-callout-inline-code.qmd >}}
+<!-- {{< include /summary-text/class2025/q25a-callout-inline-code.qmd >}} -->
 
 ```{r}
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -892,7 +891,7 @@ plot_rank_data(data = q25a_familiar_ml_data,
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q25b_unsup_alg_data  <- clean_freq_rank_data(all_PLO_data = both_timepoints_clean,
+q25b_unsup_alg_data  <- clean_freq_rank_data(all_PLO_data = meds2026_before_clean, #both_timepoints_clean,
                                              col_name = "implemented_algo",
                                              categories = c("1 (definitely not)", 
                                                             "2",
@@ -908,7 +907,7 @@ plot_rank_data(data = q25b_unsup_alg_data,
   scale_x_discrete(labels = function(x) str_wrap(x, width = 15))
 ```
 
-{{< include /summary-text/class2025/q25b-callout-inline-code.qmd >}}
+<!-- {{< include /summary-text/class2025/q25b-callout-inline-code.qmd >}} -->
 
 ```{r}
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -916,7 +915,7 @@ plot_rank_data(data = q25b_unsup_alg_data,
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q25c_kmeans_data <- clean_q25c_kmeans(both_timepoints_clean)
+q25c_kmeans_data <- clean_q25c_kmeans(meds2026_before_clean) # both_timepoints_clean
 
 # plot ----
 plot_correct_answer_comparison(data = q25c_kmeans_data,
@@ -931,7 +930,7 @@ plot_correct_answer_comparison(data = q25c_kmeans_data,
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q26a_div_data  <- clean_freq_rank_data(all_PLO_data = both_timepoints_clean,
+q26a_div_data  <- clean_freq_rank_data(all_PLO_data = meds2026_before_clean, #both_timepoints_clean,
                                        col_name = "ml_div_data",
                                        categories = c("1 (never heard of it)", 
                                                       "2",
@@ -945,7 +944,7 @@ plot_rank_data(data = q26a_div_data,
                caption = "Question 26a (choosing '1 (never heard of it)' skips respondent to question 27)")
 ```
 
-{{< include /summary-text/class2025/q26a-callout-inline-code.qmd >}}
+<!-- {{< include /summary-text/class2025/q26a-callout-inline-code.qmd >}} -->
 
 ```{r}
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -953,7 +952,7 @@ plot_rank_data(data = q26a_div_data,
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q26b_tvs_data  <- clean_freq_rank_data(all_PLO_data = both_timepoints_clean,
+q26b_tvs_data  <- clean_freq_rank_data(all_PLO_data = meds2026_before_clean, # both_timepoints_clean,
                                        col_name = "train_valid_split",
                                        categories = c("1 (never)", 
                                                       "2", 
@@ -968,29 +967,29 @@ plot_rank_data(data = q26b_tvs_data,
                caption = "Question 26b (choosing '1 (never)' skips respondent to question 27)")
 ```
 
-{{< include /summary-text/class2025/q26b-callout-inline-code.qmd >}}
+<!-- {{< include /summary-text/class2025/q26b-callout-inline-code.qmd >}} -->
 
 ```{r}
 # wrangle (INDIV RESPONSES) ----
-q26c_mod_perf_data <- clean_q26c_mod_perf(both_timepoints_clean)
+q26c_mod_perf_data <- clean_q26c_mod_perf(meds2026_before_clean) # both_timepoints_clean
 
 # plot (INDIV RESPONSES) ----
 plot_q26c_mod_perf(q26c_mod_perf_data)
 ```
 
-::: {.callout-note}
-## The percentage of respondents who provided a *fully correct* answer to Queston 26c increased from Pre- to Post-MEDS PLO assessments
+<!-- ::: {.callout-note} -->
+<!-- ## The percentage of respondents who provided a *fully correct* answer to Queston 26c increased from Pre- to Post-MEDS PLO assessments -->
 
-Only students who chose 2 or greater in Question 26b were directed to answer Question 26c. A fully correct answer means choosing exactly the following options: **My model is overfitting the training set, My model is unlikely to perform well when applied to new data**.  
+<!-- Only students who chose 2 or greater in Question 26b were directed to answer Question 26c. A fully correct answer means choosing exactly the following options: **My model is overfitting the training set, My model is unlikely to perform well when applied to new data**.   -->
 
-```{r}
-# wrangle (FULLY CORRECT) ----
-q26c_FULLY_CORRECT_data <- clean_q26c_FULLY_CORRECT(both_timepoints_clean)
+<!-- ```{r} -->
+<!-- # wrangle (FULLY CORRECT) ---- -->
+<!-- q26c_FULLY_CORRECT_data <- clean_q26c_FULLY_CORRECT(both_timepoints_clean) -->
 
-# plot (FULLY CORRECT) ----
-plot_q26c_FULLY_CORRECT(q26c_FULLY_CORRECT_data)
-```
-:::
+<!-- # plot (FULLY CORRECT) ---- -->
+<!-- plot_q26c_FULLY_CORRECT(q26c_FULLY_CORRECT_data) -->
+<!-- ``` -->
+<!-- ::: -->
 
 ## **Part 10: Environmental Justice**
 
@@ -1000,7 +999,7 @@ plot_q26c_FULLY_CORRECT(q26c_FULLY_CORRECT_data)
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q27_data_justice_data  <- clean_freq_rank_data(all_PLO_data = both_timepoints_clean,
+q27_data_justice_data  <- clean_freq_rank_data(all_PLO_data = meds2026_before_clean, # both_timepoints_clean,
                                                col_name = "data_justice",
                                                categories = c("1 (never heard of it)", 
                                                               "2", 
@@ -1020,7 +1019,7 @@ plot_rank_data(data = q27_data_justice_data,
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q28_bias_data  <- clean_freq_rank_data(all_PLO_data = both_timepoints_clean,
+q28_bias_data  <- clean_freq_rank_data(all_PLO_data = meds2026_before_clean, # both_timepoints_clean,
                                        col_name = "bias",
                                        categories = c("1 (strongly disagree)",
                                                       "2", 
@@ -1042,7 +1041,7 @@ plot_rank_data(data = q28_bias_data,
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q29_create_viz_data  <- clean_freq_rank_data(all_PLO_data = both_timepoints_clean,
+q29_create_viz_data  <- clean_freq_rank_data(all_PLO_data = meds2026_before_clean, #both_timepoints_clean,
                                              col_name = "data_viz_programming",
                                              categories = c("1 (never done it)",
                                                             "2", 
@@ -1081,7 +1080,7 @@ knitr::include_graphics(here::here("yearly-reports", "images", "30-plot.png"))
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q30_improve_dv_pre <- clean_q30_improve_dv(meds2025_before_clean)
+q30_improve_dv_pre <- clean_q30_improve_dv(meds2026_before_clean)
 
 # plot ----
 plot_q30_improve_dv(q30_improve_dv_pre)
@@ -1094,16 +1093,16 @@ plot_q30_improve_dv(q30_improve_dv_pre)
 :::
 
 ```{r}
-
-##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-##                  Question 30: Improve Data Viz (Post-MEDS)               ----
-##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-# wrangle ----
-q30_improve_dv_post <- clean_q30_improve_dv(meds2025_after_clean)
-
-# plot ----
-plot_q30_improve_dv(q30_improve_dv_post)
+# 
+# ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ##                  Question 30: Improve Data Viz (Post-MEDS)               ----
+# ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# 
+# # wrangle ----
+# q30_improve_dv_post <- clean_q30_improve_dv(meds2026_after_clean)
+# 
+# # plot ----
+# plot_q30_improve_dv(q30_improve_dv_post)
 ```
 :::
 
@@ -1116,7 +1115,7 @@ Responses as they were recorded are included in the tables, below:
 
 ```{r}
 #~..........................wrangle.............................
-q30_improve_dv_pre <- both_timepoints_clean |> 
+q30_improve_dv_pre <- meds2026_before_clean |> #both_timepoints_clean |> 
   
   # select necessary cols & arrange ----
   select(timepoint, improve_data_viz) |> 
@@ -1142,7 +1141,7 @@ DT::datatable(q30_improve_dv_pre, colnames = c("Timepoint", "Free Response Answe
 # ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # 
 # #~..........................wrangle.............................
-# q30_improve_dv_pre <- meds2025_before_clean |> 
+# q30_improve_dv_pre <- meds2026_before_clean |> 
 #   
 #   # select necessary cols ----
 #   select(improve_data_viz)
@@ -1168,7 +1167,7 @@ DT::datatable(q30_improve_dv_pre, colnames = c("Timepoint", "Free Response Answe
 # ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # 
 # #~..........................wrangle.............................
-# q30_improve_dv_post <- meds2025_after_clean |> 
+# q30_improve_dv_post <- meds2026_after_clean |> 
 #   
 #   # select necessary cols ----
 #   select(improve_data_viz)
@@ -1208,7 +1207,7 @@ convert_F_to_C(32)
 ##~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # wrangle ----
-q31_lang_data <- clean_q31_lang(both_timepoints_clean)
+q31_lang_data <- clean_q31_lang(meds2026_before_clean) # both_timepoints_clean
 
 # plot ----
 plot_correct_answer_comparison(data = q31_lang_data,
@@ -1220,7 +1219,7 @@ plot_correct_answer_comparison(data = q31_lang_data,
 <br>
 
 ::: {.center-text}
-***End MEDS Class of 2025 PLO Assessment Report***
+***End MEDS Class of 2026 PLO Assessment Report***
 :::
 
 <br>

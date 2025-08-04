@@ -32,3 +32,4 @@ editor_options:
 - [MEDS Class of 2023](yearly-reports/class2023.html){target="_blank"} (only post-MEDS data available)
 - [MEDS Class of 2024](yearly-reports/class2024.html){target="_blank"}
 - [MEDS Class of 2025](yearly-reports/class2025.html){target="_blank"} 
+- [MEDS Class of 2026](yearly-reports/class2026.html){target="_blank"} (only pre-MEDS data currently available)
